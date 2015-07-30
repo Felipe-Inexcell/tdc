@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="364dp"
+    android:background="#00000000">
+
+    <ImageView
+        android:layout_alignParentTop="true"
+        android:id="@+id/ImageMapView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_above="@+id/button"/>
+
+    <ProgressBar
+        android:layout_margin="100dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/progressMap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button"/>
+
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_ready1white"
+        android:background="@drawable/custom_button_rounded_green"/>
+</RelativeLayout>

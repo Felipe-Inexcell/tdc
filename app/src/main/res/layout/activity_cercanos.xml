@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#FFF8B03D">
+
+    <!-- header -->
+    <LinearLayout
+        android:id="@+id/cerca_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/fondo_general"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical|center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo_tdc" />
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="TDC@"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/app_title" />
+
+            <TextView
+                android:id="@+id/header_actual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Sitios Cercanos"
+                android:textColor="#ffff7644" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- end header -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cerca_content"
+        android:layout_below="@+id/cerca_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/cerca_footer"
+        android:background="@drawable/fondo_general">
+
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:id="@+id/cerca_footer"
+        android:background="@drawable/fondo_general"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:id="@+id/cerca_imageButton"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"
+            android:layout_alignParentBottom="false"
+            android:background="@drawable/custom_button_shutdown"
+            android:layout_centerVertical="true"
+            android:onClick="onClick_back"
+            android:backgroundTintMode="src_over"
+            android:src="@drawable/ic_close1" />
+
+        <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:id="@+id/btn_off"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_shutdown"
+            android:layout_alignParentTop="false"
+            android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:background="@drawable/custom_button_shutdown"
+            android:onClick="onClick_apagar" />
+
+        <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:id="@+id/btn_search"
+            android:src="@drawable/abc_ic_search_api_mtrl_alpha"
+            android:scaleType="fitCenter"
+            android:layout_toLeftOf="@+id/btn_off"
+            android:layout_toRightOf="@+id/cerca_imageButton"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:background="@drawable/custom_button_rounded_green"
+            android:onClick="onClick_search" />
+    </RelativeLayout>
+
+</RelativeLayout>

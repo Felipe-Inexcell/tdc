@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/info_layout"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="SITE:"
+            android:id="@+id/textView15"
+            android:layout_weight="1"
+            android:textColor="#FFF8B03D"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="site"
+            android:id="@+id/t1"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="STREET:"
+            android:id="@+id/textView17"
+            android:layout_weight="1"
+            android:textColor="#FFF8B03D"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="street"
+            android:id="@+id/t2"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DISTRICT:"
+            android:id="@+id/textView19"
+            android:layout_weight="1"
+            android:textColor="#FFF8B03D"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="district"
+            android:id="@+id/t3"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="PROVINCE:"
+            android:id="@+id/textView21"
+            android:layout_weight="1"
+            android:textColor="#FFF8B03D"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="province"
+            android:id="@+id/t4"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DEPARTAMENT:"
+            android:id="@+id/textView23"
+            android:layout_weight="1"
+            android:textColor="#FFF8B03D"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="departament"
+            android:id="@+id/t5"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+</LinearLayout>

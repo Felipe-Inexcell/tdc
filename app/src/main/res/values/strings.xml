@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TDC@</string>
+    <string name="app_title">Gestión Técnica en Terreno</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="faenas_combustible">Formulario De Faenas De Combustible</string>
+    <string name="niveles_combustible">Formulario De Niveles De Combustible</string>
+    <string name="mantenimiento_preventivo">Formulario De Mantenimiento Preventivo</string>
+    <string name="mantenimiento_correctivo">Formulario De Faenas De Correctivo</string>
+
+    <string-array name="lista_formularios">
+        <item>Formulario de Faenas de Combustibles</item>
+        <item>Formulario de Niveles de Combustibles</item>
+        <item>Formulario de Mantenimiento Preventivo</item>
+        <item>Formulario de Mantenimiento Correctivo</item>
+    </string-array>
+
+    <string-array name="lista_faenas">
+        <item>Faenas de Combustibles</item>
+        <item>Niveles de Combustibles</item>
+        <item>Mantenimiento Preventivo</item>
+        <item>Mantenimiento Correctivo</item>
+    </string-array>
+
+    <string-array name="lista_elementos">
+        <item>AMPLIFICADOR</item>
+        <item>CÁMARA</item>
+        <item>EQUIPO ENERGÍA</item>
+    </string-array>
+
+
+    <string-array name="lista_siniestro">
+        <item>DAÑO</item>
+        <item>ROBO</item>
+        <item>CORROSIÓN</item>
+    </string-array>
+
+    <string-array name="lista_dummy">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+        <item>Entry 4</item>
+        <item>Entry 5</item>
+        <item>Entry 6</item>
+        <item>Entry 7</item>
+        <item>Entry 8</item>
+        <item>Entry 9</item>
+        <item>Entry 10</item>
+        <item>Entry 11</item>
+        <item>Entry +</item>
+    </string-array>
+
+    <string-array name="lista_sitios">
+        <item>Sitio 1</item>
+        <item>Sitio 2</item>
+        <item>Sitio 3</item>
+    </string-array>
+
+    <string-array name="lista_estaciones">
+        <item>Estación 1</item>
+        <item>Estación 2</item>
+        <item>Estación 3</item>
+    </string-array>
+
+    <string-array name="lista_tecnico">
+        <item>Técnico 1</item>
+        <item>Técnico 2</item>
+        <item>Técnico 3</item>
+        <item>Técnico 4</item>
+    </string-array>
+
+    <string-array name="lista_proveedor">
+        <item>Proveedor 1</item>
+        <item>Proveedor 2</item>
+        <item>Proveedor 3</item>
+        <item>Proveedor 4</item>
+    </string-array>
+
+    <string-array name="lista_equipos">
+        <item>Equipo 1</item>
+        <item>Equipo 2</item>
+        <item>Equipo 3</item>
+        <item>Equipo 4</item>
+    </string-array>
+
+    <string-array name="lista_ordenes">
+        <item>Número de Orden</item>
+        <item>2345</item>
+        <item>3456</item>
+    </string-array>
+
+    <string-array name="lista_periodos">
+        <item>Periodo</item>
+        <item>01/04/2015</item>
+        <item>02/04/2015</item>
+        <item>03/04/2015</item>
+    </string-array>
+
+    <string-array name="lista_fechas">
+        <item>Fecha Trabajo</item>
+        <item>02/04/2015</item>
+        <item>03/04/2015</item>
+    </string-array>
+
+    <string-array name="lista_responsables">
+        <item>Responsable 1</item>
+        <item>Responsable 2</item>
+        <item>Responsable 3</item>
+    </string-array>
+    <string-array name="lista_nombres">
+        <item>Nombre 1</item>
+        <item>Nombre 2</item>
+        <item>Nombre 3</item>
+    </string-array>
+    <string-array name="lista_caso">
+        <item>Numero de Caso</item>
+        <item>Caso 1</item>
+        <item>Caso 2</item>
+    </string-array>
+    <string-array name="lista_trabajo">
+        <item>Trabajo Realizado</item>
+        <item>Trabajo 1</item>
+        <item>Trabajo 2</item>
+    </string-array>
+
+    <string-array name="lista_repuestos">
+        <item>Repuesto 1      Cantidad 1</item>
+        <item>Repuesto 2      Cantidad 2</item>
+        <item>Repuesto 3      Cantidad 3</item>
+    </string-array>
+
+
+</resources>

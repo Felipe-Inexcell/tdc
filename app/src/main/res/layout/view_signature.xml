@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+    <com.github.gcacace.signaturepad.views.SignaturePad
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/signature_pad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:penColor="@android:color/black"
+        android:background="#ffa7d7e8"
+        android:layout_margin="5dp"
+        android:layout_above="@+id/btn_signatureok"/>
+
+    <ImageButton
+        android:id="@+id/btn_signatureok"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/custom_button_rounded_green"
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_ready1white"/>
+
+    <ImageButton
+        android:id="@+id/btn_signatureclear"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/btn_signatureok"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/custom_button_rounded_green"
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_clear"/>
+
+    <ImageButton
+        android:id="@+id/btn_signaturecancel"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/btn_signatureclear"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/custom_button_shutdown"
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher"/>
+
+</RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="12dp">
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_components"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/cantidad"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/textView" />
+
+    <EditText
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/cantidad"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView16" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Componente:"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cantidad:"
+        android:id="@+id/textView16"
+        android:layout_above="@+id/list_components"
+        android:layout_toRightOf="@+id/list_components"
+        android:layout_toEndOf="@+id/list_components" />
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:id="@+id/OK"
+        android:background="@drawable/custom_button_rounded_green"
+        android:layout_below="@+id/cantidad"
+        android:layout_toLeftOf="@+id/NOK"
+        android:src="@drawable/ic_ready1white"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:id="@+id/NOK"
+        android:background="@drawable/custom_button_shutdown"
+        android:layout_alignTop="@+id/OK"
+        android:layout_toStartOf="@+id/cantidad"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone" />
+</RelativeLayout>
