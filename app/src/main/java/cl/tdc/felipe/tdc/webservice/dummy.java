@@ -17,6 +17,9 @@ public class dummy {
         public static final String URL_FORM_PREV_SAVE = "http://"+IP+"/tdc/Service/responseCheckList.php";
         public static final String URL_GET_ACTIVITY = "http://"+IP+"/tdc/Service/maintenancePlanningActivity.php";
         public static final String URL_MAINTENANCE_PLANNING = "http://"+IP+"/tdc/Service/maintenancePlanning.php";
+        public static final String URL_PROJECT_WORK = "http://"+IP+"/tdc/ServiceWorkTracking/ProjectWork.php";
+        public static final String URL_PROJECT_ACTIVITIES = "http://"+IP+"/tdc/ServiceWorkTracking/ActivitiesCheckList.php";
+        public static final String URL_PROJECT_SEND = "http://"+IP+"/tdc/ServiceWorkTracking/RespActivitiesCheckList.php";
 
         public static String notifyExample = "<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"urn:Configurationwsdl\">" +
                 "<SOAP-ENV:Body>" +

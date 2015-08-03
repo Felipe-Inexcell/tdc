@@ -148,6 +148,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    public void onClick_btn5(View v) {
+        startActivity(new Intent(this, Seguimiento.class));
+    }
+    public void onClick_btn6(View v) {
+        startActivity(new Intent(this, Seguimiento.class));
+    }
 
     void settings() {
         TelephonyManager fono = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);

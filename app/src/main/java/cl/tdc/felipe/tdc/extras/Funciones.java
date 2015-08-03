@@ -16,6 +16,10 @@ import android.text.InputType;
 import android.util.Log;
 import android.widget.CheckBox;
 
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +62,9 @@ public class Funciones {
         List<String> paises = new ArrayList<>();
         paises.add("Chile");
         paises.add("Peru");
+        paises.add("Perú");
 
+        Log.e("TEST", location.getCountryName());
         for (String pais : paises) {
             if (location.getCountryName().compareTo(pais) == 0)
                 return true;
@@ -171,5 +177,14 @@ public class Funciones {
             }
         }
         return i;
+    }
+
+    public static String getCharacterDataFromElement(Element e) {
+        Node child = e.getFirstChild();
+        if (child instanceof CharacterData) {
+            CharacterData cd = (CharacterData) child;
+            return cd.getData();
+        }
+        return "";
     }
 }

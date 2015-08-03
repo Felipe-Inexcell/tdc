@@ -50,6 +50,8 @@
         <activity android:name=".AveriaActivity" android:screenOrientation="portrait"/>
         <activity android:name=".CercanosActivity" android:screenOrientation="portrait"/>
         <activity android:name=".FormCheckActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Seguimiento" android:screenOrientation="portrait"/>
+        <activity android:name=".DetalleProyecto" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
