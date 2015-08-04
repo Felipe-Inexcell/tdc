@@ -76,60 +76,6 @@ public class Seguimiento extends Activity {
     }
 
 
-
-
-    private ArrayList<Proyecto> getProyectos(int a){
-        ArrayList<Proyecto> proyectos = new ArrayList<>();
-        Proyecto p =  new Proyecto();
-        p.setNombre("Proyecto Mancora");
-        p.setAvance_programado("20");
-        p.setAvance_real("10");
-        p.setFecha_final("7/08/2015");
-        p.setFecha_inicio("3/08/2015");
-        p.setId("0");
-        p.setAtrasado("0");
-        p.setDia("1");
-
-        proyectos.add(p);
-
-        p =  new Proyecto();
-        p.setNombre("Proyecto Lima");
-        p.setAvance_programado("7");
-        p.setAvance_real("3");
-        proyectos.add(p);
-        p.setFecha_final("7/08/2015");
-        p.setFecha_inicio("3/08/2015");
-        p.setId("1");
-        p.setAtrasado("0");
-        p.setDia("2");
-
-        p =  new Proyecto();
-        p.setNombre("Proyecto Arequipa");
-        p.setAvance_programado("20");
-        p.setAvance_real("10");
-        proyectos.add(p);
-        p.setFecha_final("7/08/2015");
-        p.setFecha_inicio("3/08/2015");
-        p.setId("2");
-        p.setAtrasado("0");
-        p.setDia("1");
-
-        p =  new Proyecto();
-        p.setNombre("Proyecto Piura");
-        p.setAvance_programado("20");
-        p.setAvance_real("10");
-        proyectos.add(p);
-        p.setFecha_final("7/08/2015");
-        p.setFecha_inicio("3/08/2015");
-        p.setId("3");
-        p.setAtrasado("0");
-        p.setDia("1");
-
-        this.proyectos = proyectos;
-        return proyectos;
-    }
-
-
     public class ProyectosAdapter extends RecyclerView.Adapter<ProyectosAdapter.ViewHolder> {
         private ArrayList<Proyecto> mDataset;
         private final AdapterView.OnItemClickListener itemClickListener;

@@ -94,27 +94,22 @@ public class DetalleProyecto extends Activity {
 
     }
 
-
-
     private void init() {
         actividad = this;
         mContext = this;
 
         mProyecto = new Proyecto(getIntent().getExtras().getString("PROYECTO"));
-
         mRecyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);
 
         getActivities task = new getActivities(this);
         task.execute();
 
         detalle_progreso = (TextView)this.findViewById(R.id.detalle_progress);
-
         nombreProyecto = (TextView) this.findViewById(R.id.nombre_proyecto);
         dia = (EditText) this.findViewById(R.id.dia);
         inicio = (EditText) this.findViewById(R.id.inicio);
         fin = (EditText) this.findViewById(R.id.fin);
         mProgressBar = (ProgressBar) this.findViewById(R.id.progressBar);
-
     }
 
     public void onClick_enviar(View view) {
@@ -133,7 +128,6 @@ public class DetalleProyecto extends Activity {
         @Override
         public ActividadesAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent,
                                                                 final int viewType) {
-            // create a new view
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.proyectos_detalle, parent, false);
             ViewHolder vh = new ViewHolder(v);

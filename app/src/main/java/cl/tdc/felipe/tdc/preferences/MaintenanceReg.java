@@ -23,36 +23,37 @@ public class MaintenanceReg {
     }
 
     public void newMaintenance(String ID, String FLAG) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(MAINTENANCE_ID, ID);
-            editor.putString(MAINTENANCE_FLAG, FLAG);
-            editor.apply();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Log.i("NEW SHARED", ID + "   " + FLAG);
+        editor.putString(MAINTENANCE_ID, ID);
+        editor.putString(MAINTENANCE_FLAG, FLAG);
+        editor.apply();
     }
 
-    public String getMaintenance(){
-        Log.d("SHARED",sharedPreferences.getString(MAINTENANCE_ID,"-1")+"   "+sharedPreferences.getString(MAINTENANCE_FLAG,"-1"));
-        return sharedPreferences.getString(MAINTENANCE_ID,"-1")+";"+sharedPreferences.getString(MAINTENANCE_FLAG,"-1");
+    public String getMaintenance() {
+        Log.d("GET SHARED", sharedPreferences.getString(MAINTENANCE_ID, "-1") + "   " + sharedPreferences.getString(MAINTENANCE_FLAG, "-1"));
+        return sharedPreferences.getString(MAINTENANCE_ID, "-1") + ";" + sharedPreferences.getString(MAINTENANCE_FLAG, "-1");
     }
 
-    public void clearPreferences(){
+    public void clearPreferences() {
         SharedPreferences.Editor ed = sharedPreferences.edit();
         ed.clear();
         ed.apply();
     }
 
-    public void stateActivity(Activity a, boolean complete){
+    public void stateActivity(Activity a, boolean complete) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("ACTIVIDAD" + a.getIdActivity(), complete);
         editor.apply();
     }
 
-    public void deleteStateActivity(Activity a){
+    public void deleteStateActivity(Activity a) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("ACTIVIDAD"+a.getIdActivity());
+        editor.remove("ACTIVIDAD" + a.getIdActivity());
         editor.apply();
     }
 
-    public boolean isCompleteActivity(Activity a){
+    public boolean isCompleteActivity(Activity a) {
         return sharedPreferences.getBoolean("ACTIVIDAD" + a.getIdActivity(), false);
     }
 

@@ -199,6 +199,8 @@ public class CercanosActivity extends FragmentActivity implements GoogleMap.OnMa
             try {
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 String response = SoapRequest.getLocation(String.valueOf(trackerTDC.gps.getLatitude()), String.valueOf(trackerTDC.gps.getLongitude()), telephonyManager.getDeviceId());
+
+                Log.i("CERCANOS", response);
                 ArrayList<String> parse = XMLParser.getLocations(response);
                 Log.d("MAP", parse.toString());
                 return parse;

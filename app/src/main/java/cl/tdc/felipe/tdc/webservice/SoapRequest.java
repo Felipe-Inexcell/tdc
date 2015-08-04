@@ -162,7 +162,7 @@ public class SoapRequest {
     }
 
 
-    public static String sendPosition(String LONGITUDE, String LATITUDE, String DATE, String IMEI, String FLAG, String ID) throws Exception {
+    public static String sendPosition(String LONGITUDE, String LATITUDE, String DATE, String IMEI, String ID, String FLAG) throws Exception {
         final String SOAP_ACTION = "";//"urn:Configurationwsdl#request";
         String response = null;
         String xml = null;
@@ -685,7 +685,7 @@ public class SoapRequest {
     }
 
 
-    public static String getLocation(String LONGITUDE, String LATITUDE, String IMEI) throws Exception {
+    public static String getLocation(String LATITUDE, String LONGITUDE, String IMEI) throws Exception {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
         String response = null;
         String xml = null;
@@ -735,6 +735,8 @@ public class SoapRequest {
                         "</urn:request>" +
                         "</soapenv:Body>" +
                         "</soapenv:Envelope>";
+
+        Log.i("CERCANOS SEND", bodyOut);
         xml = bodyOut;
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");

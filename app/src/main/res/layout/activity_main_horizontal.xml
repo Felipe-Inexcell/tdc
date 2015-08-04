@@ -226,7 +226,8 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/click_seguimiento"
                     android:onClick="onClick_btn5"
-                    android:clickable="false" />
+                    android:clickable="false"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textView7"
