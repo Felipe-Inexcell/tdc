@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
         service_wifi = new Intent(this, WifiTrackerTDC.class);
         //startService(service_wifi);
         service_pos = new Intent(this, PositionTrackerTDC.class);
-        //startService(service_pos);
+        startService(service_pos);
         settings();
 
     }
