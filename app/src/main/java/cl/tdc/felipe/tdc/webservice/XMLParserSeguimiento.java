@@ -64,7 +64,7 @@ public class XMLParserSeguimiento {
 
         for (int i = 0; i < nodes.getLength(); i++) {
             Proyecto proyecto = new Proyecto();
-            NodeList parameters = nodes.item(0).getChildNodes().item(0).getChildNodes();
+            NodeList parameters = nodes.item(i).getChildNodes().item(0).getChildNodes();
             for(int j = 0; j < parameters.getLength(); j++){
 
                 String name = Funciones.getCharacterDataFromElement((Element)parameters.item(j).getChildNodes().item(0));

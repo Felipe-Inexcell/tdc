@@ -52,6 +52,7 @@
         <activity android:name=".FormCheckActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Seguimiento" android:screenOrientation="portrait"/>
         <activity android:name=".DetalleProyecto" android:screenOrientation="portrait"/>
+        <activity android:name=".FormCheckSecurity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

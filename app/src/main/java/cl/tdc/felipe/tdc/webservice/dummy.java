@@ -20,6 +20,10 @@ public class dummy {
         public static final String URL_PROJECT_WORK = "http://"+IP+"/tdc/ServiceWorkTracking/ProjectWork.php";
         public static final String URL_PROJECT_ACTIVITIES = "http://"+IP+"/tdc/ServiceWorkTracking/ActivitiesCheckList.php";
         public static final String URL_PROJECT_SEND = "http://"+IP+"/tdc/ServiceWorkTracking/RespActivitiesCheckList.php";
+        public static final String URL_GET_DAILYACTIVITIES = "http://"+IP+"/tdc/Service/dailyActivitiesCheckList.php";
+        public static final String URL_SEND_DAILYACTIVITIES = "http://"+IP+"/tdc/Service/RespDailyActivitiesCheckList.php";
+        public static final String URL_MAIN_ACT_CHECKLIST = "http://"+IP+"/tdc/Service/maintenanceActivitiesCheckList.php";
+        public static final String URL_SEND_MAIN_ACT_CHECKLIST = "http://"+IP+"/tdc/Service/RespMaintenanceActivitiesCheckList.php";
 
         public static String notifyExample = "<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"urn:Configurationwsdl\">" +
                 "<SOAP-ENV:Body>" +

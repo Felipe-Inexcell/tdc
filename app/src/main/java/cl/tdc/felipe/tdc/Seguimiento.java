@@ -148,9 +148,12 @@ public class Seguimiento extends Activity {
 
                 String[] result = XMLParserSeguimiento.getResultCode(query).split(";");
 
-                if(result[0].compareTo("0")==0){
+                if(result[0].compareTo("0")==0) {
                     resultOk = true;
                     return query;
+                }else if(result[0].compareTo("1")==0){
+                    resultOk = false;
+                    return "No hay proyectos asignados";
                 }else{
                     resultOk = false;
                     return result[1];

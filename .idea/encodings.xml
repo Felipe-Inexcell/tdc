@@ -3,6 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/DetalleProyecto.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/Seguimiento.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/daemon/MyLocationListener.java" charset="UTF-8" />

@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.xml.sax.SAXException;
 
 import java.io.BufferedInputStream;
@@ -83,12 +84,12 @@ public class DetalleProyecto extends Activity {
         dia.setText(String.valueOf(mProyecto.getDia()));
         inicio.setText(mProyecto.getFecha_inicio());
         fin.setText(mProyecto.getFecha_final());
-        detalle_progreso.setText("Progreso: "+mProyecto.getAvance_real()+"%");
+        detalle_progreso.setText("Progreso: " + mProyecto.getAvance_real() + "%");
 
         try {
             mProgressBar.setMax(Integer.parseInt(mProyecto.getAvance_programado()));
             mProgressBar.setProgress(Integer.parseInt(mProyecto.getAvance_real()));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -104,7 +105,7 @@ public class DetalleProyecto extends Activity {
         getActivities task = new getActivities(this);
         task.execute();
 
-        detalle_progreso = (TextView)this.findViewById(R.id.detalle_progress);
+        detalle_progreso = (TextView) this.findViewById(R.id.detalle_progress);
         nombreProyecto = (TextView) this.findViewById(R.id.nombre_proyecto);
         dia = (EditText) this.findViewById(R.id.dia);
         inicio = (EditText) this.findViewById(R.id.inicio);
@@ -376,7 +377,7 @@ public class DetalleProyecto extends Activity {
 
     }
 
-    private class Enviar extends AsyncTask<String, String, String>{
+    private class Enviar extends AsyncTask<String, String, String> {
         Context aContext;
         ProgressDialog dialog;
         boolean resultOk = false;
@@ -394,7 +395,7 @@ public class DetalleProyecto extends Activity {
 
         @Override
         protected String doInBackground(String... strings) {
-            try{
+            try {
                 String query = SoapRequestSeguimiento.sendResponse(mProyecto.getId(), mDias);
 
                 String[] result = XMLParserSeguimiento.getResultCode(query).split(";");
@@ -406,7 +407,7 @@ public class DetalleProyecto extends Activity {
                     resultOk = false;
                     return result[1];
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return "Ah ocurrido un error, vuelva a intentarlo";
             }
@@ -428,8 +429,10 @@ public class DetalleProyecto extends Activity {
 
 
     public void onClick_apagar(View v) {
-        Seguimiento.actividad.finish();
-        MainActivity.actividad.finish();
+        if (Seguimiento.actividad != null)
+            Seguimiento.actividad.finish();
+        if (MainActivity.actividad != null)
+            MainActivity.actividad.finish();
         finish();
     }
 

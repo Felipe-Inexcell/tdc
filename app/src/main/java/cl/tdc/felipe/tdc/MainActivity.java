@@ -29,7 +29,9 @@ import cl.tdc.felipe.tdc.objects.FormularioCheck;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
+import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
+import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class MainActivity extends ActionBarActivity {
@@ -50,11 +52,11 @@ public class MainActivity extends ActionBarActivity {
         actividad = this;
         preferencesTDC = new PreferencesTDC(this);
 
-        agendabtn = (ImageButton)findViewById(R.id.btn_agenda);
-        locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        agendabtn = (ImageButton) findViewById(R.id.btn_agenda);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            AlertDialog.Builder b  = new AlertDialog.Builder(this)
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setCancelable(false)
                     .setMessage("Active GPS antes de iniciar la aplicación")
@@ -79,18 +81,18 @@ public class MainActivity extends ActionBarActivity {
         IMEI = telephonyManager.getDeviceId();
 
         service_wifi = new Intent(this, WifiTrackerTDC.class);
-        startService(service_wifi);
+        //startService(service_wifi);
         service_pos = new Intent(this, PositionTrackerTDC.class);
-        startService(service_pos);
+        //startService(service_pos);
         settings();
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_SETTINGS_ACTION){
-            Log.d("SETTINGS", "CODE: "+resultCode);
-            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (requestCode == REQUEST_SETTINGS_ACTION) {
+            Log.d("SETTINGS", "CODE: " + resultCode);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 Toast.makeText(this, "Sigue desactivado el GPS.", Toast.LENGTH_LONG).show();
                 MainActivity.this.finish();
             }
@@ -151,8 +153,10 @@ public class MainActivity extends ActionBarActivity {
     public void onClick_btn5(View v) {
         startActivity(new Intent(this, Seguimiento.class));
     }
+
     public void onClick_btn6(View v) {
-        startActivity(new Intent(this, Seguimiento.class));
+        ChecklistTask c = new ChecklistTask(this);
+        c.execute();
     }
 
     void settings() {
@@ -166,6 +170,59 @@ public class MainActivity extends ActionBarActivity {
 
 
     //-----------------TASK ASINCRONICO------------------------------------
+
+
+    private class ChecklistTask extends AsyncTask<String, String, String> {
+        Context tContext;
+        ProgressDialog dialog;
+        boolean ok = false;
+
+        private ChecklistTask(Context tContext) {
+            this.tContext = tContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(tContext);
+            dialog.setMessage("Solicitando Checklist...");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String query = SoapRequestCheckLists.getdailyActivities(IMEI);
+
+                String[] code = XMLParserChecklists.getResultCode(query).split(";");
+                if (code[0].compareTo("0") == 0) {
+                    ok = true;
+                    return query;
+                } else {
+                    ok = false;
+                    return code[1];
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Ha ocurrido un error ("+e.getMessage()+"). Por favor reintente.";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (ok) {
+
+                Intent check = new Intent(actividad, FormCheckSecurity.class);
+                check.putExtra("RESPONSE", s);
+                startActivity(check);
+
+            } else {
+                Toast.makeText(tContext, s, Toast.LENGTH_LONG).show();
+            }
+            if (dialog.isShowing()) dialog.dismiss();
+        }
+    }
 
     private class AgendaTask extends AsyncTask<String, String, ArrayList<String>> {
         ProgressDialog progressDialog;
@@ -223,9 +280,6 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
-
-
-
 
 
 }

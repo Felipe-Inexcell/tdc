@@ -88,17 +88,15 @@
         android:paddingBottom="15dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="15dp"
-        android:layout_above="@+id/main_footer">
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:id="@+id/row1"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:weightSum="2"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/btn_2"
@@ -121,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="-22dp"
+                    android:layout_marginTop="-20dp"
                     android:gravity="center_horizontal"
                     android:paddingBottom="0dp"
                     android:text="Agenda"
@@ -132,13 +130,53 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButton7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/click_seguimiento"
+                    android:onClick="onClick_btn5"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="-32dp"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="0dp"
+                    android:text="Seguimiento de Obras"
+                    android:textColor="#ffffff"
+                    android:textStyle="normal"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/row2"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/btn_3"
@@ -203,75 +241,47 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/row3"
+            android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:weightSum="2"
             android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_marginTop="10dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:gravity="center_vertical" >
 
                 <ImageButton
                     android:id="@+id/imageButton4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/click_seguimiento"
-                    android:onClick="onClick_btn5"
-                    android:clickable="false"
-                    android:visibility="gone" />
+                    android:background="@drawable/click_seguridad"
+                    android:scaleType="fitXY"
+                    android:onClick="onClick_btn6" />
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="-22dp"
+                    android:layout_marginTop="-32dp"
                     android:gravity="center_horizontal"
                     android:paddingBottom="0dp"
-                    android:text="Seguimiento de Obras"
+                    android:text="Checklist de Seguridad"
                     android:textColor="#ffffff"
                     android:textStyle="normal"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <ImageButton
-                    android:id="@+id/imageButton5"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/click_cercanos"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="-22dp"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="0dp"
-                    android:text="Sitios Cercanos"
-                    android:textColor="#ffffff"
-                    android:textStyle="normal" />
-            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -346,7 +356,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Versión 0.9.4"
+            android:text="Versión 0.9.4.3"
             android:id="@+id/textView26"
             android:layout_alignParentBottom="false"
             android:layout_alignParentTop="false"
