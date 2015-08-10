@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -98,9 +99,9 @@ public class DetalleProyecto1 extends Activity {
         imgToSendList = new ArrayList<>();
         try {
             avance_real_total = Float.parseFloat(mProyecto.getAvance_real());
-            float real = Float.parseFloat(String.format(FLOAT_FORMAT, avance_real_total));
+            float real = Float.parseFloat(String.format(Locale.US,FLOAT_FORMAT, avance_real_total));
             float progra = Float.parseFloat(mProyecto.getAvance_programado());
-            detalle_progreso.setText("Progreso: " + String.format(FLOAT_FORMAT, avance_real_total) + "%");
+            detalle_progreso.setText("Progreso: " + String.format(Locale.US,FLOAT_FORMAT, avance_real_total) + "%");
             mProgressBar.setMax((100 * 10000));
             mProgressBar.setProgress((int) (real * 10000));
         } catch (Exception e) {
@@ -261,31 +262,43 @@ public class DetalleProyecto1 extends Activity {
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        float advance = Float.parseFloat(dia.getAdvanceToday());
-                        if (b) {
-                            advance += a.getAdvance();
-                            avance_real_total += a.getAdvance();
-                            dia.setModify(true);
 
-                            for (int k = dia.getDayNumber()-1; k < mAvances.size(); k++) {
-                                float actual = Float.parseFloat(mAvances.get(k).getText().toString());
-                                mAvances.get(k).setText(String.format(FLOAT_FORMAT, (actual + a.getAdvance())));
+                            Log.i("CHECKBOX LISTENER", "****");
+                            float advance;
+                            if (dia.getAdvanceToday() == null) {
+                                advance = 0;
+                            } else
+                                advance = Float.parseFloat(dia.getAdvanceToday());
+                            Log.i("CHECKBOX LISTENER", "advance: " + advance);
+                        try {
+                            if (b) {
+                                advance += a.getAdvance();
+                                avance_real_total += a.getAdvance();
+                                dia.setModify(true);
+
+                                for (int k = dia.getDayNumber() - 1; k < mAvances.size(); k++) {
+                                    float actual = Float.parseFloat(mAvances.get(k).getText().toString());
+                                    mAvances.get(k).setText(String.format(Locale.US,FLOAT_FORMAT, (actual + a.getAdvance())));
+                                }
+
+                            } else {
+                                advance -= a.getAdvance();
+                                avance_real_total -= a.getAdvance();
+                                if (advance < 0) advance *= -1;
+
+                                for (int k = dia.getDayNumber() - 1; k < mAvances.size(); k++) {
+                                    float actual = Float.parseFloat(mAvances.get(k).getText().toString());
+                                    mAvances.get(k).setText(String.format(Locale.US,FLOAT_FORMAT, (actual - a.getAdvance())));
+                                }
                             }
 
-                        } else {
-                            advance -= a.getAdvance();
-                            avance_real_total -= a.getAdvance();
-                            if (advance < 0) advance *= -1;
-
-                            for (int k = dia.getDayNumber()-1; k < mAvances.size(); k++) {
-                                float actual = Float.parseFloat(mAvances.get(k).getText().toString());
-                                mAvances.get(k).setText(String.format(FLOAT_FORMAT, (actual - a.getAdvance())));
-                            }
+                            Log.i("CHECKBOX LISTENER", "to: " + advance);
+                            dia.setAdvanceToday(String.format(Locale.US,FLOAT_FORMAT, advance));
+                            p_real.setText(String.format(Locale.US,FLOAT_FORMAT, advance));
+                            updateProgresoTotal();
+                        }catch(Exception e){
+                            Toast.makeText(mContext, e.getMessage()+"\n"+e.getCause()+"\n"+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                        dia.setAdvanceToday(String.format(FLOAT_FORMAT, advance));
-                        //dia_p_real.setText(String.format("%.2f", advance + Float.parseFloat(dia.getRealAdvance())));
-                        p_real.setText(String.format(FLOAT_FORMAT, advance));
-                        updateProgresoTotal();
                     }
                 });
                 checkBoxes.add(c);
@@ -310,8 +323,8 @@ public class DetalleProyecto1 extends Activity {
     }
 
     private void updateProgresoTotal() {
-        detalle_progreso.setText("Progreso: " + String.format(FLOAT_FORMAT, avance_real_total) + "%");
-        float real = Float.parseFloat(String.format(FLOAT_FORMAT, avance_real_total));
+        detalle_progreso.setText("Progreso: " + String.format(Locale.US,FLOAT_FORMAT, avance_real_total) + "%");
+        float real = Float.parseFloat(String.format(Locale.US,FLOAT_FORMAT, avance_real_total));
         mProgressBar.setProgress((int) (real * 10000));
 
     }

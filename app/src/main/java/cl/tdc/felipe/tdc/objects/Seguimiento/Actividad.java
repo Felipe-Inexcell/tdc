@@ -1,6 +1,7 @@
 package cl.tdc.felipe.tdc.objects.Seguimiento;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class Actividad {
 
@@ -16,10 +17,13 @@ public class Actividad {
     Bitmap image;
 
     public float getAdvance() {
+
+        Log.d("GETADVANCE", ""+advance);
         return advance;
     }
 
     public void setAdvance(String advance) {
+        Log.d("SETADVANCE", advance);
         this.advance = Float.parseFloat(advance);
     }
 
