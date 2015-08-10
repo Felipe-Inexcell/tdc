@@ -22,6 +22,8 @@ import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cl.tdc.felipe.tdc.AgendaActivity;
 import cl.tdc.felipe.tdc.MainActivity;
@@ -30,6 +32,18 @@ import cl.tdc.felipe.tdc.objects.Maintenance.Activity;
 import cl.tdc.felipe.tdc.objects.Maintenance.MainSystem;
 
 public class Funciones {
+    private static final String PATTERN_DATE = "([0-9]{4})-([0-9]{2})-([0-9]{2})";
+
+    public static boolean validateDate(String date) {
+
+        // Compiles the given regular expression into a pattern.
+        Pattern pattern = Pattern.compile(PATTERN_DATE);
+
+        // Match the given input against this pattern
+        Matcher matcher = pattern.matcher(date);
+        return matcher.matches();
+
+    }
 
     public static int getInputType(String type) {
         int inputType;

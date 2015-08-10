@@ -135,6 +135,8 @@ public class XMLParserSeguimiento {
                 actividad.setIdActivity(Funciones.getCharacterDataFromElement((Element)element.getElementsByTagName("IdActivity").item(0)));
                 actividad.setNameActivity(Funciones.getCharacterDataFromElement((Element) element.getElementsByTagName("NameActivity").item(0)));
                 actividad.setFoto(Funciones.getCharacterDataFromElement((Element) element.getElementsByTagName("Photo").item(0)));
+                actividad.setAdvance(Funciones.getCharacterDataFromElement((Element)element.getElementsByTagName("AdvanceActivity").item(0)));
+                actividad.setSelected(Funciones.getCharacterDataFromElement((Element)element.getElementsByTagName("ActivitySelected").item(0)));
 
                 acts.add(actividad);
             }

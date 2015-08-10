@@ -104,8 +104,9 @@ public class Seguimiento extends Activity {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Proyecto p = mDataset.get(position);
+            float real = Float.parseFloat(p.getAvance_real());
             holder.mTitulo.setText(p.getNombre());
-            holder.mDetalle.setText(p.getAvance_real()+"%/"+p.getAvance_programado()+"%");
+            holder.mDetalle.setText(String.format("%.2f", real)+"%/"+p.getAvance_programado()+"%");
         }
 
 
@@ -182,7 +183,7 @@ public class Seguimiento extends Activity {
                             int itemPosition = mRecyclerView.getChildPosition(view);
                             Proyecto p = proyectos.get(itemPosition);
 
-                            Intent intent = new Intent(actividad.getApplication(), DetalleProyecto.class);
+                            Intent intent = new Intent(actividad.getApplication(), DetalleProyecto1.class);
                             intent.putExtra("PROYECTO", p.toString());
                             startActivity(intent);
                         }

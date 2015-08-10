@@ -2,7 +2,6 @@ package cl.tdc.felipe.tdc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,31 +9,42 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.daemon.WifiTrackerTDC;
-import cl.tdc.felipe.tdc.objects.FormularioCheck;
+import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
+import cl.tdc.felipe.tdc.webservice.UploadImage;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
-import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class MainActivity extends ActionBarActivity {
+    Context mContext;
     private static final String TAG = "MAINACTIVITY";
     public static Activity actividad;
     public static Intent service_wifi, service_pos;
@@ -51,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG, "MainActyvity Start");
         actividad = this;
         preferencesTDC = new PreferencesTDC(this);
+        mContext = this;
 
         agendabtn = (ImageButton) findViewById(R.id.btn_agenda);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -76,6 +87,7 @@ public class MainActivity extends ActionBarActivity {
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
         }
+
 
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         IMEI = telephonyManager.getDeviceId();
@@ -117,19 +129,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    // AGENDA.
+    // TODO: AGENDA.
     public void onClick_btn2(View v) {
         //startActivity(new Intent(this,AgendaActivity.class));
         AgendaTask agendaTask = new AgendaTask(this);
         agendaTask.execute();
     }
 
-    // NOTIFICAR AVERIA
+    //TODO: NOTIFICAR AVERIA
     public void onClick_btn3(View v) {
         startActivity(new Intent(this, AveriaActivity.class));
     }
 
-    // SITIOS CERCANOS
+    //TODO:  SITIOS CERCANOS
     public void onClick_btn4(View v) {
         try {
             startActivity(new Intent(this, CercanosActivity.class));
@@ -149,15 +161,21 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
+  //TODO: SEGUIMIENTO DE OBRAS
     public void onClick_btn5(View v) {
         startActivity(new Intent(this, Seguimiento.class));
     }
 
+    //TODO CHECKLIST SEGURIDAD DIARIO
     public void onClick_btn6(View v) {
         ChecklistTask c = new ChecklistTask(this);
         c.execute();
     }
+
+
+
+
+
 
     void settings() {
         TelephonyManager fono = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -169,7 +187,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    //-----------------TASK ASINCRONICO------------------------------------
+//-----------------TASK ASINCRONICO------------------------------------
 
 
     private class ChecklistTask extends AsyncTask<String, String, String> {
@@ -205,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return "Ha ocurrido un error ("+e.getMessage()+"). Por favor reintente.";
+                return "Ha ocurrido un error (" + e.getMessage() + "). Por favor reintente.";
             }
         }
 

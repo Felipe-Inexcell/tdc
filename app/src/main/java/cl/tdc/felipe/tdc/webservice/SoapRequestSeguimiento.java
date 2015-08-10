@@ -143,6 +143,7 @@ public class SoapRequestSeguimiento {
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();
         response = EntityUtils.toString(resEntity);
+        Log.d("GET ACTIVIDADES", response);
         return response;
     }
 
@@ -170,19 +171,40 @@ public class SoapRequestSeguimiento {
                 "<Parameters xsi:type=\"urn:Parameters\">" +
                 "<Building xsi:type=\"urn:Building\">" +
                 "<Days xsi:type=\"urn:Days\">";
-        for (Dia d : dias) {
+
+        float tadvance = 0;
+        for (int j = 0; j < dias.size(); j++) {
+            Dia d = dias.get(j);
+            float enviar = 0;
+            float real = Float.parseFloat(d.getRealAdvance());
+            float today = Float.parseFloat(d.getAdvanceToday());
+            tadvance+= today;
+
+            enviar = real + tadvance;
+            String date = "-1";
+            if(d.getFecha().getText().length() > 0)
+                date = d.getFecha().getText().toString();
+
             xml += "<Day xsi:type=\"urn:Day\">" +
                     "<DayNumber xsi:type=\"xsd:string\">" + d.getDayNumber() + "</DayNumber>" +
                     "<ProgrammedAdvance xsi:type=\"xsd:string\">" + d.getProgrammedAdvance() + "</ProgrammedAdvance>" +
-                    "<RealAdvance xsi:type=\"xsd:string\">" + d.getRealAdvance() + "</RealAdvance>" +
-                    "<Date xsi:type=\"xsd:string\">+" + d.getDate() + "</Date>" +
-                    "<DescriptionDay xsi:type=\"xsd:string\">" + d.getDescriptionDay() + "</DescriptionDay>" +
+                    "<RealAdvance xsi:type=\"xsd:string\">" + enviar + "</RealAdvance>" +
+                    "<Date xsi:type=\"xsd:string\">" + date + "</Date>" +
+                    "<DescriptionDay xsi:type=\"xsd:string\">" + d.getObservacion().getText() + "</DescriptionDay>" +
                     "<Activities xsi:type=\"urn:Activities\">";
-            for (Actividad a : d.getActividades()) {
+
+            for (int i = 0; i < d.getActividades().size(); i++) {
+                Actividad a = d.getActividades().get(i);
+
                 xml += "<Activity xsi:type=\"urn:Activity\">" +
-                        "<IdActivity xsi:type=\"xsd:string\">"+a.getIdActivity()+"</IdActivity>" +
-                        "<NameActivity xsi:type=\"xsd:string\">"+a.getNameActivity()+"</NameActivity>" +
-                        "</Activity>";
+                        "<IdActivity xsi:type=\"xsd:string\">" + a.getIdActivity() + "</IdActivity>" +
+                        "<NameActivity xsi:type=\"xsd:string\">" + a.getNameActivity() + "</NameActivity>";
+                if (d.getCheckBoxes().get(i).isChecked()) {
+                    xml += "<ActivitySelected xsi:type=\"xsd:string\">1</ActivitySelected>";
+                } else {
+                    xml += "<ActivitySelected xsi:type=\"xsd:string\">0</ActivitySelected>";
+                }
+                xml += "</Activity>";
             }
             xml += "</Activities>" +
                     "</Day>";
@@ -209,7 +231,7 @@ public class SoapRequestSeguimiento {
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
         httpPost.addHeader("", dummy.URL_PROJECT_SEND);
-
+        Log.w("ENVIANDO", xml);
         httpPost.setEntity(se);
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();

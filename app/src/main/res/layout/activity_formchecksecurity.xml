@@ -80,8 +80,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        android:layout_above="@+id/cerca_footer"
-        android:background="@drawable/fondo_general">
+        android:layout_above="@+id/cerca_footer">
 
         <LinearLayout
             android:gravity="center_horizontal"

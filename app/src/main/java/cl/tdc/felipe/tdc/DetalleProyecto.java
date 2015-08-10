@@ -16,11 +16,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +106,7 @@ public class DetalleProyecto extends Activity {
         mProyecto = new Proyecto(getIntent().getExtras().getString("PROYECTO"));
         mRecyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);
 
+
         getActivities task = new getActivities(this);
         task.execute();
 
@@ -119,10 +124,9 @@ public class DetalleProyecto extends Activity {
     }
 
     public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.ViewHolder> {
-        private ArrayList<Dia> mDataset;
+        public ArrayList<Dia> mDiasResp;
 
-        public ActividadesAdapter(ArrayList<Dia> myDataset) {
-            mDataset = myDataset;
+        public ActividadesAdapter() {
         }
 
 
@@ -139,18 +143,59 @@ public class DetalleProyecto extends Activity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             final Date fecha = new Date();
-            final Dia d = mDataset.get(position);
-            String actividades = "";
+
+            final Dia d = mDias.get(position);
+
+            holder.pProgramado.setText(d.getProgrammedAdvance() + "%");
+            holder.pReal.setText(d.getRealAdvance() + "%");
+            holder.avance.setText(d.getRealAdvance());
+
             boolean foto = false;
-            for (Actividad a : d.getActividades()) {
+            float avancetotal= 0;
+            final ArrayList<Actividad> actividadArrayList = d.getActividades();
+
+            for (int i = 0; i< actividadArrayList.size(); i++) {
+                final Actividad a = actividadArrayList.get(i);
                 if (a.isFoto()) foto = true;
-                actividades += "* " + a.getNameActivity() + "\n";
+
+                CheckBox c = new CheckBox(mContext);
+                c.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                c.setText(a.getNameActivity());
+                c.setPadding(0,0,0,24);
+
+
+                if(a.isSelected()){
+                    c.setEnabled(false);
+                    c.setChecked(a.isSelected());
+                    avancetotal+= a.getAdvance();
+                }
+
+                final int index = i;
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        a.setSelected(b);
+                        actividadArrayList.set(index,a);
+                        d.setActividades(actividadArrayList);
+                        float f;
+                        if(b){
+                            f = Float.parseFloat(d.getRealAdvance()) + a.getAdvance();
+                        }else{
+                            f = Float.parseFloat(d.getRealAdvance()) - a.getAdvance();
+                        }
+
+                        d.setRealAdvance(String.valueOf(f));
+                        mDias.set(position, d);
+                        holder.avance.setText(String.valueOf(f));
+
+                    }
+                });
+
+                ((LinearLayout) holder.listadoActividades).addView(c);
+
             }
 
             holder.dia.setText("DÍA " + String.valueOf(d.getDayNumber()));
-            holder.pProgramado.setText(d.getProgrammedAdvance() + "%");
-            holder.pReal.setText(d.getRealAdvance() + "%");
-            holder.nombre.setText(actividades);
             if (foto) {
                 holder.camara.setVisibility(View.VISIBLE);
                 holder.camara.setOnClickListener(new View.OnClickListener() {
@@ -164,23 +209,6 @@ public class DetalleProyecto extends Activity {
 
             holder.fecha.setText(formatter.format(fecha));
 
-            holder.avance.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    d.setRealAdvance(editable.toString());
-                    d.setDate(formatter.format(fecha));
-                    mDias.set(position, d);
-                }
-            });
 
             holder.observacion.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -205,7 +233,7 @@ public class DetalleProyecto extends Activity {
 
         @Override
         public int getItemCount() {
-            return mDataset.size();
+            return mDias.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -215,6 +243,8 @@ public class DetalleProyecto extends Activity {
             public ImageButton camara;
             private View contenido;
 
+            public View listadoActividades;
+
             public EditText avance, fecha, observacion;
 
             public ViewHolder(View v) {
@@ -222,6 +252,8 @@ public class DetalleProyecto extends Activity {
                 contenido = v.findViewById(R.id.content);
                 expandir = (ImageButton) v.findViewById(R.id.expand);
                 camara = (ImageButton) v.findViewById(R.id.foto);
+
+                listadoActividades = v.findViewById(R.id.activityList);
 
                 avance = (EditText) v.findViewById(R.id.avance);
 
@@ -351,7 +383,7 @@ public class DetalleProyecto extends Activity {
                     mLayoutManager = new LinearLayoutManager(aContext);
                     mRecyclerView.setLayoutManager(mLayoutManager);
 
-                    mAdapter = new ActividadesAdapter(mDias);
+                    mAdapter = new ActividadesAdapter();
                     mRecyclerView.setAdapter(mAdapter);
 
                 } catch (ParserConfigurationException e) {
@@ -390,6 +422,7 @@ public class DetalleProyecto extends Activity {
         protected void onPreExecute() {
             dialog = new ProgressDialog(aContext);
             dialog.setMessage("Enviando Checklist");
+            dialog.setCancelable(false);
             dialog.show();
         }
 

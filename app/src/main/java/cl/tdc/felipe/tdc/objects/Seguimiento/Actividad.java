@@ -2,9 +2,6 @@ package cl.tdc.felipe.tdc.objects.Seguimiento;
 
 import android.graphics.Bitmap;
 
-/**
- * Created by felip on 02/08/2015.
- */
 public class Actividad {
 
     public Actividad() {
@@ -12,8 +9,42 @@ public class Actividad {
 
     int idActivity;
     String nameActivity;
+    float advance;
+    boolean selected;
     boolean foto;
+
     Bitmap image;
+
+    public float getAdvance() {
+        return advance;
+    }
+
+    public void setAdvance(String advance) {
+        this.advance = Float.parseFloat(advance);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public String isSelectedString() {
+        if (selected)
+            return "1";
+        else
+            return "0";
+    }
+
+    public void setSelected(Boolean b){
+        this.selected = b;
+    }
+
+    public void setSelected(String selected) {
+        if (selected.compareTo("0") == 0)
+            this.selected = false;
+        if (selected.compareTo("1") == 0)
+            this.selected = true;
+
+    }
 
     public Bitmap getImage() {
         return image;

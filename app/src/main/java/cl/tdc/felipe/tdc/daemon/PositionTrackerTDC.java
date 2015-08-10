@@ -81,7 +81,7 @@ public class PositionTrackerTDC extends Service {
 
                             String latitude = String.valueOf(gps.getLatitude());
                             String longitude = String.valueOf(gps.getLongitude());
-
+                            Log.i("GEOCODER", latitude+" "+longitude);
                             List<Address> addressList = geocoder.getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
 
                             if (addressList != null && addressList.size() > 0 && Funciones.isCorrect(addressList.get(0))) {

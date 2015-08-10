@@ -1,13 +1,17 @@
 package cl.tdc.felipe.tdc;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -15,10 +19,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.gcacace.signaturepad.views.SignaturePad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +46,19 @@ import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 
 public class FormCheckSecurity extends Activity {
+    Context mContext;
     String Response;
     FormularioCheck formulario;
     ArrayList<Modulo> modulos;
     ScrollView scrollViewMain;
+    Bitmap firma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formchecksecurity);
 
+        mContext = this;
         scrollViewMain = (ScrollView)findViewById(R.id.cerca_content);
         Response = getIntent().getStringExtra("RESPONSE");
         ObtenerFormulario init = new ObtenerFormulario(this);
@@ -110,7 +121,7 @@ public class FormCheckSecurity extends Activity {
             LinearLayout lModulo = new LinearLayout(this);
             lModulo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             lModulo.setOrientation(LinearLayout.VERTICAL);
-            lModulo.setBackgroundResource(R.drawable.fondo_general1_bottom);
+            lModulo.setBackgroundResource(R.drawable.fondo_general_bottom);
             lModulo.setPadding(10,6,10,6);
 
             TextView tModulo = new TextView(this);
@@ -127,15 +138,16 @@ public class FormCheckSecurity extends Activity {
                 LinearLayout lSubModulo = new LinearLayout(this);
                 lSubModulo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 lSubModulo.setOrientation(LinearLayout.VERTICAL);
+                lSubModulo.setGravity(Gravity.CENTER_HORIZONTAL);
                 lSubModulo.setBackgroundResource(R.drawable.fondo_1);
-                lSubModulo.setPadding(15,8,15,8);
 
                 TextView tSubModulo = new TextView(this);
                 tSubModulo.setText(subModulo.getName());
-                tSubModulo.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+                tSubModulo.setBackgroundColor(Color.parseColor("#226666"));
+                tSubModulo.setTextAppearance(this, android.R.style.TextAppearance_Small);
+                tSubModulo.setTextColor(getResources().getColor(android.R.color.white));
                 tSubModulo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 tSubModulo.setGravity(Gravity.CENTER_HORIZONTAL);
-                tSubModulo.setTextAppearance(this, android.R.style.TextAppearance_Small);
                 lSubModulo.addView(tSubModulo);
 
 
@@ -147,10 +159,13 @@ public class FormCheckSecurity extends Activity {
                     lElemento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     lElemento.setOrientation(LinearLayout.VERTICAL);
                     lElemento.setGravity(Gravity.CENTER_HORIZONTAL);
+                    lElemento.setPadding(24,8,24,8);
 
                     TextView tElemento = new TextView(this);
                     tElemento.setText(elemento.getName());
-                    lSubModulo.addView(tElemento);
+                    tElemento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tElemento.setGravity(Gravity.CENTER_HORIZONTAL);
+                    lElemento.addView(tElemento);
 
                     if(elemento.getType().compareTo("CHECK") == 0){
                         LinearLayout checkboxLayout = new LinearLayout(this);
@@ -161,6 +176,7 @@ public class FormCheckSecurity extends Activity {
                         while(count < elemento.getValues().size()){
                             LinearLayout dump = new LinearLayout(this);
                             dump.setOrientation(LinearLayout.HORIZONTAL);
+                            dump.setGravity(Gravity.CENTER_HORIZONTAL);
                             dump.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             for(int p = 0; p < 3; p++){
                                 if(count < elemento.getValues().size()) {
@@ -186,7 +202,101 @@ public class FormCheckSecurity extends Activity {
                         lElemento.addView(campo);
                     }
                     if(elemento.getType().compareTo("FIRMA")== 0){
+                        LinearLayout firmaLayout = new LinearLayout(this);
+                        firmaLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        firmaLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        firmaLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
+                        Button firmar = new Button(this);
+                        final Button verFirma = new Button(this);
+
+                        firmar.setBackgroundResource(R.drawable.custom_button_rounded_green);
+                        verFirma.setBackgroundResource(R.drawable.custom_button_rounded_green);
+
+                        firmar.setText("Firmar");
+                        verFirma.setText("Ver Firma");
+
+                        verFirma.setEnabled(false);
+
+                        firmar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                View v = LayoutInflater.from(FormCheckSecurity.this).inflate(R.layout.view_signature, null, false);
+
+                                final SignaturePad pad = (SignaturePad) v.findViewById(R.id.signature_pad);
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                                builder.setView(v);
+                                builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        firma = pad.getSignatureBitmap();
+                                        verFirma.setEnabled(true);
+                                    }
+                                });
+                                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+
+                                builder.setNeutralButton("Borrar", null);
+                                final AlertDialog dialog = builder.create();
+                                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                                    @Override
+                                    public void onShow(DialogInterface d) {
+
+                                        Button b = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                                        b.setOnClickListener(new View.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(View view) {
+                                                pad.clear();
+                                            }
+                                        });
+                                    }
+                                });
+
+                                dialog.show();
+                            }
+                        });
+
+                        verFirma.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                                b.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                b.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        firma = null;
+                                        verFirma.setEnabled(false);
+                                        Toast.makeText(mContext, " Se  ha eliminado la firma.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                View v = LayoutInflater.from(mContext).inflate(R.layout.view_signature_preview, null, false);
+                                ImageView IVpreview = (ImageView) v.findViewById(R.id.preview);
+                                IVpreview.setImageBitmap(firma);
+                                b.setView(v);
+                                b.setTitle("Vista Previa Firma");
+                                b.show();
+                            }
+                        });
+
+                        firmaLayout.addView(firmar);
+                        firmaLayout.addView(verFirma);
+
+
+
+                        lElemento.addView(firmaLayout);
                     }
 
                     lSubModulo.addView(lElemento);

@@ -247,8 +247,7 @@
             android:layout_gravity="center_horizontal"
             android:weightSum="2"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:visibility="gone">
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -256,7 +255,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_vertical" >
+                android:gravity="center_vertical"
+                android:visibility="gone">
 
                 <ImageButton
                     android:id="@+id/imageButton4"
@@ -356,7 +356,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Versión 0.9.4.3"
+            android:text="Versión 0.9.4.8"
             android:id="@+id/textView26"
             android:layout_alignParentBottom="false"
             android:layout_alignParentTop="false"

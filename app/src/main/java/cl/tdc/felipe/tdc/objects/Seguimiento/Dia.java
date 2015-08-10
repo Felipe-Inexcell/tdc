@@ -1,21 +1,76 @@
 package cl.tdc.felipe.tdc.objects.Seguimiento;
 
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
-/**
- * Created by felip on 02/08/2015.
- */
 public class Dia {
 
     public Dia() {
+        this.modify = false;
     }
 
+    boolean modify;
     int dayNumber;
     String programmedAdvance;
     String realAdvance;
+    String advanceToday;
     String date;
     String descriptionDay;
     ArrayList<Actividad> actividades;
+
+    ArrayList<CheckBox> checkBoxes;
+    EditText fecha, observacion, avance;
+
+    public boolean isModify() {
+        return modify;
+    }
+
+    public void setModify(boolean modify) {
+        this.modify = modify;
+    }
+
+    public String getAdvanceToday() {
+        return advanceToday;
+    }
+
+    public void setAdvanceToday(String advanceToday) {
+        this.advanceToday = advanceToday;
+    }
+
+    public ArrayList<CheckBox> getCheckBoxes() {
+        return checkBoxes;
+    }
+
+    public void setCheckBoxes(ArrayList<CheckBox> checkBoxes) {
+        this.checkBoxes = checkBoxes;
+    }
+
+    public EditText getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(EditText fecha) {
+        this.fecha = fecha;
+    }
+
+    public EditText getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(EditText observacion) {
+        this.observacion = observacion;
+    }
+
+    public EditText getAvance() {
+        return avance;
+    }
+
+    public void setAvance(EditText avance) {
+        this.avance = avance;
+    }
 
     public int getDayNumber() {
         return dayNumber;

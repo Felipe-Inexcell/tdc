@@ -2,10 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginBottom="0dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -106,9 +103,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Nombre Actividad"
+            android:text="Actividades:"
             android:id="@+id/nombre_actividad"
             android:layout_marginRight="16dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activityList"></LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -121,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="% AVANCE REAL"
-                android:id="@+id/textView24" />
+                android:id="@+id/textView24"
+                android:visibility="gone"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -131,11 +135,12 @@
                 android:layout_marginRight="24dp"
                 android:background="@drawable/fondo_edittext"
                 android:paddingTop="4dp"
+                android:editable="false"
                 android:paddingBottom="4dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -159,11 +164,11 @@
                 android:layout_marginRight="24dp"
                 android:background="@drawable/fondo_edittext"
                 android:paddingTop="4dp"
+                android:hint="AAAA-MM-DD"
                 android:paddingBottom="4dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:editable="false"
-                android:inputType="none" />
+                android:inputType="date" />
         </LinearLayout>
 
         <LinearLayout
