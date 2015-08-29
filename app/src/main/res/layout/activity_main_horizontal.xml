@@ -255,8 +255,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:visibility="gone">
+                android:gravity="center_vertical">
 
                 <ImageButton
                     android:id="@+id/imageButton4"
@@ -356,7 +355,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Versión 0.9.4.9"
+            android:text="@string/app_version"
             android:id="@+id/textView26"
             android:layout_alignParentBottom="false"
             android:layout_alignParentTop="false"

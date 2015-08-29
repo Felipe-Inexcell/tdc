@@ -1,4 +1,4 @@
-package cl.tdc.felipe.tdc.objects.ControSeguridadDiario;
+package cl.tdc.felipe.tdc.objects.MaintChecklist;
 
 import java.util.ArrayList;
 

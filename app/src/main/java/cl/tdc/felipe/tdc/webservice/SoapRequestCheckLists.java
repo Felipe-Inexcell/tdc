@@ -1,5 +1,7 @@
 package cl.tdc.felipe.tdc.webservice;
 
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,7 +15,13 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Elemento;
+import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Modulo;
+import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.SubModulo;
+import cl.tdc.felipe.tdc.objects.MaintChecklist.Section;
 
 
 public class SoapRequestCheckLists {
@@ -48,11 +56,11 @@ public class SoapRequestCheckLists {
                 "</Parameters>" +
                 "</Form_Detail>" +
                 "<Header xsi:type=\"urn:Header\">" +
-                "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
                 "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
                 "</Header>" +
                 "<Form_Header xsi:type=\"urn:Form_Header\">" +
-                "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                "<Imei xsi:type=\"xsd:string\">" + IMEI + "</Imei>" +
                 "</Form_Header>" +
                 "</Request>" +
                 "</System>" +
@@ -70,8 +78,8 @@ public class SoapRequestCheckLists {
         response = EntityUtils.toString(resEntity);
         return response;
     }
-    
-    public static String getMainChecklist(int ID) throws Exception {
+
+    public static String getMainChecklist(String ID) throws Exception {
         String response = null;
         String xml = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -100,11 +108,11 @@ public class SoapRequestCheckLists {
                 "</Parameters>" +
                 "</Form_Detail>" +
                 "<Header xsi:type=\"urn:Header\">" +
-                "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
                 "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
                 "</Header>" +
                 "<Form_Header xsi:type=\"urn:Form_Header\">" +
-                "<MaintenanceId xsi:type=\"xsd:string\">"+ID+"</MaintenanceId>" +
+                "<MaintenanceId xsi:type=\"xsd:string\">" + ID + "</MaintenanceId>" +
                 "</Form_Header>" +
                 "</Request>" +
                 "</System>" +
@@ -123,7 +131,7 @@ public class SoapRequestCheckLists {
         return response;
     }
 
-    public static String sendDailyActivities(String IMEI) throws Exception {
+    public static String sendDailyActivities(String IMEI, ArrayList<Modulo> form) throws Exception {
         String response = null;
         String xml = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -146,34 +154,41 @@ public class SoapRequestCheckLists {
                 "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
                 "<Parameters xsi:type=\"urn:Parameters\">" +
                 "<Risk xsi:type=\"urn:Risk\">" +
-                "<Modules xsi:type=\"urn:Modules\">" +
-                "<Module xsi:type=\"urn:Module\">" +
-                "<IdModule xsi:type=\"xsd:string\">?</IdModule>" +
-                "<NameModule xsi:type=\"xsd:string\">?</NameModule>" +
-                "<SubModules xsi:type=\"urn:SubModules\">" +
-                "<SubModule xsi:type=\"urn:SubModule\">" +
-                "<IdSubModule xsi:type=\"xsd:string\">?</IdSubModule>" +
-                "<NameSubModule xsi:type=\"xsd:string\">?</NameSubModule>" +
-                "<Activities xsi:type=\"urn:Activities\">" +
-                "<Activity xsi:type=\"urn:Activity\">" +
-                "<IdActivity xsi:type=\"xsd:string\">?</IdActivity>" +
-                "<NameActivity xsi:type=\"xsd:string\">?</NameActivity>" +
-                "<ValueActivity xsi:type=\"xsd:string\">?</ValueActivity>" +
-                "</Activity>" +
-                "</Activities>" +
-                "</SubModule>" +
-                "</SubModules>" +
-                "</Module>" +
-                "</Modules>" +
+                "<Modules xsi:type=\"urn:Modules\">";
+        for (Modulo m : form) {
+            xml += "<Module xsi:type=\"urn:Module\">" +
+                    "<IdModule xsi:type=\"xsd:string\">" + m.getId() + "</IdModule>" +
+                    "<NameModule xsi:type=\"xsd:string\">" + m.getName() + "</NameModule>" +
+                    "<SubModules xsi:type=\"urn:SubModules\">";
+            for (SubModulo sm : m.getSubModulos()) {
+                xml += "<SubModule xsi:type=\"urn:SubModule\">" +
+                        "<IdSubModule xsi:type=\"xsd:string\">" + sm.getId() + "</IdSubModule>" +
+                        "<NameSubModule xsi:type=\"xsd:string\">" + sm.getName() + "</NameSubModule>" +
+                        "<Activities xsi:type=\"urn:Activities\">";
+
+                for (Elemento e : sm.getElementos()) {
+                    xml += "<Activity xsi:type=\"urn:Activity\">" +
+                            "<IdActivity xsi:type=\"xsd:string\">" + e.getId() + "</IdActivity>" +
+                            "<NameActivity xsi:type=\"xsd:string\">" + e.getName() + "</NameActivity>" +
+                            "<ValueActivity xsi:type=\"xsd:string\">" + e.getValue() + "</ValueActivity>" +
+                            "</Activity>";
+                }
+                xml += "</Activities>" +
+                        "</SubModule>";
+            }
+            xml += "</SubModules>" +
+                    "</Module>";
+        }
+        xml += "</Modules>" +
                 "</Risk>" +
                 "</Parameters>" +
                 "</Form_Detail>" +
                 "<Header xsi:type=\"urn:Header\">" +
-                "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
                 "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
                 "</Header>" +
                 "<Form_Header xsi:type=\"urn:Form_Header\">" +
-                "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                "<Imei xsi:type=\"xsd:string\">" + IMEI + "</Imei>" +
                 "</Form_Header>" +
                 "</Request>" +
                 "</System>" +
@@ -181,6 +196,7 @@ public class SoapRequestCheckLists {
                 "</soapenv:Body>" +
                 "</soapenv:Envelope>";
 
+        Log.i("SEND DAILY", xml);
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
         httpPost.addHeader("", dummy.URL_SEND_DAILYACTIVITIES);
@@ -192,7 +208,7 @@ public class SoapRequestCheckLists {
         return response;
     }
 
-    public static String sendMainChecklist(int ID) throws Exception {
+    public static String sendMainChecklist(String ID, ArrayList<cl.tdc.felipe.tdc.objects.MaintChecklist.Modulo> form) throws Exception {
         String response = null;
         String xml = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -214,22 +230,31 @@ public class SoapRequestCheckLists {
                 "<Request xsi:type=\"urn:Request\">" +
                 "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
                 "<Parameters xsi:type=\"urn:Parameters\">" +
-                "<Answers xsi:type=\"urn:Answers\">" +
-                "<Answer xsi:type=\"urn:Answer\">" +
-                "<IdActivity xsi:type=\"xsd:string\">?</IdActivity>" +
-                "<AnswerActivity xsi:type=\"xsd:string\">?</AnswerActivity>" +
-                "</Answer>" +
-                "</Answers>" +
+                "<Answers xsi:type=\"urn:Answers\">";
+        for(cl.tdc.felipe.tdc.objects.MaintChecklist.Modulo m: form){
+            for(cl.tdc.felipe.tdc.objects.MaintChecklist.SubModulo sm: m.getSubModulos()){
+                for(Section s: sm.getSections()){
+                    for(Elemento e: s.getElementos()){
+                        xml += "<Answer xsi:type=\"urn:Answer\">" +
+                                "<IdActivity xsi:type=\"xsd:string\">"+e.getId()+"</IdActivity>" +
+                                "<AnswerActivity xsi:type=\"xsd:string\">"+e.getValue()+"</AnswerActivity>" +
+                                "</Answer>";
+                    }
+                }
+            }
+        }
+
+        xml += "</Answers>" +
                 "</Parameters>" +
                 "</Form_Detail>" +
                 "<!--Optional:-->" +
                 "<Header xsi:type=\"urn:Header\">" +
-                "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
                 "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
                 "</Header>" +
                 "<!--Optional:-->" +
                 "<Form_Header xsi:type=\"urn:Form_Header\">" +
-                "<MaintenanceId xsi:type=\"xsd:string\">"+ID+"</MaintenanceId>" +
+                "<MaintenanceId xsi:type=\"xsd:string\">" + ID + "</MaintenanceId>" +
                 "</Form_Header>" +
                 "</Request>" +
                 "</System>" +

@@ -11,6 +11,7 @@ public class MaintenanceReg {
     public static final String NAME_MAINTENANCE_PREF = "MAINENANCE_REG";
     public static final String MAINTENANCE_ID = "MAINTENANSE_ID";
     public static final String MAINTENANCE_FLAG = "MAINTENANSE_FLAG";
+    public static final String MAINTENANCE_CHECK = "MAINTENANSE_CHECK";
 
     public SharedPreferences sharedPreferences;
 
@@ -30,9 +31,21 @@ public class MaintenanceReg {
         editor.apply();
     }
 
+    public void setChecklistState(boolean state){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(MAINTENANCE_CHECK, state);
+        editor.apply();
+    }
+
+    public boolean getChecklistState(){return sharedPreferences.getBoolean(MAINTENANCE_CHECK,false);}
+
     public String getMaintenance() {
         Log.d("GET SHARED", sharedPreferences.getString(MAINTENANCE_ID, "-1") + "   " + sharedPreferences.getString(MAINTENANCE_FLAG, "-1"));
         return sharedPreferences.getString(MAINTENANCE_ID, "-1") + ";" + sharedPreferences.getString(MAINTENANCE_FLAG, "-1");
+    }
+
+    public String getID(){
+        return sharedPreferences.getString(MAINTENANCE_ID,"-1");
     }
 
     public void clearPreferences() {

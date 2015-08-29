@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,7 +31,21 @@ import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Elemento;
@@ -40,15 +57,19 @@ import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttribute;
 import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttributeValues;
 import cl.tdc.felipe.tdc.objects.FormSystem;
 import cl.tdc.felipe.tdc.objects.FormularioCheck;
+import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
+import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
+import cl.tdc.felipe.tdc.webservice.UploadImage;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
+import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class FormCheckSecurity extends Activity {
     Context mContext;
     String Response;
-    FormularioCheck formulario;
+    ArrayList<Modulo> formulario;
     ArrayList<Modulo> modulos;
     ScrollView scrollViewMain;
     Bitmap firma;
@@ -65,21 +86,54 @@ public class FormCheckSecurity extends Activity {
         init.execute();
     }
 
-    public void onClick_apagar(View v) {
-        finish();
-        if(AgendaActivity.actividad!=null)
-            AgendaActivity.actividad.finish();
-        if(MainActivity.actividad!= null)
-            MainActivity.actividad.finish();
+    public void onClick_apagar(View v) {AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir del CheckList?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((Activity)mContext).finish();
+                if(AgendaActivity.actividad!=null)
+                    AgendaActivity.actividad.finish();
+                if(MainActivity.actividad!= null)
+                    MainActivity.actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
 
     public void onClick_back(View v) {
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir del CheckList?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((Activity)mContext).finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
     public void enviar_form(View v){
-        String TAG = "ENVIARFORM";
+        if(firma == null) {
+            Toast.makeText(mContext, "Por favor registre su firma.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Enviar task = new Enviar(this);
+        task.execute();
 
     }
 
@@ -109,11 +163,11 @@ public class FormCheckSecurity extends Activity {
     /*
     TODO DIBUJAR VISTA
      */
-    private void dibujarVista(ArrayList<Modulo> formulario) {
+    private void dibujarVista(ArrayList<Modulo> form) {
         LinearLayout contenido = (LinearLayout) this.findViewById(R.id.contenido);
         final List<LinearLayout> subcontenidos = new ArrayList<>();
 
-        for(Modulo modulo : formulario){
+        for(Modulo modulo : form){
             LinearLayout lModulotitle = new LinearLayout(this);
             lModulotitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             lModulotitle.setOrientation(LinearLayout.VERTICAL);
@@ -152,8 +206,7 @@ public class FormCheckSecurity extends Activity {
 
 
 
-                for(Elemento elemento : subModulo.getElementos()){
-                    List<CheckBox> checkBoxes = new ArrayList<>();
+                for(final Elemento elemento : subModulo.getElementos()){
 
                     LinearLayout lElemento = new LinearLayout(this);
                     lElemento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -172,6 +225,7 @@ public class FormCheckSecurity extends Activity {
                         checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         checkboxLayout.setOrientation(LinearLayout.VERTICAL);
 
+                        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
                         int count = 0;
                         while(count < elemento.getValues().size()){
                             LinearLayout dump = new LinearLayout(this);
@@ -189,10 +243,11 @@ public class FormCheckSecurity extends Activity {
                                 }
                             }
                             checkboxLayout.addView(dump);
-
                         }
                         makeOnlyOneCheckable(checkBoxes);
                         lElemento.addView(checkboxLayout);
+
+                        elemento.setCheckBoxes(checkBoxes);
                     }
                     if(elemento.getType().compareTo("TEXT") == 0){
                         EditText campo = new EditText(this);
@@ -200,6 +255,7 @@ public class FormCheckSecurity extends Activity {
                         campo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         campo.setBackgroundResource(R.drawable.fondo_edittext);
                         lElemento.addView(campo);
+                        elemento.setEditText(campo);
                     }
                     if(elemento.getType().compareTo("FIRMA")== 0){
                         LinearLayout firmaLayout = new LinearLayout(this);
@@ -231,7 +287,13 @@ public class FormCheckSecurity extends Activity {
                                 builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        DateFormat format = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+                                        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
                                         firma = pad.getSignatureBitmap();
+                                        elemento.setFileName(telephonyManager.getDeviceId()+"_"+format.format(new Date())+".png");
+                                        elemento.setFirma(firma);
                                         verFirma.setEnabled(true);
                                     }
                                 });
@@ -278,6 +340,8 @@ public class FormCheckSecurity extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         firma = null;
+                                        elemento.setFirma(null);
+                                        elemento.setFileName(null);
                                         verFirma.setEnabled(false);
                                         Toast.makeText(mContext, " Se  ha eliminado la firma.", Toast.LENGTH_SHORT).show();
                                     }
@@ -309,180 +373,6 @@ public class FormCheckSecurity extends Activity {
             contenido.addView(lModulotitle);
             contenido.addView(lModulo);
         }
-        /*for (FormSystem System : formulario.getSystem()) {
-
-            Button buttonSystem = new Button(this);
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            //buttonSystem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            buttonSystem.setText(System.getNameSystem());
-
-            if(formulario.getSystem().indexOf(System) == 0) {
-                buttonSystem.setBackgroundResource(R.drawable.accordion_top);
-            }
-            else{
-                buttonSystem.setBackgroundResource(R.drawable.accordion_topc);
-                param.setMargins(0, 10, 0, 0);
-            }
-            buttonSystem.setLayoutParams(param);
-            buttonSystem.setClickable(true);
-            contenido.addView(buttonSystem);
-
-
-            final LinearLayout bottom = new LinearLayout(this);
-            bottom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bottom.setOrientation(LinearLayout.VERTICAL);
-            bottom.setBackgroundResource(R.drawable.accordion_bot);
-            bottom.setVisibility(View.GONE);
-
-            for (FormSubSystem subSystem : System.getSubSystemList()) {
-                TextView nameSubSystem = new TextView(this);
-                nameSubSystem.setText(subSystem.getNameSubSystem());
-                nameSubSystem.setTextSize(16);
-                nameSubSystem.setGravity(Gravity.CENTER_HORIZONTAL);
-                nameSubSystem.setPadding(0, 15, 0, 10);
-
-                //contenido.addView(nameSubSystem);
-                bottom.addView(nameSubSystem);
-
-                for (int i = 0; i < subSystem.getItemList().size(); i++) {
-                    FormSubSystemItem item = subSystem.getItemList().get(i);
-                    LinearLayout itemLayout = new LinearLayout(this);
-
-                    /*if (i == 0)
-                        itemLayout.setBackgroundResource(R.drawable.fondo_general1_top);
-                    else if (i == (subSystem.getItemList().size() - 1))
-                        itemLayout.setBackgroundResource(R.drawable.fondo_general1_bottom);
-                    else
-                        itemLayout.setBackgroundResource(R.drawable.fondo_general1_center);
-                        *
-
-                    itemLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-                    itemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    itemLayout.setPadding(16, 5, 16, 5);
-                    itemLayout.setOrientation(LinearLayout.VERTICAL);
-
-                    TextView titulo = new TextView(this);
-                    titulo.setText(item.getNameItem());
-                    titulo.setTextSize(14);
-                    titulo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    titulo.setGravity(Gravity.CENTER_HORIZONTAL);
-                    titulo.setBackgroundResource(R.drawable.fondo_general_top);
-                    titulo.setTextColor(Color.WHITE);
-
-                    itemLayout.addView(titulo);
-
-                    LinearLayout atributosLayout = new LinearLayout(this);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    atributosLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-                    atributosLayout.setOrientation(LinearLayout.VERTICAL);
-                    atributosLayout.setPadding(10, 10, 10, 10);
-                    atributosLayout.setBackgroundResource(R.drawable.fondo_general_bottom);
-
-                    for (FormSubSystemItemAttribute attribute : item.getAttributeList()) {
-                        LinearLayout valuesLayout = new LinearLayout(this);
-                        valuesLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        valuesLayout.setOrientation(LinearLayout.VERTICAL);
-
-                        TextView atributo = new TextView(this);
-                        atributo.setText(attribute.getNameAttribute());
-                        atributo.setTextSize(14);
-                        atributo.setTextColor(Color.BLUE);
-                        atributo.setPadding(0, 8, 0, 0);
-                        atributo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        atributo.setGravity(Gravity.CENTER_HORIZONTAL);
-                        if (attribute.getNameAttribute().compareTo("") == 0)
-                            atributo.setVisibility(View.GONE);
-
-
-                        for (FormSubSystemItemAttributeValues values : attribute.getValuesList()) {
-                            if (values.getValueState() != null && values.getTypeValue().compareTo("CHECK") == 0) {
-                                List<CheckBox> checkBoxes = new ArrayList<>();
-                                /*LinearLayout checkboxLayout = new LinearLayout(this);
-                                checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                checkboxLayout.setOrientation(LinearLayout.HORIZONTAL);
-                                for (int st = 0; st < values.getValueState().size(); st++) {
-                                    String state = values.getValueState().get(st);
-                                    CheckBox cb = new CheckBox(this);
-                                    cb.setText(state);
-                                    checkBoxes.add(cb);
-                                    checkboxLayout.addView(cb);
-
-                                }*
-                                LinearLayout checkboxLayout = new LinearLayout(this);
-                                checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                checkboxLayout.setOrientation(LinearLayout.VERTICAL);
-
-                                /*
-                                Este WHILE lo que hace es dibujar a los mas 2 checkbox por linea, para evitar que queden
-                                elementos fuera de la vista.
-
-
-                                int count = 0;
-                                while(count < values.getValueState().size()){
-                                    LinearLayout dump = new LinearLayout(this);
-                                    dump.setOrientation(LinearLayout.HORIZONTAL);
-                                    dump.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    for(int p = 0; p < 2; p++){
-                                        String state = values.getValueState().get(count);
-                                        CheckBox cb = new CheckBox(this);
-                                        cb.setText(state);
-                                        checkBoxes.add(cb);
-                                        dump.addView(cb);
-                                        count++;
-                                    }
-                                    checkboxLayout.addView(dump);
-
-                                }
-                                makeOnlyOneCheckable(checkBoxes);
-                                values.setCheckBoxes(checkBoxes);
-                                valuesLayout.addView(atributo);
-                                valuesLayout.addView(checkboxLayout);
-
-                            }
-                            if (values.getTypeValue().compareTo("TEXT") == 0) {
-                                EditText campo = new EditText(this);
-                                //campo.setText("test");
-                                campo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                campo.setBackgroundResource(R.drawable.fondo_edittext);
-                                valuesLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                valuesLayout.addView(atributo);
-                                valuesLayout.addView(campo);
-                                values.setEditText(campo);
-                            }
-
-                        }
-                        atributosLayout.addView(valuesLayout);
-                    }
-                    atributosLayout.setLayoutParams(layoutParams);
-                    itemLayout.addView(atributosLayout);
-
-                    //contenido.addView(itemLayout);
-                    bottom.addView(itemLayout);
-                }
-            }
-            subcontenidos.add(bottom);
-            contenido.addView(bottom);
-            System.setContenido(bottom);
-
-            buttonSystem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(bottom.getVisibility() == View.GONE){
-                        bottom.setVisibility(View.VISIBLE);
-                        for(LinearLayout l: subcontenidos){
-                            if(l != bottom)
-                                l.setVisibility(View.GONE);
-                        }
-                        scrollViewMain.smoothScrollTo(0, bottom.getTop());
-                    }else{
-                        bottom.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-
-        }*/
     }
 
     private View addItem(String type) {
@@ -542,6 +432,7 @@ public class FormCheckSecurity extends Activity {
         protected void onPostExecute(ArrayList<Modulo> response) {
             if (response != null) {
                     dibujarVista(response);
+                    formulario = response;
                     modulos = response;
             } else {
                 Toast.makeText(context, "Ha ocurrido un error al dibujar el checklist, por favor reintente", Toast.LENGTH_LONG).show();
@@ -555,10 +446,11 @@ public class FormCheckSecurity extends Activity {
     /*
    TODO Enviar Formulario
     */
-    private class Enviar extends AsyncTask<String, String, ArrayList<String>> {
-        private final String ASYNCTAG = "OBTENERFORMULARIO";
+    private class Enviar extends AsyncTask<String, String, String> {
+        private final String ASYNCTAG = "ENVIARFORMULARIO";
         Context context;
         ProgressDialog dialog;
+        boolean ok = false;
 
         public Enviar(Context context) {
             this.context = context;
@@ -572,51 +464,186 @@ public class FormCheckSecurity extends Activity {
             dialog.show();
         }
 
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
 
         @Override
-        protected ArrayList<String> doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             try {
-                String request = SoapRequest.FormSave("", formulario);
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String request = SoapRequestCheckLists.sendDailyActivities(telephonyManager.getDeviceId(), formulario);
                 Log.d("ENVIANDOFORM", request);
-                ArrayList<String> parse = XMLParser.getReturnCode1(request);
-                return parse;
+                String[] parse = XMLParserChecklists.getResultCode(request).split(";");
+
+                if(parse[0].compareTo("0")==0){
+                    ok = true;
+                    return parse[1];
+                }else{
+                    ok = false;
+                    return parse[1];
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(ASYNCTAG, e.getMessage() + ": " + e.getCause());
-                return null;
+                return e.getMessage();
             }
 
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> response) {
-            if (response != null) {
-                if(response.get(0).compareTo("0")==0){
-                    Toast.makeText(context, response.get(1), Toast.LENGTH_LONG).show();
-
-                    MaintenanceReg m = new MaintenanceReg(getApplicationContext());
-                    m.clearPreferences();
-
-                    if(AgendaActivity.actividad != null){
-                        AgendaActivity.actividad.finish();
+        protected void onPostExecute(String response) {
+            Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
+            if(ok){
+                for(Modulo m: formulario){
+                    for(SubModulo sm: m.getSubModulos()){
+                        for(Elemento e: sm.getElementos()){
+                            if(e.getType().compareTo("FIRMA")==0){
+                                UploadImageSec uis = new UploadImageSec(mContext, e.getFileName(), e.getFirma());
+                                uis.execute(dummy.URL_UPLOAD_IMG_SECURITY);
+                            }
+                        }
                     }
-                    FormCheckSecurity.this.finish();
-
-                }else{
-                    Toast.makeText(context, response.get(1), Toast.LENGTH_LONG).show();
-                    FormCheckSecurity.this.finish();
                 }
-            } else {
-                Toast.makeText(context, "Ha ocurrido un error, por favor reintente", Toast.LENGTH_LONG).show();
 
             }
+
             if (dialog.isShowing())
                 dialog.dismiss();
         }
+    }
+
+    private class UploadImageSec extends AsyncTask<String, String, String> {
+
+        private Context mContext;
+        Bitmap imagen;
+        String Filename;
+        ProgressDialog dialog;
+
+        public UploadImageSec(Context mContext, String FileName, Bitmap img) {
+            this.mContext = mContext;
+            this.imagen = img;
+            this.Filename = FileName;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = "";
+
+            DateFormat timestamp_name = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+
+                try {
+
+
+                    Log.i("ENVIANDO", Filename);
+                    HttpURLConnection conn;
+                    DataOutputStream dos;
+                    String lineEnd = "\r\n";
+                    String twoHyphens = "--";
+                    String boundary = "*****";
+                    int bytesRead, bytesAvailable, bufferSize;
+
+                    File done = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Filename);
+                    done.createNewFile();
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    imagen.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+                    FileOutputStream fos = new FileOutputStream(done);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+
+
+                    if (!done.isFile())
+                        Log.e("DownloadManager", "no existe");
+                    else {
+                        FileInputStream fileInputStream = new FileInputStream(done);
+                        URL url = new URL(params[0]);
+
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Connection", "Keep-Alive");
+                        conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                        conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                        conn.setRequestProperty("uploaded_file", Filename);
+
+                        dos = new DataOutputStream(conn.getOutputStream());
+
+                        dos.writeBytes(twoHyphens + boundary + lineEnd);
+                        dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + Filename + "\"" + lineEnd);
+                        dos.writeBytes(lineEnd);
+
+                        bytesAvailable = fileInputStream.available();
+
+                        bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
+                        byte[] buf = new byte[bufferSize];
+
+                        bytesRead = fileInputStream.read(buf, 0, bufferSize);
+
+                        while (bytesRead > 0) {
+
+                            dos.write(buf, 0, bufferSize);
+                            bytesAvailable = fileInputStream.available();
+                            bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
+                            bytesRead = fileInputStream.read(buf, 0, bufferSize);
+
+                        }
+
+                        dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                        int serverResponseCode = conn.getResponseCode();
+                        String serverResponseMessage = conn.getResponseMessage();
+
+
+                        Log.i("UploadManager", "HTTP response is: " + serverResponseMessage + ": " + serverResponseCode);
+
+                        fileInputStream.close();
+                        dos.flush();
+                        dos.close();
+
+                        InputStream responseStream = new BufferedInputStream(conn.getInputStream());
+
+                        BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                        String line = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((line = responseStreamReader.readLine()) != null) {
+                            stringBuilder.append(line).append("\n");
+                        }
+                        responseStreamReader.close();
+
+                        response = stringBuilder.toString();
+
+                    }
+
+
+                } catch (Exception e) {
+                    Log.d("TAG", "Error: " + e.getMessage());
+                    response = "ERROR";
+                }
+
+            return response;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(mContext);
+            dialog.setMessage("Subiendo imagenes...");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (dialog.isShowing())
+                dialog.dismiss();
+            ((Activity)mContext).finish();
+            super.onPostExecute(s);
+        }
+
+
     }
 
 }

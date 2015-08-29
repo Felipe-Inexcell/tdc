@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="com.google.android.provides.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <permission android:name="cl.tdc.felipe.tdc.permission.MAP_RECEIVE" android:protectionLevel="signature"/>
     <uses-permission android:name="cl.tdc.felipe.tdc.permission.MAP_RECEIVE"/>
@@ -53,6 +54,7 @@
         <activity android:name=".Seguimiento" android:screenOrientation="portrait"/>
         <activity android:name=".DetalleProyecto1" android:screenOrientation="portrait"/>
         <activity android:name=".FormCheckSecurity" android:screenOrientation="portrait"/>
+        <activity android:name=".FormCheckMaintenance" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

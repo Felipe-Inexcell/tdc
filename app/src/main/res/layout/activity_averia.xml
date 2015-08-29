@@ -72,7 +72,7 @@
 
     <!-- end header -->
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/averia_content"
@@ -83,6 +83,125 @@
         android:layout_above="@+id/averia_footer"
         android:background="@drawable/fondo_general">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/fondo_1"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Departamento"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:id="@+id/cb_dpto"
+                        android:entries="@array/lista_elementos"
+                        android:spinnerMode="dialog"
+                        android:background="@drawable/spinner_bg"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/textView31"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Provincia"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:id="@+id/cb_prov"
+                        android:entries="@array/lista_elementos"
+                        android:spinnerMode="dialog"
+                        android:background="@drawable/spinner_bg"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Distrito"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:id="@+id/cd_dist"
+                        android:entries="@array/lista_elementos"
+                        android:spinnerMode="dialog"
+                        android:background="@drawable/spinner_bg"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/textView33"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estación"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:id="@+id/cb_station"
+                        android:entries="@array/lista_elementos"
+                        android:spinnerMode="dialog"
+                        android:background="@drawable/spinner_bg"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +211,7 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/cb_elemento"
             android:layout_below="@+id/textView5"
             android:entries="@array/lista_elementos"
@@ -113,7 +232,7 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/cb_siniestro"
             android:layout_below="@+id/textView6"
             android:entries="@array/lista_siniestro"
@@ -130,7 +249,7 @@
             android:ems="10"
             android:id="@+id/et_comentario"
             android:layout_below="@+id/cb_siniestro"
-            android:hint="Comentario (Opcional)"
+            android:hint="Comentario"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/fondo_spinner1"
@@ -142,8 +261,8 @@
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:layout_alignParentBottom="true" />
-
-    </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:layout_width="fill_parent"

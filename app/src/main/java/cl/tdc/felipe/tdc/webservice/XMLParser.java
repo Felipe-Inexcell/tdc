@@ -23,6 +23,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.adapters.Actividades;
 import cl.tdc.felipe.tdc.adapters.Maintenance;
+import cl.tdc.felipe.tdc.objects.Averia.Item;
 import cl.tdc.felipe.tdc.objects.FormSubSystem;
 import cl.tdc.felipe.tdc.objects.FormSubSystemItem;
 import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttribute;
@@ -72,6 +73,8 @@ public class XMLParser {
         return response;
         //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
     }
+
+
 
 	/*
      * Parser Return Code
@@ -456,5 +459,37 @@ public class XMLParser {
         agenda.setMaintenanceList(mainList);
         return agenda;
     }
+
+
+    /* NEW AVERIA**/
+
+    public static ArrayList<Item> getItem(String xml, String tag) throws ParserConfigurationException,
+            SAXException, IOException {
+
+        String TAG_NAME = "Name"+tag;
+        String TAG_ID = "Id"+tag;
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+        Document doc = db.parse(is);
+
+        ArrayList<Item> response = new ArrayList<>();
+
+        NodeList Parameters = doc.getElementsByTagName(tag);
+        for (int i = 0; i < Parameters.getLength(); i++) {
+            Element nodo = (Element)Parameters.item(i);
+
+            Item item = new Item(
+              Integer.parseInt(getCharacterDataFromElement((Element)nodo.getElementsByTagName(TAG_ID).item(0))),
+                    getCharacterDataFromElement((Element)nodo.getElementsByTagName(TAG_NAME).item(0))
+            );
+
+            response.add(item);
+
+        }
+        return response;
+        //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
+    }
+
 
 }

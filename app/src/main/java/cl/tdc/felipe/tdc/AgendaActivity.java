@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -47,7 +49,9 @@ import cl.tdc.felipe.tdc.objects.Maintenance.MainSystem;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
+import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
+import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class AgendaActivity extends Activity {
@@ -62,6 +66,9 @@ public class AgendaActivity extends Activity {
     private PagerAdapter mPagerAdapter;
     ArrayList<Maintenance> m;
     MaintenanceReg pref;
+    Button checklist;
+    ProgressBar progressBar;
+    ImageButton complete;
 
     ArrayList<String> idsActivities = new ArrayList<>();
 
@@ -79,6 +86,21 @@ public class AgendaActivity extends Activity {
     private void init() {
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         IMEI = telephonyManager.getDeviceId();
+
+        checklist = (Button) findViewById(R.id.checklist);
+        checklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!pref.getChecklistState()) {
+                    CheckListTask task = new CheckListTask(actividad);
+                    task.execute();
+                }else{
+                    Toast.makeText(actividad.getApplicationContext(), "Ya ha finalizado el Checklist de Manteniemiento.\nPuede continuar con el cierre del Mantenimiento.",Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
 
         mPager = (ViewPager) findViewById(R.id.agenda_contentPager);
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -110,7 +132,7 @@ public class AgendaActivity extends Activity {
     // TODO: funcion onClick del botón apagar.
 
     public void onClick_apagar(View v) {
-        if(MainActivity.actividad!=null)
+        if (MainActivity.actividad != null)
             MainActivity.actividad.finish();
         finish();
     }
@@ -170,6 +192,7 @@ public class AgendaActivity extends Activity {
                     Toast.makeText(mContext, s.getDescription(), Toast.LENGTH_LONG).show();
                     Intent n = new Intent(AgendaActivity.this, FormCheckActivity.class);
                     n.putExtra("RESPONSE", queryCopy);
+                    n.putExtra("MANTENIMIENTO", idMaintenance);
                     n.putStringArrayListExtra("ACTIVIDADES", idsActivities);
                     startActivity(n);
                 } else {
@@ -179,6 +202,60 @@ public class AgendaActivity extends Activity {
 
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
+        }
+    }
+
+
+    private class CheckListTask extends AsyncTask<String, String, String> {
+        Context tContext;
+        ProgressDialog dialog;
+        boolean ok = false;
+
+        private CheckListTask(Context tContext) {
+            this.tContext = tContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(tContext);
+            dialog.setMessage("Solicitando Checklist...");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String query = SoapRequestCheckLists.getMainChecklist(pref.getID());
+
+                String[] code = XMLParserChecklists.getResultCode(query).split(";");
+                if (code[0].compareTo("0") == 0) {
+                    ok = true;
+                    return query;
+                } else {
+                    ok = false;
+                    return code[1];
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Ha ocurrido un error (" + e.getMessage() + "). Por favor reintente.";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (ok) {
+
+                Intent check = new Intent(actividad, FormCheckMaintenance.class);
+                check.putExtra("RESPONSE", s);
+                check.putExtra("ID", pref.getID());
+                startActivity(check);
+
+            } else {
+                Toast.makeText(tContext, s, Toast.LENGTH_LONG).show();
+            }
+            if (dialog.isShowing()) dialog.dismiss();
         }
     }
 
@@ -227,6 +304,7 @@ public class AgendaActivity extends Activity {
 
         @Override
         protected void onPostExecute(final Agenda s) {
+
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
 
@@ -256,6 +334,11 @@ public class AgendaActivity extends Activity {
                         }
 
                         @Override
+                        public void destroyItem(ViewGroup container, int position, Object object) {
+                            super.destroyItem(container, position, object);
+                        }
+
+                        @Override
                         public Object instantiateItem(ViewGroup container, int position) {
                             final cl.tdc.felipe.tdc.objects.Maintenance.Maintenance m = s.getMaintenanceList().get(position);
                             final Boolean terminated;
@@ -271,11 +354,16 @@ public class AgendaActivity extends Activity {
                             TextView tType = (TextView) rootView.findViewById(R.id.tType);
 
                             final ImageButton bComplete = (ImageButton) rootView.findViewById(R.id.bComplete);
+                            complete = bComplete;
                             bComplete.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    CompletarActividad c = new CompletarActividad(tContext, Integer.parseInt(m.getIdMaintenance()));
-                                    c.execute();
+                                    if(pref.getChecklistState()) {
+                                        CompletarActividad c = new CompletarActividad(tContext, Integer.parseInt(m.getIdMaintenance()));
+                                        c.execute();
+                                    }else{
+                                        Toast.makeText(actividad.getApplicationContext(), "Debe completar el checklist antes de continuar.",Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                             bComplete.setEnabled(false);
@@ -301,7 +389,6 @@ public class AgendaActivity extends Activity {
                                     m.getLongitude() + "" +
                                     "&sensor=false";
                             ImageLoader.getInstance().displayImage(url, iMap);
-
 
 
                             int max = Funciones.getNumActivities(m.getSystemList());
@@ -358,7 +445,7 @@ public class AgendaActivity extends Activity {
                                             }
 
                                             if (pProgress.getProgress() == pProgress.getMax()) {
-                                                bComplete.setEnabled(true);
+                                                    bComplete.setEnabled(true);
                                             } else {
                                                 bComplete.setEnabled(false);
                                             }
@@ -395,66 +482,66 @@ public class AgendaActivity extends Activity {
                     mPager.setAdapter(mPagerAdapter);
 
                     Log.d(ATAG, s.toString());
-                }else{
+                } else {
                     Toast.makeText(tContext, s.getDescription(), Toast.LENGTH_LONG).show();
                     AgendaActivity.this.finish();
                 }
-                }
-
-
             }
 
 
         }
 
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == REQUEST_FORMULARIO) {
-                if (resultCode == RESULT_OK) {
-                    AgendaTask agenda = new AgendaTask(this);
-                    agenda.execute();
-                }
+    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_FORMULARIO) {
+            if (resultCode == RESULT_OK) {
+                AgendaTask agenda = new AgendaTask(this);
+                agenda.execute();
             }
+
         }
+    }
 
-        public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
-            private static final float MIN_SCALE = 0.85f;
-            private static final float MIN_ALPHA = 0.5f;
+    public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.85f;
+        private static final float MIN_ALPHA = 0.5f;
 
-            public void transformPage(View view, float position) {
-                int pageWidth = view.getWidth();
-                int pageHeight = view.getHeight();
+        public void transformPage(View view, float position) {
+            int pageWidth = view.getWidth();
+            int pageHeight = view.getHeight();
 
-                if (position < -1) { // [-Infinity,-1)
-                    // This page is way off-screen to the left.
-                    view.setAlpha(0);
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                view.setAlpha(0);
 
-                } else if (position <= 1) { // [-1,1]
-                    // Modify the default slide transition to shrink the page as well
-                    float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
-                    float vertMargin = pageHeight * (1 - scaleFactor) / 2;
-                    float horzMargin = pageWidth * (1 - scaleFactor) / 2;
-                    if (position < 0) {
-                        view.setTranslationX(horzMargin - vertMargin / 2);
-                    } else {
-                        view.setTranslationX(-horzMargin + vertMargin / 2);
-                    }
-
-                    // Scale the page down (between MIN_SCALE and 1)
-                    view.setScaleX(scaleFactor);
-                    view.setScaleY(scaleFactor);
-
-                    // Fade the page relative to its size.
-                    view.setAlpha(MIN_ALPHA +
-                            (scaleFactor - MIN_SCALE) /
-                                    (1 - MIN_SCALE) * (1 - MIN_ALPHA));
-
-                } else { // (1,+Infinity]
-                    // This page is way off-screen to the right.
-                    view.setAlpha(0);
+            } else if (position <= 1) { // [-1,1]
+                // Modify the default slide transition to shrink the page as well
+                float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+                float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+                if (position < 0) {
+                    view.setTranslationX(horzMargin - vertMargin / 2);
+                } else {
+                    view.setTranslationX(-horzMargin + vertMargin / 2);
                 }
+
+                // Scale the page down (between MIN_SCALE and 1)
+                view.setScaleX(scaleFactor);
+                view.setScaleY(scaleFactor);
+
+                // Fade the page relative to its size.
+                view.setAlpha(MIN_ALPHA +
+                        (scaleFactor - MIN_SCALE) /
+                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                view.setAlpha(0);
             }
         }
     }
+}

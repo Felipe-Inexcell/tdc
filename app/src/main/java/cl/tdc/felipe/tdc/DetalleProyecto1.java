@@ -50,6 +50,7 @@ import cl.tdc.felipe.tdc.objects.Seguimiento.Proyecto;
 import cl.tdc.felipe.tdc.webservice.SoapRequestSeguimiento;
 import cl.tdc.felipe.tdc.webservice.UploadImage;
 import cl.tdc.felipe.tdc.webservice.XMLParserSeguimiento;
+import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class DetalleProyecto1 extends Activity {
     private static final String TAG = "DETALLE";
@@ -99,9 +100,9 @@ public class DetalleProyecto1 extends Activity {
         imgToSendList = new ArrayList<>();
         try {
             avance_real_total = Float.parseFloat(mProyecto.getAvance_real());
-            float real = Float.parseFloat(String.format(Locale.US,FLOAT_FORMAT, avance_real_total));
+            float real = Float.parseFloat(String.format(Locale.US, FLOAT_FORMAT, avance_real_total));
             float progra = Float.parseFloat(mProyecto.getAvance_programado());
-            detalle_progreso.setText("Progreso: " + String.format(Locale.US,FLOAT_FORMAT, avance_real_total) + "%");
+            detalle_progreso.setText("Progreso: " + String.format(Locale.US, FLOAT_FORMAT, avance_real_total) + "%");
             mProgressBar.setMax((100 * 10000));
             mProgressBar.setProgress((int) (real * 10000));
         } catch (Exception e) {
@@ -263,13 +264,13 @@ public class DetalleProyecto1 extends Activity {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                            Log.i("CHECKBOX LISTENER", "****");
-                            float advance;
-                            if (dia.getAdvanceToday() == null) {
-                                advance = 0;
-                            } else
-                                advance = Float.parseFloat(dia.getAdvanceToday());
-                            Log.i("CHECKBOX LISTENER", "advance: " + advance);
+                        Log.i("CHECKBOX LISTENER", "****");
+                        float advance;
+                        if (dia.getAdvanceToday() == null) {
+                            advance = 0;
+                        } else
+                            advance = Float.parseFloat(dia.getAdvanceToday());
+                        Log.i("CHECKBOX LISTENER", "advance: " + advance);
                         try {
                             if (b) {
                                 advance += a.getAdvance();
@@ -278,7 +279,7 @@ public class DetalleProyecto1 extends Activity {
 
                                 for (int k = dia.getDayNumber() - 1; k < mAvances.size(); k++) {
                                     float actual = Float.parseFloat(mAvances.get(k).getText().toString());
-                                    mAvances.get(k).setText(String.format(Locale.US,FLOAT_FORMAT, (actual + a.getAdvance())));
+                                    mAvances.get(k).setText(String.format(Locale.US, FLOAT_FORMAT, (actual + a.getAdvance())));
                                 }
 
                             } else {
@@ -288,16 +289,16 @@ public class DetalleProyecto1 extends Activity {
 
                                 for (int k = dia.getDayNumber() - 1; k < mAvances.size(); k++) {
                                     float actual = Float.parseFloat(mAvances.get(k).getText().toString());
-                                    mAvances.get(k).setText(String.format(Locale.US,FLOAT_FORMAT, (actual - a.getAdvance())));
+                                    mAvances.get(k).setText(String.format(Locale.US, FLOAT_FORMAT, (actual - a.getAdvance())));
                                 }
                             }
 
                             Log.i("CHECKBOX LISTENER", "to: " + advance);
-                            dia.setAdvanceToday(String.format(Locale.US,FLOAT_FORMAT, advance));
-                            p_real.setText(String.format(Locale.US,FLOAT_FORMAT, advance));
+                            dia.setAdvanceToday(String.format(Locale.US, FLOAT_FORMAT, advance));
+                            p_real.setText(String.format(Locale.US, FLOAT_FORMAT, advance));
                             updateProgresoTotal();
-                        }catch(Exception e){
-                            Toast.makeText(mContext, e.getMessage()+"\n"+e.getCause()+"\n"+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(mContext, e.getMessage() + "\n" + e.getCause() + "\n" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -323,15 +324,15 @@ public class DetalleProyecto1 extends Activity {
     }
 
     private void updateProgresoTotal() {
-        detalle_progreso.setText("Progreso: " + String.format(Locale.US,FLOAT_FORMAT, avance_real_total) + "%");
-        float real = Float.parseFloat(String.format(Locale.US,FLOAT_FORMAT, avance_real_total));
+        detalle_progreso.setText("Progreso: " + String.format(Locale.US, FLOAT_FORMAT, avance_real_total) + "%");
+        float real = Float.parseFloat(String.format(Locale.US, FLOAT_FORMAT, avance_real_total));
         mProgressBar.setProgress((int) (real * 10000));
 
     }
 
     public void tomarFotografia() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Escoja una Opcion:");
         builder.setIcon(R.drawable.ic_camera);
         builder.setItems(opcionCaptura, new DialogInterface.OnClickListener() {
@@ -349,7 +350,12 @@ public class DetalleProyecto1 extends Activity {
             }
         });
         AlertDialog alert = builder.create();
-        alert.show();
+        alert.show();*/
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        int code = TAKE_PICTURE;
+        Uri output = Uri.fromFile(new File(name));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
+        startActivityForResult(intent, code);
     }
 
     @Override
@@ -503,7 +509,7 @@ public class DetalleProyecto1 extends Activity {
                 if (dialog.isShowing())
                     dialog.dismiss();
                 UploadImage ui = new UploadImage(aContext, imgToSendList);
-                ui.execute();
+                ui.execute(dummy.URL_UPLOAD_IMG_WORKTRACKING);
             } else {
                 Toast.makeText(aContext, s, Toast.LENGTH_LONG).show();
             }

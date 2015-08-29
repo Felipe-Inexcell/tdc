@@ -1,15 +1,23 @@
-package cl.tdc.felipe.tdc.objects.ControSeguridadDiario;
+package cl.tdc.felipe.tdc.objects.MaintChecklist;
 
 import java.util.ArrayList;
 
-public class Modulo {
-
+public class SubModulo {
+    public SubModulo() {
+    }
     int id;
     String name;
-    ArrayList<SubModulo> subModulos;
+    ArrayList<Section> sections;
 
-    public Modulo() {
+    public ArrayList<Section> getSections() {
+        return sections;
     }
+
+    public void setSections(ArrayList<Section> sections) {
+        this.sections = sections;
+    }
+
+
 
     public int getId() {
         return id;
@@ -28,13 +36,5 @@ public class Modulo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<SubModulo> getSubModulos() {
-        return subModulos;
-    }
-
-    public void setSubModulos(ArrayList<SubModulo> subModulos) {
-        this.subModulos = subModulos;
     }
 }

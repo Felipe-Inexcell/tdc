@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:paddingBottom="4dp"
-            android:paddingTop="4dp" />
+            android:paddingTop="3dp" />
         </android.support.v4.view.ViewPager>
 
 
@@ -145,6 +145,21 @@
             android:clickable="true"
             android:background="@drawable/custom_button_shutdown"
             android:onClick="onClick_apagar" />
+
+        <Button
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:id="@+id/checklist"
+            android:background="@drawable/custom_button_rounded_green"
+            android:backgroundTintMode="src_over"
+            android:src="@drawable/ic_close1"
+            android:layout_centerVertical="true"
+            android:text="Checklist de\nMantenimiento"
+            android:textColor="#ffffff"
+            android:layout_toLeftOf="@+id/btn_off"
+            android:layout_toRightOf="@+id/imageButton"
+            android:layout_toEndOf="@+id/imageButton"
+            android:layout_marginLeft="5dp" />
     </RelativeLayout>
 
 </RelativeLayout>

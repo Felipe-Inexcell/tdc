@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,6 +14,7 @@ import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.CheckBox;
 
@@ -20,6 +22,7 @@ import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -45,6 +48,15 @@ public class Funciones {
 
     }
 
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immagex = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        return imageEncoded;
+    }
+
     public static int getInputType(String type) {
         int inputType;
 
@@ -59,6 +71,16 @@ public class Funciones {
 
         return inputType;
 
+    }
+
+    public static boolean isAnyChecked(List<CheckBox> checkBoxes) {
+
+        for (CheckBox ch : checkBoxes) {
+            if (ch.isChecked()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String getChecked(List<CheckBox> checkBoxes) {
@@ -137,8 +159,8 @@ public class Funciones {
                         .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_tdc))
                         .setAutoCancel(true)
                         .setContentTitle("Nuevo Mantenimiento")
-                                //.setVibrate(new long[]{1000,1000,1000})
-                                //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                .setVibrate(new long[]{1000,1000,1000})
+                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentText(message);
 
                 contentIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -153,8 +175,8 @@ public class Funciones {
                         .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_tdc))
                         .setAutoCancel(true)
                         .setContentTitle("Nueva Modificación")
-                                //.setVibrate(new long[]{1000,1000,1000})
-                                //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                .setVibrate(new long[]{1000,1000,1000})
+                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentText(message);
 
                 contentIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -169,8 +191,8 @@ public class Funciones {
                         .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_tdc))
                         .setAutoCancel(true)
                         .setContentTitle("Actualización")
-                                //.setVibrate(new long[]{1000,1000,1000})
-                                //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                .setVibrate(new long[]{1000,1000,1000})
+                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentText(message);
 
                 contentIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_CANCEL_CURRENT);

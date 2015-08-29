@@ -79,7 +79,7 @@ public class UploadImage extends AsyncTask<String, String, String> {
                     Log.e("DownloadManager", "no existe");
                 else {
                     FileInputStream fileInputStream = new FileInputStream(done);
-                    URL url = new URL("http://190.12.95.42/telrad/uploadWorkTracking.php");
+                    URL url = new URL(params[0]);
 
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);

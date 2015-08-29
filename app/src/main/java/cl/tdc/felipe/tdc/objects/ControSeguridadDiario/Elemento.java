@@ -1,8 +1,12 @@
 package cl.tdc.felipe.tdc.objects.ControSeguridadDiario;
 
 import android.graphics.Bitmap;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import java.util.ArrayList;
+
+import cl.tdc.felipe.tdc.extras.Funciones;
 
 /**
  * Created by felip on 04/08/2015.
@@ -13,15 +17,57 @@ public class Elemento {
     String name;
     String type;
     ArrayList<String> values;
-    String valor;
     Bitmap firma;
+    ArrayList<CheckBox> checkBoxes;
+    String FileName;
 
-    public String getValor() {
-        return valor;
+    public String getFileName() {
+        return FileName;
     }
 
-    public void setValor(String valor) {
-        this.valor = valor;
+    public void setFileName(String fileName) {
+        FileName = fileName;
+    }
+
+    public String getValue(){
+        if(this.type.compareTo("TEXT")==0){
+            return this.editText.getText().toString();
+        }
+        if(this.type.compareTo("CHECK")==0){
+            return getCheckboxSelected();
+        }
+        if(this.type.compareTo("FIRMA")==0){
+            return FileName;
+        }
+
+        return "";
+    }
+
+    private String getCheckboxSelected(){
+        for(CheckBox c: this.checkBoxes){
+            if(c.isChecked()){
+                return c.getText().toString();
+            }
+        }
+        return "";
+    }
+
+    public EditText getEditText() {
+        return editText;
+    }
+
+    public void setEditText(EditText editText) {
+        this.editText = editText;
+    }
+
+    EditText editText;
+
+    public ArrayList<CheckBox> getCheckBoxes() {
+        return checkBoxes;
+    }
+
+    public void setCheckBoxes(ArrayList<CheckBox> checkBoxes) {
+        this.checkBoxes = checkBoxes;
     }
 
     public Bitmap getFirma() {

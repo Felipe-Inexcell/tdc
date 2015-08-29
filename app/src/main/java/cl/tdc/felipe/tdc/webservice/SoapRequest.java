@@ -33,12 +33,14 @@ import java.io.OutputStreamWriter;
 import java.security.KeyStore;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import cl.tdc.felipe.tdc.adapters.Actividad;
 import cl.tdc.felipe.tdc.adapters.ComponenteCantidad;
 import cl.tdc.felipe.tdc.extras.Funciones;
+import cl.tdc.felipe.tdc.objects.FormImage;
 import cl.tdc.felipe.tdc.objects.FormSubSystem;
 import cl.tdc.felipe.tdc.objects.FormSubSystemItem;
 import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttribute;
@@ -601,7 +603,250 @@ public class SoapRequest {
         return response;
     }
 
-    public static String sendAveria(String IMEI, String Element, String Component, String Comment, String Image, String Latitude, String Longitude) throws Exception {
+    public static String getDepartament(String IMEI) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#request";
+        String URL = dummy.URL_DEPTO;
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Parameters xsi:type=\"urn:Parameters\">" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Parameter xsi:type=\"urn:Parameter\">" +
+                                                "<Name xsi:type=\"xsd:string\">EQUIPOID</Name>" +
+                                                "<Value xsi:type=\"xsd:string\">1</Value>" +
+                                             "</Parameter>" +
+                                          "</Parameters>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, URL);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        return response;
+    }
+
+    public static String getProvince(String IMEI, int ID) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#request";
+        String URL = dummy.URL_PROV;
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Parameters xsi:type=\"urn:Parameters\">" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Parameter xsi:type=\"urn:Parameter\">" +
+                                                "<Name xsi:type=\"xsd:string\">EQUIPOID</Name>" +
+                                                "<Value xsi:type=\"xsd:string\">1</Value>" +
+                                             "</Parameter>" +
+                                          "</Parameters>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                                          "<IdDepartment xsi:type=\"xsd:string\">"+ID+"</IdDepartment>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, URL);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        return response;
+    }
+
+    public static String getDistrict(String IMEI, int ID) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#request";
+        String URL = dummy.URL_DISTRICT;
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Parameters xsi:type=\"urn:Parameters\">" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Parameter xsi:type=\"urn:Parameter\">" +
+                                                "<Name xsi:type=\"xsd:string\">EQUIPOID</Name>" +
+                                                "<Value xsi:type=\"xsd:string\">1</Value>" +
+                                             "</Parameter>" +
+                                          "</Parameters>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                                          "<IdProvince xsi:type=\"xsd:string\">"+ID+"</IdProvince>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, URL);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        return response;
+    }
+
+    public static String getStation(String IMEI, int ID) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#request";
+        String URL = dummy.URL_STATION;
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Parameters xsi:type=\"urn:Parameters\">" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Parameter xsi:type=\"urn:Parameter\">" +
+                                                "<Name xsi:type=\"xsd:string\">EQUIPOID</Name>" +
+                                                "<Value xsi:type=\"xsd:string\">1</Value>" +
+                                             "</Parameter>" +
+                                          "</Parameters>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Imei xsi:type=\"xsd:string\">"+IMEI+"</Imei>" +
+                                          "<IdDistrict xsi:type=\"xsd:string\">"+ID+"</IdDistrict>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, URL);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        return response;
+    }
+
+    public static String sendAveria(String IMEI,int station , String Element, String Component, String Comment, String Image, String Latitude, String Longitude) throws Exception {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
         String response = null;
         String xml = null;
@@ -657,6 +902,10 @@ public class SoapRequest {
                         "<Parameter xsi:type=\"urn:Parameter\">" +
                         "<Name xsi:type=\"xsd:string\">SUMMARY</Name>" +
                         "<Value xsi:type=\"xsd:string\">" + Comment + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">STATION</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + station + "</Value>" +
                         "</Parameter>" +
                         "</Parameters>" +
                         "<!--Optional:-->" +
@@ -872,7 +1121,7 @@ public class SoapRequest {
         return response;
     }
 
-    public static String FormSave(String IMEI, FormularioCheck formulario) throws Exception {
+    public static String FormSave(FormularioCheck formulario, ArrayList<FormImage> imagenes) throws Exception {
         final String SOAP_ACTION = "";//"urn:Configurationwsdl#request";
         String response = null;
         String xml = null;
@@ -948,8 +1197,22 @@ public class SoapRequest {
         }
         bodyOut += "</Systems>" +
                 "</Parameters>" +
-                "</Form_Detail>" +
-                "<!--Optional:-->" +
+                "</Form_Detail>";
+        if(imagenes != null || imagenes.size()>0) {
+            bodyOut+="<Photo_Detail xsi:type=\"urn:Photo_Detail\">";
+                    for(FormImage image: imagenes) {
+                        if(image.isSend()) {
+                            bodyOut += "<Photo xsi:type=\"urn:Photo\">" +
+                                    "<IdSystem xsi:type=\"xsd:string\">" + image.getIdSystem() + "</IdSystem>" +
+                                    "<IdSubsystem xsi:type=\"xsd:string\">" + image.getIdSubSystem() + "</IdSubsystem>" +
+                                    "<Comment xsi:type=\"xsd:string\">" + image.getComment() + "</Comment>" +
+                                    "<NamePhoto xsi:type=\"xsd:string\">" + image.getName() + "</NamePhoto>" +
+                                    "</Photo>";
+                        }
+                    }
+                    bodyOut+="</Photo_Detail>";
+        }
+                bodyOut+="<!--Optional:-->" +
                 "<Header xsi:type=\"urn:Header\">" +
                 "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
                 "<Platafform xsi:type=\"xsd:string\"> MOBILE</Platafform>" +
@@ -968,6 +1231,7 @@ public class SoapRequest {
         se.setContentType("text/xml");
         httpPost.addHeader(SOAP_ACTION, dummy.URL_FORM_PREV_SAVE);
 
+        Log.d("ENVIANDO", xml);
         httpPost.setEntity(se);
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();
