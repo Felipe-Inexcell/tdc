@@ -535,7 +535,6 @@ public class RelevarActivity extends Activity {
                 try {
                     modulos = XMLParser.getRelevoCheck(s);
                     dibujarCheck();
-                    Toast.makeText(context, "OK", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
