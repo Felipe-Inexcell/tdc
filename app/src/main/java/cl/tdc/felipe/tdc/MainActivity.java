@@ -172,6 +172,10 @@ public class MainActivity extends ActionBarActivity {
         c.execute();
     }
 
+    public void onClick_relevo(View v) {
+        startActivity(new Intent(this, RelevarActivity.class));
+    }
+
 
 
 

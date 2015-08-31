@@ -35,6 +35,14 @@ public class dummy {
     public static final String URL_UPLOAD_IMG = "http://" + IP + "/telrad/uploadFailure.php";
     public static final String URL_AVERIA = "http://" + IP + "/tdc/ServiceFailure/failureReport.php";
 
+    /**RELEVAR*/
+    public static final String URL_R_DEPTO = "http://" + IP + "/tdc/ServiceRelevamiento/department.php";
+    public static final String URL_R_PROV = "http://" + IP + "/tdc/ServiceRelevamiento/province.php";
+    public static final String URL_R_DISTRICT = "http://" + IP + "/tdc/ServiceRelevamiento/district.php";
+    public static final String URL_R_STATION = "http://" + IP + "/tdc/ServiceRelevamiento/station.php";
+    public static final String URL_R_CHECK = "http://" + IP + "/tdc/ServiceRelevamiento/itemsCheckRelevamiento.php";
+
+
 
     public static String notifyExample = "<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"urn:Configurationwsdl\">" +
             "<SOAP-ENV:Body>" +

@@ -33,6 +33,7 @@ import cl.tdc.felipe.tdc.objects.FormularioCheck;
 import cl.tdc.felipe.tdc.objects.Maintenance.Activity;
 import cl.tdc.felipe.tdc.objects.Maintenance.Agenda;
 import cl.tdc.felipe.tdc.objects.Maintenance.MainSystem;
+import cl.tdc.felipe.tdc.objects.Relevar.Modulo;
 
 public class XMLParser {
 
@@ -466,8 +467,8 @@ public class XMLParser {
     public static ArrayList<Item> getItem(String xml, String tag) throws ParserConfigurationException,
             SAXException, IOException {
 
-        String TAG_NAME = "Name"+tag;
-        String TAG_ID = "Id"+tag;
+        String TAG_NAME = "Name" + tag;
+        String TAG_ID = "Id" + tag;
         DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         InputSource is = new InputSource();
         is.setCharacterStream(new StringReader(xml));
@@ -477,16 +478,68 @@ public class XMLParser {
 
         NodeList Parameters = doc.getElementsByTagName(tag);
         for (int i = 0; i < Parameters.getLength(); i++) {
-            Element nodo = (Element)Parameters.item(i);
+            Element nodo = (Element) Parameters.item(i);
 
             Item item = new Item(
-              Integer.parseInt(getCharacterDataFromElement((Element)nodo.getElementsByTagName(TAG_ID).item(0))),
-                    getCharacterDataFromElement((Element)nodo.getElementsByTagName(TAG_NAME).item(0))
+                    Integer.parseInt(getCharacterDataFromElement((Element) nodo.getElementsByTagName(TAG_ID).item(0))),
+                    getCharacterDataFromElement((Element) nodo.getElementsByTagName(TAG_NAME).item(0))
             );
 
             response.add(item);
 
         }
+        return response;
+        //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
+    }
+
+    public static ArrayList<Modulo> getRelevoCheck(String xml) throws ParserConfigurationException,
+            SAXException, IOException {
+
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+        Document doc = db.parse(is);
+
+        ArrayList<Modulo> response = new ArrayList<>();
+
+        NodeList modulos = doc.getElementsByTagName("Module");
+
+        for (int i = 0; i < modulos.getLength(); i++) {
+            Element eModulo = (Element) modulos.item(i);
+            Modulo modulo = new Modulo();
+
+            modulo.setId(getCharacterDataFromElement((Element) eModulo.getElementsByTagName("IdModule").item(0)));
+            modulo.setName(getCharacterDataFromElement((Element) eModulo.getElementsByTagName("NameModule").item(0)));
+
+            NodeList items = eModulo.getElementsByTagName("Item");
+            ArrayList<cl.tdc.felipe.tdc.objects.Relevar.Item> itemsL = new ArrayList<>();
+
+            for (int j = 0; j < items.getLength(); j++) {
+                Element eItem = (Element) items.item(j);
+                cl.tdc.felipe.tdc.objects.Relevar.Item item = new cl.tdc.felipe.tdc.objects.Relevar.Item();
+                item.setId(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Id_Item").item(0)));
+                item.setName(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Name_Item").item(0)));
+                item.setType(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Type_Item").item(0)));
+
+                NodeList values = eItem.getElementsByTagName("Value");
+                ArrayList<String> valores = new ArrayList<>();
+
+                for (int k = 0; k < values.getLength(); k++) {
+                    Element eValue = (Element) values.item(k);
+                    valores.add(getCharacterDataFromElement((Element)eValue.getElementsByTagName("Name_Value").item(0)));
+                }
+
+                item.setValues(valores);
+                itemsL.add(item);
+            }
+
+            modulo.setItems(itemsL);
+
+            response.add(modulo);
+
+        }
+
+
         return response;
         //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
     }
