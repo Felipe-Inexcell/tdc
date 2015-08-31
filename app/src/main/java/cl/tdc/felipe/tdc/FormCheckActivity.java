@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttributeValues;
 import cl.tdc.felipe.tdc.objects.FormSystem;
 import cl.tdc.felipe.tdc.objects.FormularioCheck;
 import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
+import cl.tdc.felipe.tdc.preferences.FormCheckReg;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
@@ -72,9 +74,10 @@ public class FormCheckActivity extends Activity {
     ArrayList<FormImage> imagenes;
     FormImage imageTmp;
     int idMantenimiento;
-    final CharSequence[] opcionCaptura = {
-            "Tomar Fotografía"
-    };
+
+    ArrayList<View> vistas = new ArrayList<>();
+
+    FormCheckReg reg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,7 @@ public class FormCheckActivity extends Activity {
         setContentView(R.layout.activity_formcheck);
 
         mContext = this;
+        reg = new FormCheckReg(this, "ACTIVITYREG");
 
         imagenes = new ArrayList<>();
         scrollViewMain = (ScrollView) findViewById(R.id.cerca_content);
@@ -98,6 +102,7 @@ public class FormCheckActivity extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity) mContext).finish();
                 if (AgendaActivity.actividad != null)
                     AgendaActivity.actividad.finish();
@@ -122,6 +127,7 @@ public class FormCheckActivity extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity) mContext).finish();
             }
         });
@@ -258,17 +264,7 @@ public class FormCheckActivity extends Activity {
                         for (FormSubSystemItemAttributeValues values : attribute.getValuesList()) {
                             if (values.getValueState() != null && values.getTypeValue().compareTo("CHECK") == 0) {
                                 List<CheckBox> checkBoxes = new ArrayList<>();
-                                /*LinearLayout checkboxLayout = new LinearLayout(this);
-                                checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                checkboxLayout.setOrientation(LinearLayout.HORIZONTAL);
-                                for (int st = 0; st < values.getValueState().size(); st++) {
-                                    String state = values.getValueState().get(st);
-                                    CheckBox cb = new CheckBox(this);
-                                    cb.setText(state);
-                                    checkBoxes.add(cb);
-                                    checkboxLayout.addView(cb);
 
-                                }*/
                                 LinearLayout checkboxLayout = new LinearLayout(this);
                                 checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 checkboxLayout.setOrientation(LinearLayout.VERTICAL);
@@ -287,10 +283,14 @@ public class FormCheckActivity extends Activity {
                                         if (count < values.getValueState().size()) {
                                             String state = values.getValueState().get(count);
                                             CheckBox cb = new CheckBox(this);
+                                            String id = System.getIdSystem()+subSystem.getIdSubSystem()+item.getIdItem()+atributo.getId()+values.getValueState().get(count);
+                                            cb.setId(Funciones.str2int(id));
+                                            cb.setChecked(reg.getBoolean("CHECK"+cb.getId()));
                                             cb.setText(state);
                                             checkBoxes.add(cb);
                                             dump.addView(cb);
                                             count++;
+                                            vistas.add(cb);
                                         }
                                     }
                                     checkboxLayout.addView(dump);
@@ -304,13 +304,16 @@ public class FormCheckActivity extends Activity {
                             }
                             if (values.getTypeValue().compareTo("TEXT") == 0) {
                                 EditText campo = new EditText(this);
-                                //campo.setText("test");
+                                String id = System.getIdSystem()+subSystem.getIdSubSystem()+item.getIdItem()+atributo.getId()+"";
+                                campo.setId(Funciones.str2int(id));
+                                campo.setText(reg.getString("TEXT" + campo.getId()));
                                 campo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 campo.setBackgroundResource(R.drawable.fondo_edittext);
                                 valuesLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 valuesLayout.addView(atributo);
                                 valuesLayout.addView(campo);
                                 values.setEditText(campo);
+                                vistas.add(campo);
                             }
 
                         }
@@ -323,9 +326,20 @@ public class FormCheckActivity extends Activity {
                     bottom.addView(itemLayout);
                 }
 
+                LinearLayout horizontal = new LinearLayout(this);
+                horizontal.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                LinearLayout.LayoutParams left = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams right = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                left.weight = 2;
+                right.weight = 1;
+                right.setMargins(1,0,0,0);
+
                 Button foto = new Button(this);
+                Button verfoto = new Button(this);
+
                 foto.setText("Agregar Foto");
-                foto.setBackgroundResource(R.drawable.custom_button_rounded_green);
+                foto.setBackgroundResource(R.drawable.custom_button_blue_left);
                 foto.setTextColor(Color.WHITE);
                 foto.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -334,8 +348,40 @@ public class FormCheckActivity extends Activity {
                         tomarFoto();
                     }
                 });
-                bottom.addView(foto);
-                //bottom.addView(addFotoCommentSection(System.getIdSystem(), subSystem.getIdSubSystem()));
+
+
+                verfoto.setText("Ver Foto");
+                verfoto.setBackgroundResource(R.drawable.custom_button_blue_right);
+                verfoto.setTextColor(Color.WHITE);
+                verfoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FormImage tmp = findImg(System.getIdSystem(), subSystem.getIdSubSystem());
+                        if (tmp == null) {
+                            Toast.makeText(mContext, "No hay imagen registrada", Toast.LENGTH_SHORT).show();
+                        } else {
+                            AlertDialog.Builder bi = new AlertDialog.Builder(mContext);
+                            bi.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            ImageView iv = new ImageView(mContext);
+                            iv.setImageBitmap(tmp.getImage());
+
+                            bi.setView(iv);
+                            bi.show();
+                        }
+                    }
+                });
+
+                horizontal.addView(foto, left);
+                horizontal.addView(verfoto, right);
+                bottom.addView(horizontal);
+
+                loadData(System.getIdSystem(), subSystem.getIdSubSystem());
             }
             subcontenidos.add(bottom);
             contenido.addView(bottom);
@@ -359,6 +405,49 @@ public class FormCheckActivity extends Activity {
 
 
         }
+    }
+
+    private void loadData(int system, int subSystem){
+        String id1 = "FOTOBITMAP"+system+subSystem;
+        String id2 = "FOTONAME"+system+subSystem;
+        String id3 = "FOTOCOMMENT"+system+subSystem;
+        FormImage tmp = new FormImage(system, subSystem, reg.getString(id3),reg.getString(id2));
+
+        if(reg.getString(id1).equals(""))
+            return;
+
+        tmp.setImage(Funciones.decodeBase64(reg.getString(id1)));
+        imagenes.add(tmp);
+    }
+
+    private void saveData(){
+        for(FormImage img: imagenes){
+            if(img.getImage() != null) {
+                String id1 = "FOTOBITMAP" + img.getIdSystem() + img.getIdSubSystem();
+                String id2 = "FOTONAME" + img.getIdSystem() + img.getIdSubSystem();
+                String id3 = "FOTOCOMMENT" + img.getIdSystem() + img.getIdSubSystem();
+
+                reg.addValue(id1, Funciones.encodeTobase64(img.getImage()));
+                reg.addValue(id2, img.getName());
+                reg.addValue(id3, img.getComment());
+            }
+        }
+        for(View v: vistas){
+            if(v instanceof CheckBox ){
+                reg.addValue("CHECK" + v.getId(), ((CheckBox) v).isChecked());
+            }
+            if(v instanceof EditText){
+                reg.addValue("TEXT" + v.getId(), ((EditText) v).getText().toString());
+            }
+        }
+    }
+
+    private FormImage findImg(int idSystem, int idSubSystem) {
+        for(FormImage img: imagenes){
+            if(img.getIdSystem() == idSystem && img.getIdSubSystem() == idSubSystem)
+                return img;
+        }
+        return null;
     }
 
 
@@ -467,6 +556,7 @@ public class FormCheckActivity extends Activity {
 
                     MaintenanceReg m = new MaintenanceReg(getApplicationContext());
                     m.clearPreferences();
+                    reg.clearPreferences();
 
                     if (AgendaActivity.actividad != null) {
                         AgendaActivity.actividad.finish();
@@ -487,26 +577,7 @@ public class FormCheckActivity extends Activity {
     }
 
     private void tomarFoto() {
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Escoja una Opcion:");
-        builder.setIcon(R.drawable.ic_camera);
-        builder.setItems(opcionCaptura, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                int code = 0;
-                if (item == 0) {
-                    imageTmp.newName(idMantenimiento);
-                    Uri output = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/TDC@/"+imageTmp.getName()));
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
-                } else if (item == 1) {
-                    intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    code = 1;
-                }
-                startActivityForResult(intent, code);
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();*/
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         int code = 0;
         imageTmp.newName(idMantenimiento);
@@ -756,4 +827,6 @@ public class FormCheckActivity extends Activity {
 
 
     }
+
+
 }

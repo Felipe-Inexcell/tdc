@@ -30,10 +30,12 @@ import com.github.gcacace.signaturepad.views.SignaturePad;
 import java.util.ArrayList;
 import java.util.List;
 
+import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Elemento;
 import cl.tdc.felipe.tdc.objects.MaintChecklist.Modulo;
 import cl.tdc.felipe.tdc.objects.MaintChecklist.SubModulo;
 import cl.tdc.felipe.tdc.objects.MaintChecklist.Section;
+import cl.tdc.felipe.tdc.preferences.FormCheckReg;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
@@ -45,12 +47,16 @@ public class FormCheckMaintenance extends Activity {
     ScrollView scrollViewMain;
     Bitmap firma;
     String ID;
+    FormCheckReg reg;
+
+    ArrayList<View> vistas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formchecksecurity);
 
+        reg = new FormCheckReg(this, "MAINTENANCEREG");
         mContext = this;
         scrollViewMain = (ScrollView) findViewById(R.id.cerca_content);
         Response = getIntent().getStringExtra("RESPONSE");
@@ -65,6 +71,7 @@ public class FormCheckMaintenance extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity)mContext).finish();
                 if (AgendaActivity.actividad != null)
                     AgendaActivity.actividad.finish();
@@ -88,6 +95,7 @@ public class FormCheckMaintenance extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity)mContext).finish();
             }
         });
@@ -216,10 +224,14 @@ public class FormCheckMaintenance extends Activity {
                                     if (count < elemento.getValues().size()) {
                                         String state = elemento.getValues().get(count);
                                         CheckBox cb = new CheckBox(this);
+                                        String id = modulo.getId()+subModulo.getId()+section.getId()+elemento.getId()+elemento.getName()+elemento.getValues().get(count);
+                                        cb.setId(Funciones.str2int(id));
+                                        cb.setChecked(reg.getBoolean("CHECK"+cb.getId()));
                                         cb.setText(state);
                                         checkBoxes.add(cb);
                                         dump.addView(cb);
                                         count++;
+                                        vistas.add(cb);
                                     }
                                 }
                                 checkboxLayout.addView(dump);
@@ -231,9 +243,12 @@ public class FormCheckMaintenance extends Activity {
                         }
                         if (elemento.getType().compareTo("TEXT") == 0) {
                             EditText campo = new EditText(this);
-                            //campo.setText("test");
+                            String id = modulo.getId()+subModulo.getId()+elemento.getId()+elemento.getName();
+                            campo.setId(Funciones.str2int(id));
+                            campo.setText(reg.getString("TEXT"+campo.getId()));
                             campo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             campo.setBackgroundResource(R.drawable.fondo_edittext);
+                            vistas.add(campo);
                             lElemento.addView(campo);
                             elemento.setEditText(campo);
                         }
@@ -328,6 +343,12 @@ public class FormCheckMaintenance extends Activity {
                                     b.show();
                                 }
                             });
+
+                            String tmp = reg.getString("FIRMA");
+                            if(!tmp.equals("")){
+                                firma = Funciones.decodeBase64(tmp);
+                                verFirma.setEnabled(true);
+                            }
 
                             firmaLayout.addView(firmar);
                             firmaLayout.addView(verFirma);
@@ -458,6 +479,20 @@ public class FormCheckMaintenance extends Activity {
 
             if (dialog.isShowing())
                 dialog.dismiss();
+        }
+    }
+
+    private void saveData(){
+        if(firma != null){
+            reg.addValue("FIRMA", Funciones.encodeTobase64(firma));
+        }
+        for(View v: vistas){
+            if(v instanceof CheckBox ){
+                reg.addValue("CHECK" + v.getId(), ((CheckBox) v).isChecked());
+            }
+            if(v instanceof EditText){
+                reg.addValue("TEXT" + v.getId(), ((EditText) v).getText().toString());
+            }
         }
     }
 

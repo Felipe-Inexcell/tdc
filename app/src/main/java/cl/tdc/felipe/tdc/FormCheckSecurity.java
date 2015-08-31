@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -17,12 +16,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -48,21 +45,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Elemento;
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Modulo;
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.SubModulo;
-import cl.tdc.felipe.tdc.objects.FormSubSystem;
-import cl.tdc.felipe.tdc.objects.FormSubSystemItem;
-import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttribute;
-import cl.tdc.felipe.tdc.objects.FormSubSystemItemAttributeValues;
-import cl.tdc.felipe.tdc.objects.FormSystem;
-import cl.tdc.felipe.tdc.objects.FormularioCheck;
-import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
-import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
-import cl.tdc.felipe.tdc.webservice.SoapRequest;
+import cl.tdc.felipe.tdc.preferences.FormCheckReg;
+import cl.tdc.felipe.tdc.preferences.FormCheckSecurityReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
-import cl.tdc.felipe.tdc.webservice.UploadImage;
-import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
@@ -74,11 +63,24 @@ public class FormCheckSecurity extends Activity {
     ScrollView scrollViewMain;
     Bitmap firma;
 
+    Bundle savedInstances;
+
+    FormCheckReg reg;
+
+    ArrayList<View> vistas = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formchecksecurity);
 
+        reg = new FormCheckReg(this,"SECURITYREG");
+
+        if(savedInstanceState != null){
+            savedInstances = savedInstanceState;
+        }else{
+            savedInstances = null;
+        }
         mContext = this;
         scrollViewMain = (ScrollView)findViewById(R.id.cerca_content);
         Response = getIntent().getStringExtra("RESPONSE");
@@ -91,6 +93,7 @@ public class FormCheckSecurity extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity)mContext).finish();
                 if(AgendaActivity.actividad!=null)
                     AgendaActivity.actividad.finish();
@@ -114,6 +117,7 @@ public class FormCheckSecurity extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
                 ((Activity)mContext).finish();
             }
         });
@@ -136,6 +140,8 @@ public class FormCheckSecurity extends Activity {
         task.execute();
 
     }
+
+
 
     private void makeOnlyOneCheckable(final List<CheckBox> cbs) {
         final List<CheckBox> copy = cbs;
@@ -234,12 +240,20 @@ public class FormCheckSecurity extends Activity {
                             dump.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             for(int p = 0; p < 3; p++){
                                 if(count < elemento.getValues().size()) {
+
                                     String state = elemento.getValues().get(count);
                                     CheckBox cb = new CheckBox(this);
+                                    String id = modulo.getId()+subModulo.getId()+elemento.getId()+elemento.getName()+elemento.getValues().get(count);
+                                    cb.setId(Funciones.str2int(id));
+                                    cb.setChecked(reg.getBoolean("CHECK"+cb.getId()));
                                     cb.setText(state);
+
+
                                     checkBoxes.add(cb);
                                     dump.addView(cb);
                                     count++;
+
+                                    vistas.add(cb);
                                 }
                             }
                             checkboxLayout.addView(dump);
@@ -251,11 +265,14 @@ public class FormCheckSecurity extends Activity {
                     }
                     if(elemento.getType().compareTo("TEXT") == 0){
                         EditText campo = new EditText(this);
-                        //campo.setText("test");
+                        String id = modulo.getId()+subModulo.getId()+elemento.getId()+elemento.getName();
+                        campo.setId(Funciones.str2int(id));
+                        campo.setText(reg.getString("TEXT"+campo.getId()));
                         campo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         campo.setBackgroundResource(R.drawable.fondo_edittext);
                         lElemento.addView(campo);
                         elemento.setEditText(campo);
+                        vistas.add(campo);
                     }
                     if(elemento.getType().compareTo("FIRMA")== 0){
                         LinearLayout firmaLayout = new LinearLayout(this);
@@ -265,6 +282,7 @@ public class FormCheckSecurity extends Activity {
 
                         Button firmar = new Button(this);
                         final Button verFirma = new Button(this);
+
 
                         firmar.setBackgroundResource(R.drawable.custom_button_rounded_green);
                         verFirma.setBackgroundResource(R.drawable.custom_button_rounded_green);
@@ -355,6 +373,11 @@ public class FormCheckSecurity extends Activity {
                             }
                         });
 
+                        String tmp = reg.getString("FIRMA");
+                        if(!tmp.equals("")){
+                            firma = Funciones.decodeBase64(tmp);
+                            verFirma.setEnabled(true);
+                        }
                         firmaLayout.addView(firmar);
                         firmaLayout.addView(verFirma);
 
@@ -373,7 +396,11 @@ public class FormCheckSecurity extends Activity {
             contenido.addView(lModulotitle);
             contenido.addView(lModulo);
         }
+
+
     }
+
+
 
     private View addItem(String type) {
         LinearLayout l = new LinearLayout(this);
@@ -389,6 +416,8 @@ public class FormCheckSecurity extends Activity {
         return l;
 
     }
+
+
 
     /*
     TODO Obtener Formulario
@@ -498,11 +527,12 @@ public class FormCheckSecurity extends Activity {
                             if(e.getType().compareTo("FIRMA")==0){
                                 UploadImageSec uis = new UploadImageSec(mContext, e.getFileName(), e.getFirma());
                                 uis.execute(dummy.URL_UPLOAD_IMG_SECURITY);
+
                             }
                         }
                     }
                 }
-
+                reg.clearPreferences();
             }
 
             if (dialog.isShowing())
@@ -644,6 +674,20 @@ public class FormCheckSecurity extends Activity {
         }
 
 
+    }
+
+    private void saveData(){
+        if(firma != null){
+            reg.addValue("FIRMA", Funciones.encodeTobase64(firma));
+        }
+        for(View v: vistas){
+            if(v instanceof CheckBox ){
+                reg.addValue("CHECK" + v.getId(), ((CheckBox) v).isChecked());
+            }
+            if(v instanceof EditText){
+                reg.addValue("TEXT" + v.getId(), ((EditText) v).getText().toString());
+            }
+        }
     }
 
 }

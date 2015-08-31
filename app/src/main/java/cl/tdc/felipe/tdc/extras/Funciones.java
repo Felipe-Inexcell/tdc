@@ -57,6 +57,11 @@ public class Funciones {
         return imageEncoded;
     }
 
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
     public static int getInputType(String type) {
         int inputType;
 
@@ -203,6 +208,18 @@ public class Funciones {
         }
 
 
+    }
+
+    //TODO: str2int
+    public static int str2int(String a) {
+        char[] b = a.toCharArray();
+        int r = 0;
+        int i = 1;
+        for (char c : b) {
+            r += Character.getNumericValue(c) * i;
+            i += 10;
+        }
+        return r;
     }
 
     public static int getNumActivities(ArrayList<MainSystem> systemList) {
