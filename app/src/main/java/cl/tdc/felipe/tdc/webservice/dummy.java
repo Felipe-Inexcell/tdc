@@ -41,6 +41,24 @@ public class dummy {
     public static final String URL_R_DISTRICT = "http://" + IP + "/tdc/ServiceRelevamiento/district.php";
     public static final String URL_R_STATION = "http://" + IP + "/tdc/ServiceRelevamiento/station.php";
     public static final String URL_R_CHECK = "http://" + IP + "/tdc/ServiceRelevamiento/itemsCheckRelevamiento.php";
+    public static final String URL_R_R_CHECK = "http://" + IP + "/tdc/ServiceRelevamiento/itemsCheckRecomendado.php";
+    public static final String URL_R_SEND_CHECK = "http://" + IP + "/tdc/ServiceRelevamiento/answerCheckRelevamiento.php";
+    public static final String URL_R_SEND_CHECK_IMGS = "http://" + IP + "/telrad/uploadRel.php ";
+    public static final String URL_R_R_SEND_CHECK = "http://" + IP + "/tdc/ServiceRelevamiento/itemsCheckRecomendado.php";
+    public static final String URL_R_R_SEND_CHECK_IMGS = "http://" + IP + "/telrad/uploadRelXtra.php";
+
+
+    /**RF **/
+    public static final String URL_RF = "http://" + IP + "/tdc/ServicePreAsbuilt/nodob.php";
+    public static final String URL_RF_CHECK = "http://" + IP + "/tdc/ServicePreAsbuilt/itemsCheckNodob.php";
+    public static final String URL_RF_SEND = "http://" + IP + "/tdc/ServicePreAsbuilt/answerCheckNodob.php";
+    public static final String URL_RF_IMG = "http://" + IP + "/telrad/uploadRf.php ";
+
+    /**MW **/
+    public static final String URL_MW = "http://" + IP + "/tdc/ServicePreAsbuilt/MW.php";
+    public static final String URL_MW_CHECK = "http://" + IP + "/tdc/ServicePreAsbuilt/itemsCheckMW.php";
+    public static final String URL_MW_SEND = "http://" + IP + "/tdc/ServicePreAsbuilt/answerCheckMW.php";
+    public static final String URL_MW_IMG = "http://" + IP + "/telrad/uploadMw.php";
 
 
 

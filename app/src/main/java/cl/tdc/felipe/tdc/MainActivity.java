@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -17,31 +16,25 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.util.EntityUtils;
+import org.xml.sax.SAXException;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.daemon.WifiTrackerTDC;
-import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
+import cl.tdc.felipe.tdc.objects.PreAsBuilt.Informacion;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
-import cl.tdc.felipe.tdc.webservice.UploadImage;
+import cl.tdc.felipe.tdc.webservice.SoapRequestPreAsBuilt;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
+import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
 
 public class MainActivity extends ActionBarActivity {
     Context mContext;
@@ -175,6 +168,27 @@ public class MainActivity extends ActionBarActivity {
     public void onClick_relevo(View v) {
         startActivity(new Intent(this, RelevarActivity.class));
     }
+    public void onClick_preasbuilt(View v) {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+
+        b.setItems(new CharSequence[]{"RF","MW"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PreAsBuilt task = new PreAsBuilt(mContext, i);
+                task.execute();
+
+            }
+        });
+        b.setTitle("Seleccione una opción");
+        b.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        b.show();
+    }
 
 
 
@@ -192,6 +206,95 @@ public class MainActivity extends ActionBarActivity {
 
 
 //-----------------TASK ASINCRONICO------------------------------------
+
+    private class PreAsBuilt extends AsyncTask<String, String, String>{
+        Context context;
+        ProgressDialog d;
+        boolean ok = false;
+        int type;
+
+        private PreAsBuilt(Context context, int type) {
+            this.context = context;
+            this.type = type;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            d = new ProgressDialog(context);
+            if(type == XMLParserPreAsBuilt.RF)
+                d.setMessage("Buscando informacion sobre RF");
+            if(type == XMLParserPreAsBuilt.MW)
+                d.setMessage("Buscando informacion sobre MW");
+            d.setCanceledOnTouchOutside(false);
+            d.setCancelable(false);
+            d.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try{
+                String query;
+                if(type == XMLParserPreAsBuilt.RF)
+                    query = SoapRequestPreAsBuilt.getNodob(IMEI);
+                else
+                    query = SoapRequestPreAsBuilt.getNodoMW(IMEI);
+
+                ArrayList<String> parse = XMLParser.getReturnCode2(query);
+
+                ok = parse.get(0).equals("0");
+
+                if(ok)
+                    return query;
+                else
+                    return parse.get(1);
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if(ok){
+                try {
+                    Informacion info = XMLParserPreAsBuilt.getInfoPreAsBuilt(s, type);
+
+                    Intent i = new Intent(mContext, PreAsBuiltActivity.class);
+                    i.putExtra("ID", info.getId());
+                    i.putExtra("TYPE", type);
+                    i.putExtra("QUERY", s);
+                    startActivity(i);
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (XPathExpressionException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }else{
+                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+            }
+            if(d.isShowing())d.dismiss();
+        }
+    }
 
 
     private class ChecklistTask extends AsyncTask<String, String, String> {

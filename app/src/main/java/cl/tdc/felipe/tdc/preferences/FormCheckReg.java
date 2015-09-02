@@ -34,6 +34,13 @@ public class FormCheckReg {
         editor.apply();
     }
 
+    public void addValue(String FLAG,int state){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Log.i(NAME, FLAG+" - "+state);
+        editor.putInt(FLAG, state);
+        editor.apply();
+    }
+
     public Boolean getBoolean(String FLAG){
         Boolean state = sharedPreferences.getBoolean(FLAG, false);
         Log.i(NAME, FLAG+" - "+state.toString());
@@ -42,6 +49,12 @@ public class FormCheckReg {
 
     public String getString(String FLAG){
         String state =  sharedPreferences.getString(FLAG, "");
+        Log.i(NAME, FLAG+" - "+state);
+        return state;
+    }
+
+    public int getInt(String FLAG){
+        int state =  sharedPreferences.getInt(FLAG, -100);
         Log.i(NAME, FLAG+" - "+state);
         return state;
     }

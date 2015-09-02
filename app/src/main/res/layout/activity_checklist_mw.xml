@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Relevamiento de Capacidades"
+                android:text="CheckList MW"
                 android:textColor="#ffff7644" />
         </LinearLayout>
     </LinearLayout>
@@ -89,114 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/fondo_1"
-                android:padding="5dp"
-                android:layout_marginBottom="10dp">
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Departamento"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/cb_dpto"
-                        android:spinnerMode="dialog"
-                        android:background="@drawable/spinner_bg"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:clickable="true" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/textView31"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Provincia"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/cb_prov"
-                        android:spinnerMode="dialog"
-                        android:background="@drawable/spinner_bg"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:clickable="true" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/textView32"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Distrito"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/cd_dist"
-                        android:spinnerMode="dialog"
-                        android:background="@drawable/spinner_bg"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:clickable="true" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/textView33"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Estación"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:id="@+id/cb_station"
-                        android:spinnerMode="dialog"
-                        android:background="@drawable/spinner_bg"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:clickable="true" />
-                </LinearLayout>
-            </LinearLayout>
 
 
 
@@ -255,25 +148,13 @@
             android:onClick="onClick_enviar"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/imageButton"
-            android:layout_toEndOf="@+id/imageButton"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:layout_marginLeft="5dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButton2"
-            android:background="@drawable/custom_button_rounded_green"
-            android:onClick="onClick_recomendado"
-            android:textColor="@android:color/white"
-            android:text="CheckList\nRecomendado"
-            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="5dp"
             android:layout_toLeftOf="@+id/btn_off"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageButton3"
-            android:layout_toEndOf="@+id/imageButton3"
-            android:layout_marginLeft="5dp" />
+            android:layout_toStartOf="@+id/btn_off" />
+
+
     </RelativeLayout>
 
 </RelativeLayout>

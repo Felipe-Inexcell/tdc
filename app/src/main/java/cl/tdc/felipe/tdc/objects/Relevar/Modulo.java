@@ -9,6 +9,15 @@ public class Modulo {
     int id;
     String name;
     ArrayList<Item> items;
+    ArrayList<Modulo> subModulo;
+
+    public ArrayList<Modulo> getSubModulo() {
+        return subModulo;
+    }
+
+    public void setSubModulo(ArrayList<Modulo> subModulo) {
+        this.subModulo = subModulo;
+    }
 
     public Modulo() {
     }

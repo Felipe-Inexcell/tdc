@@ -544,5 +544,80 @@ public class XMLParser {
         //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
     }
 
+    public static int getIdRelevo(String xml) throws ParserConfigurationException,
+            SAXException, IOException {
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+        Document doc = db.parse(is);
+        Element idRelevamiento = (Element) doc.getElementsByTagName("IdRelevamiento").item(0);
+        return Integer.valueOf(getCharacterDataFromElement(idRelevamiento));
+    }
+
+    public static ArrayList<Modulo> getRelevoCheckRecomend(String xml) throws ParserConfigurationException,
+            SAXException, IOException {
+
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+        Document doc = db.parse(is);
+
+        ArrayList<Modulo> response = new ArrayList<>();
+
+        NodeList modulos = doc.getElementsByTagName("Module");
+
+        for (int i = 0; i < modulos.getLength(); i++) {
+            Element eModulo = (Element) modulos.item(i);
+            Modulo mModulo = new Modulo();
+
+            mModulo.setId(getCharacterDataFromElement((Element) eModulo.getElementsByTagName("IdModule").item(0)));
+            mModulo.setName(getCharacterDataFromElement((Element) eModulo.getElementsByTagName("NameModule").item(0)));
+
+            NodeList submodulos = eModulo.getElementsByTagName("SubModule");
+            ArrayList<Modulo> SubModulosList = new ArrayList<>();
+
+            for(int j = 0; j < submodulos.getLength(); j++){
+                Element eSubModulo = (Element) submodulos.item(j);
+                Modulo mSubModulo = new Modulo();
+
+                mSubModulo.setId(getCharacterDataFromElement((Element) eSubModulo.getElementsByTagName("IdSubModule").item(0)));
+                mSubModulo.setName(getCharacterDataFromElement((Element) eSubModulo.getElementsByTagName("NameSubModule").item(0)));
+
+                NodeList items = eSubModulo.getElementsByTagName("Item");
+                ArrayList<cl.tdc.felipe.tdc.objects.Relevar.Item> ItemsList = new ArrayList<>();
+
+                for(int k = 0; k < items.getLength(); k++){
+                    Element eItem = (Element) items.item(k);
+                    cl.tdc.felipe.tdc.objects.Relevar.Item mItem = new cl.tdc.felipe.tdc.objects.Relevar.Item();
+
+                    mItem.setId(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Id_Item").item(0)));
+                    mItem.setName(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Name_Item").item(0)));
+                    mItem.setType(getCharacterDataFromElement((Element) eItem.getElementsByTagName("Type_Item").item(0)));
+
+                    NodeList values = eItem.getElementsByTagName("Value");
+                    ArrayList<String> valuesList = new ArrayList<>();
+
+                    for(int x= 0; x<values.getLength();x++){
+                        Element eValue = (Element) values.item(x);
+                        valuesList.add(getCharacterDataFromElement((Element)eValue.getElementsByTagName("Name_Value").item(0)));
+                    }
+                    mItem.setValues(valuesList);
+                    ItemsList.add(mItem);
+                }
+                mSubModulo.setItems(ItemsList);
+                SubModulosList.add(mSubModulo);
+
+            }
+
+            mModulo.setSubModulo(SubModulosList);
+            response.add(mModulo);
+
+        }
+
+
+        return response;
+        //	return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
+    }
+
 
 }

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#FF0272B5">
+
+    <!-- header -->
+    <LinearLayout
+        android:id="@+id/averia_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/fondo_general"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical|center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo_tdc" />
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="TDC@"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/app_title" />
+
+            <TextView
+                android:id="@+id/header_actual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PreAsBuilt"
+                android:textColor="#ffff7644" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- end header -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/averia_content"
+        android:layout_below="@+id/averia_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/averia_footer"
+        android:background="@drawable/fondo_general"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/type"
+                android:gravity="left|center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="24dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/nameStation"
+                android:gravity="left|center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#ff000000"
+                android:background="#fff57317" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/depto"
+                android:gravity="left|center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#ff000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/province"
+                android:gravity="left|center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#ff000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/district"
+                android:gravity="left|center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#ff000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="address"
+                android:id="@+id/address"
+                android:gravity="left|center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#ff000000" />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/comment"
+                android:gravity="left|center_horizontal"
+                android:layout_marginBottom="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="#ff000000" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map"
+                class="com.google.android.gms.maps.SupportMapFragment"
+                />
+        </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:id="@+id/averia_footer"
+        android:background="@drawable/fondo_general"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:id="@+id/imageButton"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"
+            android:layout_alignParentBottom="false"
+            android:background="@drawable/custom_button_shutdown"
+            android:layout_centerVertical="true"
+            android:onClick="onClick_back"
+            android:backgroundTintMode="src_over"
+            android:src="@drawable/ic_close1" />
+
+        <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_off"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_shutdown"
+            android:layout_alignParentTop="false"
+            android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:background="@drawable/custom_button_shutdown"
+            android:onClick="onClick_apagar" />
+
+        <Button
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:id="@+id/imageButton3"
+            android:text="Continuar"
+            android:textColor="@android:color/white"
+            android:background="@drawable/custom_button_rounded_green"
+            android:onClick="onClick_continuar"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/imageButton"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/btn_off"
+            android:layout_toStartOf="@+id/btn_off" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

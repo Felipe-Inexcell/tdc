@@ -57,7 +57,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: cl.tdc.felipe.tdc" />
   </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" line="248" />
+    <bookmark url="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" line="351" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e4865d9-b137-4319-8acc-c29caaac1c4d" name="Default" comment="" />
@@ -129,35 +129,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="XMLParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="8857">
-              <caret line="59" column="33" selection-start-line="59" selection-start-column="33" selection-end-line="59" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RelevarActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="RelevarActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.73745173" vertical-offset="8543" max-vertical-offset="11407">
-              <caret line="537" column="0" selection-start-line="537" selection-start-column="0" selection-end-line="537" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#23654#24149#0" expanded="true" />
-                <element signature="e#24134#24135#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SoapRequest1.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest1.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5697" max-vertical-offset="6562">
-              <caret line="317" column="38" selection-start-line="317" selection-start-column="38" selection-end-line="317" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="11142" max-vertical-offset="18394">
+              <caret line="716" column="78" selection-start-line="716" selection-start-column="78" selection-end-line="716" selection-end-column="78" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -165,21 +141,66 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dummy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/dummy.java">
+      <file leaf-file-name="FormPreAsBuiltActivityRF.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityRF.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="24616">
-              <caret line="42" column="114" selection-start-line="42" selection-start-column="114" selection-end-line="42" selection-end-column="114" />
+            <state vertical-scroll-proportion="-0.03773585" vertical-offset="6696" max-vertical-offset="8636">
+              <caret line="399" column="16" selection-start-line="399" selection-start-column="16" selection-end-line="399" selection-end-column="16" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#6346#6642#0" expanded="true" />
+                <element signature="e#6627#6628#0" expanded="true" />
+                <element signature="e#12730#12932#0" expanded="true" />
+                <element signature="e#12921#12922#0" expanded="true" />
+                <element signature="e#12972#13319#0" expanded="true" />
+                <element signature="e#13308#13309#0" expanded="true" />
+                <element signature="e#14958#15239#0" expanded="true" />
+                <element signature="e#15220#15221#0" expanded="true" />
+                <element signature="e#16596#17091#0" expanded="true" />
+                <element signature="e#17076#17077#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_main_horizontal.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1860" max-vertical-offset="7769">
+              <caret line="116" column="20" selection-start-line="347" selection-start-column="41" selection-end-line="347" selection-end-column="59" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FormCheckSecurity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java">
+      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3007" max-vertical-offset="11084">
-              <caret line="201" column="26" selection-start-line="201" selection-start-column="26" selection-end-line="201" selection-end-column="69" />
+            <state vertical-scroll-proportion="-2.72" vertical-offset="0" max-vertical-offset="2431">
+              <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FormImage.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormImage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="332" max-vertical-offset="1224">
+              <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RelevarRecomendadoActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarRecomendadoActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.892858" vertical-offset="2783" max-vertical-offset="12750">
+              <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -187,27 +208,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_relevo.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_relevo.xml">
+      <file leaf-file-name="activity_checklist_rf.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_checklist_rf.xml">
           <provider editor-type-id="android-designer">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.185185" vertical-offset="891" max-vertical-offset="4896">
-              <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="46" />
+            <state vertical-scroll-proportion="-9.0" vertical-offset="1219" max-vertical-offset="2805">
+              <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_averia.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_averia.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
+      <file leaf-file-name="FormPreAsBuiltActivityMW.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityMW.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.037037" vertical-offset="2608" max-vertical-offset="5831">
-              <caret line="163" column="20" selection-start-line="163" selection-start-column="20" selection-end-line="163" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1096" max-vertical-offset="1632">
+              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XMLParserPreAsBuilt.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserPreAsBuilt.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2235" max-vertical-offset="2873">
+              <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Modulo.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Modulo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -1488,33 +1528,11 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserSeguimiento.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/DetalleProyecto.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_detalle_pryecto1.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/Seguimiento.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/HttpFileUploader.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Seguimiento/ImagenDia.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/view_signature.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/view_signature_preview.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Seguimiento/Dia.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestSeguimiento.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/proyectos_detalle.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Seguimiento/Actividad.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/ControSeguridadDiario/Modulo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/SubModulo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/Elemento.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_formchecksecurity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/Section.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/Modulo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/MaintenanceReg.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestCheckLists.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserChecklists.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/fondo_general1_bottom.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/UploadImage.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/ControSeguridadDiario/Elemento.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_agenda_new.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/view_fotocomment.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormImage.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Averia/Item.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/dialog_averia.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest.java" />
@@ -1523,22 +1541,44 @@
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Funciones.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckSecurityReg.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckReg.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckMaintenance.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AgendaActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_checklist.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Modulo.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Item.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/spinner_bg.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/module_bg.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckReg.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_relevo.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_averia.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_cercanos.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_seguimiento.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_seguridad.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_relevo.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_preasbuilt.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest1.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/PreAsBuilt/Informacion.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestPreAsBuilt.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_preasbuilt.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/dummy.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserPreAsBuiltMW.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/PreAsBuiltActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_checklist_mw.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserPreAsBuilt.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityMW.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_checklist_rf.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarRecomendadoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityRF.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormImage.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_relevo.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Modulo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Item.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/dummy.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest1.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarActivity.java" />
       </list>
     </option>
   </component>
@@ -1617,7 +1657,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1628,6 +1667,24 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Gradle Scripts" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tdc" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1671,6 +1728,10 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1682,12 +1743,27 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tdc" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tdc" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1731,7 +1807,7 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Explorador" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="603" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="616" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.SHOW" value="true" />
@@ -1756,8 +1832,8 @@
       <recent name="cl.tdc.felipe.tdc" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="cl.tdc.felipe.tdc.webservice" />
       <recent name="cl.tdc.felipe.tdc" />
+      <recent name="cl.tdc.felipe.tdc.webservice" />
       <recent name="cl.tdc.felipe.tdc.preferences" />
       <recent name="cl.tdc.felipe.tdc.objects.MaintChecklist" />
       <recent name="cl.tdc.felipe.tdc.objects.ControSeguridadDiario" />
@@ -2005,23 +2081,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28162816" sideWeight="0.48880598" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19667171" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3190319" sideWeight="0.42537314" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39933994" sideWeight="0.445629" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3326226" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23454158" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2761276" sideWeight="0.47974414" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39933994" sideWeight="0.5293177" order="7" side_tool="false" content_ui="tabs" x="1769" y="114" width="970" height="470" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39933994" sideWeight="0.554371" order="7" side_tool="false" content_ui="tabs" x="1769" y="114" width="970" height="470" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22867803" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -2106,12 +2182,6 @@
           <option name="timeStamp" value="269" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
-          <line>151</line>
-          <properties />
-          <option name="timeStamp" value="279" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java</url>
           <line>674</line>
           <properties />
@@ -2184,245 +2254,50 @@
           <option name="timeStamp" value="292" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarActivity.java</url>
-          <line>2</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
+          <line>617</line>
           <properties />
-          <option name="timeStamp" value="293" />
+          <option name="timeStamp" value="304" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
+          <line>566</line>
+          <properties />
+          <option name="timeStamp" value="310" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest1.java</url>
+          <line>472</line>
+          <properties />
+          <option name="timeStamp" value="311" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
+          <line>569</line>
+          <properties />
+          <option name="timeStamp" value="316" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
+          <line>607</line>
+          <properties />
+          <option name="timeStamp" value="320" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java</url>
+          <line>612</line>
+          <properties />
+          <option name="timeStamp" value="321" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="304" />
+      <option name="time" value="371" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_formchecksecurity.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.647541" vertical-offset="1232" max-vertical-offset="2720">
-          <caret line="105" column="20" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/Modulo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
-          <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/SubModulo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1088" vertical-offset="0" max-vertical-offset="680">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/MaintChecklist/Section.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2992" vertical-offset="0" max-vertical-offset="663">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Maintenance/Maintenance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1088">
-          <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Maintenance/Agenda.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3536" vertical-offset="0" max-vertical-offset="850">
-          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserChecklists.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3175966" vertical-offset="1494" max-vertical-offset="2924">
-          <caret line="146" column="86" selection-start-line="146" selection-start-column="86" selection-end-line="146" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCheck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14592275" vertical-offset="51" max-vertical-offset="748">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_1.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="466">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_general.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_general1.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="466">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_general_bottom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11258278" vertical-offset="0" max-vertical-offset="453">
-          <caret line="3" column="35" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_general1_bottom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10944206" vertical-offset="0" max-vertical-offset="466">
-          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Seguimiento/ImagenDia.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/ControSeguridadDiario/Elemento.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="1564">
-          <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_agenda_new.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2635">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestSeguimiento.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3620309" vertical-offset="1757" max-vertical-offset="3587">
-          <caret line="152" column="27" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestCheckLists.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2635" max-vertical-offset="4828">
-          <caret line="172" column="77" selection-start-line="172" selection-start-column="77" selection-end-line="172" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/view_fotocomment.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="476">
-          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/daemon/PositionTrackerTDC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2686">
-          <caret line="100" column="56" selection-start-line="100" selection-start-column="56" selection-end-line="100" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_averia.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="260" max-vertical-offset="2567">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/UploadImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2465">
-          <caret line="49" column="80" selection-start-line="49" selection-start-column="7" selection-end-line="49" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/Seguimiento.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37468982" vertical-offset="2248" max-vertical-offset="3145">
-          <caret line="187" column="49" selection-start-line="187" selection-start-column="49" selection-end-line="187" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="834">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52099884" vertical-offset="0" max-vertical-offset="881">
-          <caret line="27" column="1" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/DetalleProyecto1.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6052" max-vertical-offset="9163">
-          <caret line="356" column="57" selection-start-line="356" selection-start-column="57" selection-end-line="356" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/MaintenanceReg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1241">
-          <caret line="53" column="19" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckReg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1122">
-          <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckSecurityReg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="1088">
-          <caret line="51" column="19" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AgendaActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.42767295" vertical-offset="459" max-vertical-offset="8126">
           <caret line="93" column="20" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2430,42 +2305,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="518">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32818532" vertical-offset="0" max-vertical-offset="952">
-          <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Funciones.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33204633" vertical-offset="185" max-vertical-offset="3740">
-          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8938775" vertical-offset="3815" max-vertical-offset="12478">
-          <caret line="359" column="31" selection-start-line="359" selection-start-column="31" selection-end-line="359" selection-end-column="31" />
-          <folding>
-            <element signature="e#16684#17798#0" expanded="true" />
-            <element signature="e#17779#17780#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13793103" vertical-offset="0" max-vertical-offset="2431">
-          <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2473,35 +2312,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.0366795" vertical-offset="4922" max-vertical-offset="7140">
           <caret line="250" column="46" selection-start-line="250" selection-start-column="46" selection-end-line="250" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.814815" vertical-offset="5549" max-vertical-offset="7633">
-          <caret line="342" column="55" selection-start-line="342" selection-start-column="55" selection-end-line="342" selection-end-column="55" />
-          <folding>
-            <element signature="e#268#301#0" expanded="true" />
-            <element signature="e#326#361#0" expanded="true" />
-            <element signature="e#387#422#0" expanded="true" />
-            <element signature="e#446#479#0" expanded="true" />
-            <element signature="e#2596#2615#0" expanded="true" />
-            <element signature="e#3287#3320#0" expanded="true" />
-            <element signature="e#16300#16333#0" expanded="true" />
-            <element signature="e#19134#19155#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1705" max-vertical-offset="4233">
-          <caret line="174" column="30" selection-start-line="174" selection-start-column="30" selection-end-line="174" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2509,34 +2319,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="10.2237625" vertical-offset="8607" max-vertical-offset="21250">
           <caret line="856" column="50" selection-start-line="856" selection-start-column="50" selection-end-line="856" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Modulo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
-          <caret line="20" column="40" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
-          <folding>
-            <element signature="e#247#248#0" expanded="true" />
-            <element signature="e#272#273#0" expanded="true" />
-            <element signature="e#430#431#0" expanded="true" />
-            <element signature="e#457#458#0" expanded="true" />
-            <element signature="e#497#498#0" expanded="true" />
-            <element signature="e#529#530#0" expanded="true" />
-            <element signature="e#570#571#0" expanded="true" />
-            <element signature="e#598#599#0" expanded="true" />
-            <element signature="e#649#650#0" expanded="true" />
-            <element signature="e#683#684#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Item.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
-          <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2552,27 +2334,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45945945" vertical-offset="0" max-vertical-offset="518">
           <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
-          <folding>
-            <element signature="e#278#279#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7046332" vertical-offset="604" max-vertical-offset="1139">
-          <caret line="57" column="48" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
-          <folding>
-            <element signature="e#1957#1996#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/dummy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="24616">
-          <caret line="42" column="114" selection-start-line="42" selection-start-column="114" selection-end-line="42" selection-end-column="114" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2581,60 +2342,465 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.037037" vertical-offset="2608" max-vertical-offset="5831">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2771" max-vertical-offset="5831">
           <caret line="163" column="20" selection-start-line="163" selection-start-column="20" selection-end-line="163" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Seguimiento/ImagenDia.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/module_bg.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="77" max-vertical-offset="799">
+          <caret line="3" column="38" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_relevo.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1758" max-vertical-offset="4828">
+          <caret line="113" column="20" selection-start-line="251" selection-start-column="29" selection-end-line="251" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCheckReg.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.542471" vertical-offset="0" max-vertical-offset="1343">
+          <caret line="49" column="18" selection-start-line="49" selection-start-column="18" selection-end-line="49" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Item.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="1173">
+          <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+          <folding>
+            <element signature="e#542#543#0" expanded="false" />
+            <element signature="e#576#577#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/spinner_bg.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.55791503" vertical-offset="0" max-vertical-offset="518">
+          <caret line="17" column="94" selection-start-line="17" selection-start-column="94" selection-end-line="17" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.75714284" vertical-offset="10594" max-vertical-offset="11118">
+          <caret line="692" column="4" selection-start-line="692" selection-start-column="4" selection-end-line="692" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="11660" max-vertical-offset="12427">
+          <caret line="828" column="5" selection-start-line="685" selection-start-column="3" selection-end-line="828" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal_bak.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7633">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable-mdpi/btn_agenda2.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_agenda_horizontal.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_averia.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13127413" vertical-offset="0" max-vertical-offset="518">
+          <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_cercanos.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13127413" vertical-offset="0" max-vertical-offset="518">
+          <caret line="4" column="49" selection-start-line="4" selection-start-column="49" selection-end-line="4" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_seguimiento.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="4" column="52" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_seguridad.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="3" column="45" selection-start-line="3" selection-start-column="45" selection-end-line="3" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_relevo.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="4" column="53" selection-start-line="4" selection-start-column="53" selection-end-line="4" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/click_preasbuilt.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="4" column="51" selection-start-line="4" selection-start-column="51" selection-end-line="4" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequest1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5697" max-vertical-offset="6562">
-          <caret line="317" column="38" selection-start-line="317" selection-start-column="38" selection-end-line="317" selection-end-column="38" />
+        <state vertical-scroll-proportion="-1.4851485" vertical-offset="7176" max-vertical-offset="10353">
+          <caret line="378" column="25" selection-start-line="378" selection-start-column="25" selection-end-line="378" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckSecurity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/PreAsBuilt/Informacion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3007" max-vertical-offset="11084">
-          <caret line="201" column="26" selection-start-line="201" selection-start-column="26" selection-end-line="201" selection-end-column="69" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1819">
+          <caret line="26" column="43" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#375#376#0" expanded="true" />
+            <element signature="e#400#401#0" expanded="true" />
+            <element signature="e#557#558#0" expanded="true" />
+            <element signature="e#584#585#0" expanded="true" />
+            <element signature="e#624#625#0" expanded="true" />
+            <element signature="e#656#657#0" expanded="true" />
+            <element signature="e#692#693#0" expanded="true" />
+            <element signature="e#724#725#0" expanded="true" />
+            <element signature="e#774#775#0" expanded="true" />
+            <element signature="e#816#817#0" expanded="true" />
+            <element signature="e#852#853#0" expanded="true" />
+            <element signature="e#884#885#0" expanded="true" />
+            <element signature="e#934#935#0" expanded="true" />
+            <element signature="e#976#977#0" expanded="true" />
+            <element signature="e#1011#1012#0" expanded="true" />
+            <element signature="e#1042#1043#0" expanded="true" />
+            <element signature="e#1090#1091#0" expanded="true" />
+            <element signature="e#1130#1131#0" expanded="true" />
+            <element signature="e#1168#1169#0" expanded="true" />
+            <element signature="e#1202#1203#0" expanded="true" />
+            <element signature="e#1256#1257#0" expanded="true" />
+            <element signature="e#1302#1303#0" expanded="true" />
+            <element signature="e#1337#1338#0" expanded="true" />
+            <element signature="e#1368#1369#0" expanded="true" />
+            <element signature="e#1416#1417#0" expanded="true" />
+            <element signature="e#1456#1457#0" expanded="true" />
+            <element signature="e#1491#1492#0" expanded="true" />
+            <element signature="e#1522#1523#0" expanded="true" />
+            <element signature="e#1570#1571#0" expanded="true" />
+            <element signature="e#1610#1611#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1674#1675#0" expanded="true" />
+            <element signature="e#1720#1721#0" expanded="true" />
+            <element signature="e#1758#1759#0" expanded="true" />
+            <element signature="e#1792#1793#0" expanded="true" />
+            <element signature="e#1822#1823#0" expanded="true" />
+            <element signature="e#1868#1869#0" expanded="true" />
+            <element signature="e#1906#1907#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserChecklists.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33265308" vertical-offset="92" max-vertical-offset="2924">
+          <caret line="37" column="45" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Funciones.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44208494" vertical-offset="3222" max-vertical-offset="3740">
+          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="8857">
-          <caret line="59" column="33" selection-start-line="59" selection-start-column="33" selection-end-line="59" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1601" max-vertical-offset="10132">
+          <caret line="148" column="35" selection-start-line="148" selection-start-column="35" selection-end-line="148" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_relevo.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cercanos.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.185185" vertical-offset="891" max-vertical-offset="4896">
-          <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="46" />
+        <state vertical-scroll-proportion="-8.37037" vertical-offset="1321" max-vertical-offset="2669">
+          <caret line="91" column="14" selection-start-line="86" selection-start-column="8" selection-end-line="91" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_view.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="918">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/CercanosActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5049505" vertical-offset="561" max-vertical-offset="3995">
+          <caret line="81" column="8" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestPreAsBuilt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5729">
+          <caret line="178" column="25" selection-start-line="178" selection-start-column="25" selection-end-line="178" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="604" max-vertical-offset="1190">
+          <caret line="60" column="37" selection-start-line="60" selection-start-column="37" selection-end-line="60" selection-end-column="37" />
+          <folding>
+            <element signature="e#1957#1996#0" expanded="true" />
+            <element signature="e#2062#2080#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_preasbuilt.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1503" max-vertical-offset="3978">
+          <caret line="98" column="12" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
+          <folding>
+            <element signature="e#215#250#0" expanded="true" />
+            <element signature="e#276#311#0" expanded="true" />
+            <element signature="e#335#368#0" expanded="true" />
+            <element signature="e#395#428#0" expanded="true" />
+            <element signature="e#2507#2526#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_formcheck.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6290">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4078" max-vertical-offset="6579">
+          <caret line="274" column="35" selection-start-line="274" selection-start-column="35" selection-end-line="274" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/dummy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="721" max-vertical-offset="24922">
+          <caret line="58" column="97" selection-start-line="58" selection-start-column="97" selection-end-line="58" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_checklist.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2297" max-vertical-offset="2788">
+          <caret line="141" column="8" selection-start-line="141" selection-start-column="8" selection-end-line="141" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserPreAsBuilt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2235" max-vertical-offset="2873">
+          <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/PreAsBuiltActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.80365294" vertical-offset="1994" max-vertical-offset="2516">
+          <caret line="143" column="39" selection-start-line="143" selection-start-column="39" selection-end-line="143" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_checklist_mw.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.495283" vertical-offset="505" max-vertical-offset="2805">
+          <caret line="67" column="42" selection-start-line="67" selection-start-column="42" selection-end-line="67" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/Relevar/Modulo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityMW.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1096" max-vertical-offset="1632">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_checklist_rf.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.0" vertical-offset="1219" max-vertical-offset="2805">
+          <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73745173" vertical-offset="8543" max-vertical-offset="11407">
-          <caret line="537" column="0" selection-start-line="537" selection-start-column="0" selection-end-line="537" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="11142" max-vertical-offset="18394">
+          <caret line="716" column="78" selection-start-line="716" selection-start-column="78" selection-end-line="716" selection-end-column="78" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#23654#24149#0" expanded="true" />
-            <element signature="e#24134#24135#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/RelevarRecomendadoActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.892858" vertical-offset="2783" max-vertical-offset="12750">
+          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormImage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="332" max-vertical-offset="1224">
+          <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormPreAsBuiltActivityRF.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.03773585" vertical-offset="6696" max-vertical-offset="8636">
+          <caret line="399" column="16" selection-start-line="399" selection-start-column="16" selection-end-line="399" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6346#6642#0" expanded="true" />
+            <element signature="e#6627#6628#0" expanded="true" />
+            <element signature="e#12730#12932#0" expanded="true" />
+            <element signature="e#12921#12922#0" expanded="true" />
+            <element signature="e#12972#13319#0" expanded="true" />
+            <element signature="e#13308#13309#0" expanded="true" />
+            <element signature="e#14958#15239#0" expanded="true" />
+            <element signature="e#15220#15221#0" expanded="true" />
+            <element signature="e#16596#17091#0" expanded="true" />
+            <element signature="e#17076#17077#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.72" vertical-offset="0" max-vertical-offset="2431">
+          <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1860" max-vertical-offset="7769">
+          <caret line="116" column="20" selection-start-line="347" selection-start-column="41" selection-end-line="347" selection-end-column="59" />
+          <folding />
         </state>
       </provider>
     </entry>

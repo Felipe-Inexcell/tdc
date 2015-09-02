@@ -3,6 +3,7 @@ package cl.tdc.felipe.tdc.objects;
 import android.graphics.Bitmap;
 
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class FormImage {
         this.name = name;
     }
 
+    public FormImage(){}
+
     public boolean isSend() {
         return send;
     }
@@ -35,6 +38,15 @@ public class FormImage {
     public void newName(int id){
         DateFormat f = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
         this.name = id+"_"+f.format(new Date())+".png";
+    }
+
+    public void newNameRelevo(int id, String elemento){
+        DateFormat f = new SimpleDateFormat("yyyyMMddhhmmss");
+        this.name = f.format(new Date())+"_"+id+"_"+elemento+".png";
+    }
+    public void newNameRF(int id, String elemento){
+        DateFormat f = new SimpleDateFormat("yyyyMMddhhmmss");
+        this.name = f.format(new Date())+"_"+id+"_"+elemento+".png";
     }
     public int getIdSystem() {
         return idSystem;
@@ -74,5 +86,10 @@ public class FormImage {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void newNameRelevoRecom(int id, int idRelevo, String comment) {
+        DateFormat f = new SimpleDateFormat("yyyyMMddhhmmss");
+        this.name = f.format(new Date())+"_"+id+"_"+idRelevo+"_"+comment+".png";
     }
 }

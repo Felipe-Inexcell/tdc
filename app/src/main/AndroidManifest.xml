@@ -56,6 +56,9 @@
         <activity android:name=".FormCheckSecurity" android:screenOrientation="portrait"/>
         <activity android:name=".FormCheckMaintenance" android:screenOrientation="portrait"/>
         <activity android:name=".RelevarActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".RelevarRecomendadoActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".PreAsBuiltActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".FormPreAsBuiltActivityRF" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

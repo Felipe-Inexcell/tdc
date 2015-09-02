@@ -1,12 +1,11 @@
 package cl.tdc.felipe.tdc;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
@@ -24,74 +22,66 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
 import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.Averia.Item;
+import cl.tdc.felipe.tdc.objects.FormImage;
 import cl.tdc.felipe.tdc.objects.Relevar.Modulo;
+import cl.tdc.felipe.tdc.preferences.FormCheckReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequest1;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
+import cl.tdc.felipe.tdc.webservice.dummy;
 
-/**
- * Created by Felipe on 13/02/2015.
- */
 public class RelevarActivity extends Activity {
     public static Activity actividad;
     private Context context;
-    private PositionTrackerTDC trackerTDC;
     ArrayList<Modulo> modulos;
+    ArrayList<FormImage> imagenes = new ArrayList<>();
+    FormImage imgTmp;
     LinearLayout contenido;
+    int idRelevo = -100;
+    ImageButton enviar;
+
+    FormCheckReg reg;
 
     private ArrayList<Item> departamentos, provincias, distritos, estaciones;
 
     private String name;
     private Spinner depto, province, district, station;
-    private Bitmap b = null, bmini = null;
     private static int TAKE_PICTURE = 1;
 
     ArrayList<View> vistas = new ArrayList<>();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("AVERIA", "onResume");
-        Intent intent = new Intent(this, PositionTrackerTDC.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("AVERIA", "onPause");
-        unbindService(mConnection);
-    }
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            PositionTrackerTDC.MyBinder b = (PositionTrackerTDC.MyBinder) iBinder;
-            trackerTDC = b.getService();
-            Log.d("AVERIA", "SERVICE CONNECTED");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            trackerTDC = null;
-            Log.d("AVERIA", "SERVICE DISCONNECTED");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +89,37 @@ public class RelevarActivity extends Activity {
         setContentView(R.layout.activity_relevo);
         actividad = this;
         context = this;
-        name = Environment.getExternalStorageDirectory() + "/TDC@/captura.jpg";
-        init();
+        enviar = (ImageButton) findViewById(R.id.imageButton3);
+        reg = new FormCheckReg(this, "RELEVAREG");
+
+
+        if (reg.getBoolean("SEND")) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setCancelable(false);
+            b.setMessage("Desea llenar el Checklist recomendado pendiente?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent in = new Intent(context, RelevarRecomendadoActivity.class);
+                    in.putExtra("ID", reg.getInt("IDRELEVO"));
+                    startActivityForResult(in, idRelevo);
+                }
+            });
+            b.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    reg.clearPreferences();
+                    init();
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        } else {
+            name = Environment.getExternalStorageDirectory() + "/TDC@/captura.jpg";
+            init();
+
+
+        }
     }
 
     private void init() {
@@ -175,23 +194,67 @@ public class RelevarActivity extends Activity {
 
         ObtenerDeptos obtenerDeptos = new ObtenerDeptos(this, this);
         obtenerDeptos.execute();
-
-
     }
 
     // TODO: funcion onClick del botón apagar.
 
     public void onClick_apagar(View v) {
-        MainActivity.actividad.finish();
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir del CheckList?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                saveData();
+
+                ((Activity) context).finish();
+                if (MainActivity.actividad != null)
+                    MainActivity.actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
+
     public void onClick_back(View v) {
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir del CheckList?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                saveData();
+
+                ((Activity) context).finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
     public void onClick_enviar(View v) {
+        for (Modulo m : modulos) {
+            for (cl.tdc.felipe.tdc.objects.Relevar.Item item : m.getItems()) {
+                if (item.getValor().equals("NO RESPONDE") || item.getValor().length() == 0) {
+                    Toast.makeText(this, "Debe responder el CheckList completo.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
 
+        UploadImage task = new UploadImage(this, v);
+        task.execute();
 
     }
 
@@ -200,6 +263,13 @@ public class RelevarActivity extends Activity {
      * Botón Cámara *
      */
     public void onClick_recomendado(View view) {
+        if (idRelevo == -100) {
+            Toast.makeText(this, "Debe enviar el CheckList actual para obtener acceso al recomendado", Toast.LENGTH_LONG).show();
+        } else {
+            Intent i = new Intent(this, RelevarRecomendadoActivity.class);
+            i.putExtra("ID", idRelevo);
+            startActivityForResult(i, idRelevo);
+        }
     }
 
 
@@ -213,23 +283,64 @@ public class RelevarActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE) {
-            if (data != null) {
-                if (data.hasExtra("data")) {
-                    b = (Bitmap) data.getParcelableExtra("data");
-                }
-            } else {
-                b = BitmapFactory.decodeFile(name);
+        if (requestCode == 0) {
+            if (resultCode == -1) {
+                if (data != null) {
+                    if (data.hasExtra("data")) {
+                        imgTmp.setImage(Bitmap.createScaledBitmap((Bitmap) data.getParcelableExtra("data"), 640, 480, true));
+                    }
+                } else {
+                    imgTmp.setImage(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 640, 480, true));
 
+                }
+
+                final EditText desc = new EditText(this);
+                desc.setLines(1);
+                desc.setMaxLines(1);
+
+                desc.setBackgroundResource(R.drawable.fondo_edittext);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setView(desc);
+
+                builder.setIcon(R.drawable.ic_camera);
+                builder.setTitle("¿Qué fotografió?");
+                builder.setPositiveButton("Guardar", null);
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        imgTmp = null;
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+
+                final AlertDialog alert = builder.create();
+                alert.setCanceledOnTouchOutside(false);
+                alert.setCancelable(false);
+                alert.show();
+                alert.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (desc.getText().toString().length() == 0) {
+                            Toast.makeText(getApplicationContext(), "Ingrese una descripción de lo fotografiado", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        imgTmp.setComment(desc.getText().toString());
+                        imgTmp.newNameRelevo(imgTmp.getIdSystem(), imgTmp.getComment());
+                        imagenes.add(imgTmp);
+                        imgTmp = null;
+                        alert.dismiss();
+                    }
+                });
             }
         }
-        try {
-            //b = Bitmap.createScaledBitmap(b, 640, 480, true);
-            bmini = Bitmap.createScaledBitmap(b, 64, 64, true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
+        if(requestCode == idRelevo){
+            if(resultCode == Activity.RESULT_OK){
+                reg.clearPreferences();
+                ((Activity)context).finish();
+            }
+        }
 
     }
 
@@ -282,6 +393,8 @@ public class RelevarActivity extends Activity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, e);
                     depto.setAdapter(adapter);
+
+                    depto.setSelection(adapter.getPosition(reg.getString("SELECT" + depto.getId())));
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     esta.finish();
@@ -347,6 +460,8 @@ public class RelevarActivity extends Activity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, e);
                     province.setAdapter(adapter);
+
+                    province.setSelection(adapter.getPosition(reg.getString("SELECT" + province.getId())));
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     esta.finish();
@@ -412,6 +527,7 @@ public class RelevarActivity extends Activity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, e);
                     district.setAdapter(adapter);
+                    district.setSelection(adapter.getPosition(reg.getString("SELECT" + district.getId())));
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     esta.finish();
@@ -477,6 +593,7 @@ public class RelevarActivity extends Activity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, e);
                     station.setAdapter(adapter);
+                    station.setSelection(adapter.getPosition(reg.getString("SELECT" + station.getId())));
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -558,7 +675,7 @@ public class RelevarActivity extends Activity {
             mTitulo.setBackgroundColor(Color.parseColor("#226666"));
             mTitulo.setTextColor(Color.WHITE);
             mTitulo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            mTitulo.setPadding(0,6,0,6);
+            mTitulo.setPadding(0, 6, 0, 6);
             mTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
             contenido.addView(mTitulo);
 
@@ -567,13 +684,14 @@ public class RelevarActivity extends Activity {
             itemLayout.setBackgroundResource(R.drawable.fondo_1);
             itemLayout.setGravity(Gravity.CENTER_HORIZONTAL);
             itemLayout.setOrientation(LinearLayout.VERTICAL);
-            itemLayout.setPadding(16,5,16,5);
+            itemLayout.setPadding(16, 5, 16, 5);
 
             for (cl.tdc.felipe.tdc.objects.Relevar.Item item : m.getItems()) {
                 TextView iTitulo = new TextView(this);
                 iTitulo.setText(item.getName());
+                iTitulo.setBackgroundColor(Color.GREEN);
                 iTitulo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                iTitulo.setPadding(0,8,0,4);
+                iTitulo.setPadding(0, 8, 0, 4);
                 iTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 View vista = getView(m.getId(), item);
@@ -589,20 +707,48 @@ public class RelevarActivity extends Activity {
 
         }
 
+        Button agregarFoto = new Button(this);
+        agregarFoto.setText("Agregar Foto");
+        agregarFoto.setBackgroundResource(R.drawable.custom_button_rounded_green);
+        agregarFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgTmp = new FormImage();
+                imgTmp.setIdSystem(estaciones.get(station.getSelectedItemPosition()).getId());
+                tomarFoto();
+            }
+        });
+        contenido.addView(agregarFoto);
+
 
     }
 
     private View getView(int mId, cl.tdc.felipe.tdc.objects.Relevar.Item item) {
         String type = item.getType();
         List<String> values = item.getValues();
+        LinearLayout contenido = new LinearLayout(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contenido.setLayoutParams(params);
+        params.setMargins(0, 6, 0, 0);
+        contenido.setOrientation(LinearLayout.VERTICAL);
+        contenido.setGravity(Gravity.CENTER_HORIZONTAL);
+        String comment = "";
+
         if (type.equals("SELECT")) {
             Spinner s = new Spinner(this);
             s.setBackgroundResource(R.drawable.spinner_bg);
             s.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
             s.setAdapter(adapter);
+            String id = mId + item.getId() + item.getName() + values.toString();
+            s.setId(Funciones.str2int(id));
+            String Selected = reg.getString("SELECT" + s.getId());
+            s.setSelection(adapter.getPosition(Selected));
+            contenido.addView(s);
+            item.setVista(s);
 
-            return s;
+            comment = reg.getString("COMMENTSELECT" + s.getId());
+
         } else if (type.equals("CHECK")) {
             LinearLayout checkboxLayout = new LinearLayout(this);
             checkboxLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -618,38 +764,64 @@ public class RelevarActivity extends Activity {
                     if (count < values.size()) {
                         String state = values.get(count);
                         CheckBox cb = new CheckBox(this);
-                        String id = mId + item.getName() + values.get(count);
+                        String id = mId + item.getId() + item.getName() + values.get(count);
                         cb.setId(Funciones.str2int(id));
-                        //cb.setChecked(reg.getBoolean("CHECK"+cb.getId()));
+                        cb.setChecked(reg.getBoolean("CHECK" + cb.getId()));
                         cb.setText(state);
+
                         checkBoxes.add(cb);
                         dump.addView(cb);
+                        if(count == 0)
+                            comment = reg.getString("COMMENTCHECK"+cb.getId());
                         count++;
-
                         vistas.add(cb);
                     }
                 }
                 checkboxLayout.addView(dump);
             }
             makeOnlyOneCheckable(checkBoxes);
-            return checkboxLayout;
+            item.setCheckBoxes(checkBoxes);
+            contenido.addView(checkboxLayout);
         } else if (type.equals("NUM")) {
             EditText e = new EditText(this);
             e.setBackgroundResource(R.drawable.fondo_edittext);
             e.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            String id = mId + item.getId() + item.getName();
+            e.setId(Funciones.str2int(id));
+            e.setText(reg.getString("TEXT" + e.getId()));
+            e.setLayoutParams(new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+            e.setGravity(Gravity.CENTER_HORIZONTAL);
             vistas.add(e);
-            return e;
-        }else if (type.equals("VARCHAR")) {
+            item.setVista(e);
+            contenido.addView(e);
+
+            comment = reg.getString("COMMENTTEXT" + e.getId());
+        } else if (type.equals("VARCHAR")) {
             EditText e = new EditText(this);
             e.setBackgroundResource(R.drawable.fondo_edittext);
             e.setInputType(InputType.TYPE_CLASS_TEXT);
             e.setLines(2);
             e.setGravity(Gravity.LEFT | Gravity.TOP);
+
+            String id = mId + item.getId() + item.getName();
+            e.setId(Funciones.str2int(id));
+            e.setText(reg.getString("TEXT" + e.getId()));
             vistas.add(e);
-            return e;
-        } else {
-            return null;
+            item.setVista(e);
+            contenido.addView(e);
+            comment = reg.getString("COMMENTTEXT" + e.getId());
         }
+
+        EditText comentario = new EditText(this);
+        comentario.setLayoutParams(params);
+        comentario.setBackgroundResource(R.drawable.fondo_edittext);
+        comentario.setLines(3);
+        comentario.setText(comment);
+        comentario.setHint("Comentario");
+        item.setDescription(comentario);
+        contenido.addView(comentario);
+        return contenido;
 
     }
 
@@ -674,4 +846,273 @@ public class RelevarActivity extends Activity {
 
         }
     }
+
+    private void saveData() {
+
+        reg.addValue("SELECT" + depto.getId(), depto.getSelectedItem().toString());
+        reg.addValue("SELECT" + province.getId(), province.getSelectedItem().toString());
+        reg.addValue("SELECT" + district.getId(), district.getSelectedItem().toString());
+        reg.addValue("SELECT" + station.getId(), station.getSelectedItem().toString());
+
+
+        for (Modulo m : modulos) {
+            for (cl.tdc.felipe.tdc.objects.Relevar.Item i : m.getItems()) {
+                View v = i.getVista();
+                View c = i.getDescription();
+                if (i.getCheckBoxes() != null) {
+                    for (int x = 0; x < i.getCheckBoxes().size(); x++) {
+                        CheckBox check = i.getCheckBoxes().get(x);
+                        reg.addValue("CHECK" + check.getId(), check.isChecked());
+                        if (x == 0)
+                            reg.addValue("COMMENTCHECK" + check.getId(), ((EditText) c).getText().toString());
+                    }
+                }
+                if (v instanceof Spinner) {
+                    reg.addValue("SELECT" + v.getId(), ((Spinner) v).getSelectedItem().toString());
+                    reg.addValue("COMMENTSELECT" + v.getId(), ((EditText) c).getText().toString());
+                }
+                if (v instanceof EditText) {
+                    reg.addValue("TEXT" + v.getId(), ((EditText) v).getText().toString());
+                    reg.addValue("COMMENTTEXT" + v.getId(), ((EditText) c).getText().toString());
+                }
+
+            }
+        }
+
+        for(FormImage img: imagenes){
+            if(img.getImage() != null) {
+                String id1 = "FOTOBITMAP" + img.getIdSystem() + img.getIdSubSystem();
+                String id2 = "FOTONAME" + img.getIdSystem() + img.getIdSubSystem();
+                String id3 = "FOTOCOMMENT" + img.getIdSystem() + img.getIdSubSystem();
+
+                reg.addValue(id1, Funciones.encodeTobase64(img.getImage()));
+                reg.addValue(id2, img.getName());
+                reg.addValue(id3, img.getComment());
+            }
+        }
+
+    }
+
+    private class Enviar extends AsyncTask<String, String, String> {
+        Context context;
+        ProgressDialog d;
+        boolean ok = false;
+        View boton;
+
+        private Enviar(Context context, View v) {
+            this.context = context;
+            this.boton = v;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            d = new ProgressDialog(context);
+            d.setCancelable(false);
+            d.setCanceledOnTouchOutside(false);
+            d.setMessage("Enviando CheckList...");
+            d.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            try {
+                String query = SoapRequest1.sendCheckList(telephonyManager.getDeviceId(), estaciones.get(station.getSelectedItemPosition()).getId(), modulos, imagenes);
+
+                ArrayList<String> response = XMLParser.getReturnCode2(query);
+
+                ok = response.get(0).equals("0");
+                if (ok) return query;
+                else return response.get(1);
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return "Error al leer el XML";
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return "Error al leer el XML";
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return "Error al leer el XML";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Error al leer el XML";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Ha ocurrido un error";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            if (ok) {
+                boton.setEnabled(false);
+                reg.addValue("SEND", true);
+                try {
+                    idRelevo = XMLParser.getIdRelevo(s);
+                    reg.addValue("IDRELEVO", idRelevo);
+                    Toast.makeText(context, "Se envió correctamente", Toast.LENGTH_LONG).show();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+            }
+            if (d.isShowing()) d.dismiss();
+        }
+    }
+
+    private class UploadImage extends AsyncTask<String, String, String> {
+
+        private Context mContext;
+        ProgressDialog dialog;
+        View view;
+
+        public UploadImage(Context mContext, View v) {
+            this.view = v;
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            dialog.setMessage(values[0]);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = "";
+
+            for (FormImage img : imagenes) {
+                try {
+                    String fileName = img.getName();
+
+                    publishProgress(fileName);
+                    Log.i("ENVIANDO", fileName);
+                    Log.i("ENVIANDO", "comentario: " + img.getComment());
+                    Log.i("ENVIANDO", "system: " + img.getIdSystem());
+                    Log.i("ENVIANDO", "subsystem: " + img.getIdSubSystem());
+                    HttpURLConnection conn;
+                    DataOutputStream dos;
+                    String lineEnd = "\r\n";
+                    String twoHyphens = "--";
+                    String boundary = "*****";
+                    int bytesRead, bytesAvailable, bufferSize;
+
+                    File done = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+                    done.createNewFile();
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    img.getImage().compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    FileOutputStream fos = new FileOutputStream(done);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+
+                    if (!done.isFile())
+                        Log.e("DownloadManager", "no existe");
+                    else {
+                        FileInputStream fileInputStream = new FileInputStream(done);
+                        URL url = new URL(dummy.URL_R_SEND_CHECK_IMGS);
+
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Connection", "Keep-Alive");
+                        conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                        conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                        conn.setRequestProperty("uploaded_file", fileName);
+
+                        dos = new DataOutputStream(conn.getOutputStream());
+
+                        dos.writeBytes(twoHyphens + boundary + lineEnd);
+                        dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + fileName + "\"" + lineEnd);
+                        dos.writeBytes(lineEnd);
+
+                        bytesAvailable = fileInputStream.available();
+
+                        bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
+                        byte[] buf = new byte[bufferSize];
+
+                        bytesRead = fileInputStream.read(buf, 0, bufferSize);
+
+                        while (bytesRead > 0) {
+
+                            dos.write(buf, 0, bufferSize);
+                            bytesAvailable = fileInputStream.available();
+                            bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
+                            bytesRead = fileInputStream.read(buf, 0, bufferSize);
+
+                        }
+
+                        dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                        int serverResponseCode = conn.getResponseCode();
+                        String serverResponseMessage = conn.getResponseMessage();
+
+
+                        Log.i("UploadManager", "HTTP response is: " + serverResponseMessage + ": " + serverResponseCode);
+
+                        fileInputStream.close();
+                        dos.flush();
+                        dos.close();
+
+                        InputStream responseStream = new BufferedInputStream(conn.getInputStream());
+
+                        BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                        String line = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((line = responseStreamReader.readLine()) != null) {
+                            stringBuilder.append(line).append("\n");
+                        }
+                        responseStreamReader.close();
+
+                        response = stringBuilder.toString();
+
+                        if (response.contains("<MESSAGE>OK</MESSAGE>")) {
+                            Log.d("ENVIANDO", "OK");
+                            img.setSend(true);
+                        } else {
+                            Log.d("ENVIANDO", "NOK");
+                        }
+                    }
+
+
+                } catch (Exception e) {
+                    Log.d("TAG", "Error: " + e.getMessage());
+                    response = "ERROR";
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(mContext);
+            dialog.setTitle("Subiendo imagenes");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (dialog.isShowing())
+                dialog.dismiss();
+            Enviar task = new Enviar(mContext, view);
+            task.execute();
+            super.onPostExecute(s);
+        }
+
+
+    }
+
 }
