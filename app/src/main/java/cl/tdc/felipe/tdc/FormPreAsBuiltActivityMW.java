@@ -249,6 +249,9 @@ public class FormPreAsBuiltActivityMW extends Activity {
         scontentParam.setMargins(0,0,0,15);
 
         for (Modulo m : modulos) {
+            if(m.getName().equals("EQUIPAMIENTO") && m.getItems().size() <= 1 ){
+                continue;
+            }
             Button mTitulo = new Button(this);
             mTitulo.setText(m.getName());
             mTitulo.setGravity(Gravity.CENTER);
@@ -268,7 +271,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
                 ImageButton photo = new ImageButton(this);
                 photo.setImageResource(R.drawable.ic_camerawhite);
-                photo.setBackgroundResource(R.drawable.custom_button_rounded_green);
+                photo.setBackgroundResource(R.drawable.button_dark_green);
                 photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -269,7 +269,7 @@ public class MWAerials extends Activity {
 
                 ImageButton photo = new ImageButton(this);
                 photo.setImageResource(R.drawable.ic_camerawhite);
-                photo.setBackgroundResource(R.drawable.custom_button_rounded_green);
+                photo.setBackgroundResource(R.drawable.button_dark_green);
                 photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
