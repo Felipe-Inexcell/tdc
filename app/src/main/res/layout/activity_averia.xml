@@ -213,7 +213,6 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:id="@+id/cb_elemento"
-            android:layout_below="@+id/textView5"
             android:entries="@array/lista_elementos"
             android:spinnerMode="dialog"
             android:background="@drawable/spinner_bg"
@@ -226,7 +225,6 @@
             android:layout_height="wrap_content"
             android:text="Tipo de Siniestro Ocurrido"
             android:id="@+id/textView6"
-            android:layout_below="@+id/cb_elemento"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="-2dp" />
 
@@ -234,7 +232,6 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:id="@+id/cb_siniestro"
-            android:layout_below="@+id/textView6"
             android:entries="@array/lista_siniestro"
             android:spinnerMode="dialog"
             android:background="@drawable/spinner_bg"
@@ -248,10 +245,7 @@
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/et_comentario"
-            android:layout_below="@+id/cb_siniestro"
             android:hint="Comentario"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
             android:background="@drawable/fondo_spinner1"
             android:lines="5"
             android:layout_marginTop="8dp"
@@ -259,8 +253,7 @@
             android:paddingTop="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:layout_alignParentBottom="true" />
+            android:paddingBottom="10dp" />
         </LinearLayout>
     </ScrollView>
 

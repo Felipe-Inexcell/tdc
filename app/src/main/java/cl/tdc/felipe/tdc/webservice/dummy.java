@@ -61,6 +61,11 @@ public class dummy {
     public static final String URL_MW_IMG = "http://" + IP + "/telrad/uploadMw.php";
 
 
+    public static final String ERROR_CONNECTION = "No se pudo conectar con el servidor, compruebe su conexión a internet y reinente";
+    public static final String ERROR_PARSE = "Error al leer el XML, por favor reinente";
+    public static final String ERROR_GENERAL = "Ha ocurrido un error, por favor reintente";
+
+
 
     public static String notifyExample = "<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"urn:Configurationwsdl\">" +
             "<SOAP-ENV:Body>" +

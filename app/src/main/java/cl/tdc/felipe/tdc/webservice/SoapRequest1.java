@@ -407,12 +407,14 @@ public class SoapRequest1 {
                         "<Items xsi:type=\"urn:Items\">";
         for (Modulo m : modulos) {
             for (Item i : m.getItems()) {
-
+                String com = "";
+                if(i.getDescription() != null)
+                    com = i.getDescription().getText().toString();
                 bodyOut += "<Item xsi:type=\"urn:Item\">" +
                         "<NameItem xsi:type=\"xsd:string\">" + i.getName() + "</NameItem>" +
                         "<IdItem xsi:type=\"xsd:string\">" + i.getId() + "</IdItem>" +
                         "<Answer xsi:type=\"xsd:string\">" + i.getValor() + "</Answer>" +
-                        "<CommentItem xsi:type=\"xsd:string\">" + i.getDescription().getText().toString() + "</CommentItem>" +
+                        "<CommentItem xsi:type=\"xsd:string\">" + com + "</CommentItem>" +
                         "</Item>";
             }
         }

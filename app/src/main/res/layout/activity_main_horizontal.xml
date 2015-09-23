@@ -90,7 +90,7 @@
         android:paddingTop="15dp"
         android:layout_above="@+id/main_footer"
         android:fillViewport="false"
-        android:id="@+id/">
+        android:id="@+id/scrollView">
 
         <LinearLayout
             android:id="@+id/main_content"
@@ -284,7 +284,7 @@
                             android:layout_marginTop="-36dp"
                             android:gravity="center_horizontal"
                             android:paddingBottom="0dp"
-                            android:text="Relevo\nde Capacidades"
+                            android:text="Relevamiento\nde Capacidades"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                             android:textColor="#ffffff"
                             android:textStyle="normal" />

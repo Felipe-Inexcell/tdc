@@ -2,6 +2,7 @@ package cl.tdc.felipe.tdc.objects.Seguimiento;
 
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,9 +21,17 @@ public class Dia {
     String date;
     String descriptionDay;
     ArrayList<Actividad> actividades;
-
+    LinearLayout lContenido;
     ArrayList<CheckBox> checkBoxes;
     EditText fecha, observacion, avance;
+
+    public LinearLayout getlContenido() {
+        return lContenido;
+    }
+
+    public void setlContenido(LinearLayout lContenido) {
+        this.lContenido = lContenido;
+    }
 
     public boolean isModify() {
         return modify;

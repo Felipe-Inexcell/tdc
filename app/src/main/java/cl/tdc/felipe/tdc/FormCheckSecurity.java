@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
+import org.xml.sax.SAXException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +38,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -44,6 +48,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.ControSeguridadDiario.Elemento;
@@ -62,7 +69,7 @@ public class FormCheckSecurity extends Activity {
     ArrayList<Modulo> modulos;
     ScrollView scrollViewMain;
     Bitmap firma;
-
+    public static Activity actividad;
     Bundle savedInstances;
 
     FormCheckReg reg;
@@ -75,6 +82,8 @@ public class FormCheckSecurity extends Activity {
         setContentView(R.layout.activity_formchecksecurity);
 
         reg = new FormCheckReg(this,"SECURITYREG");
+
+        actividad = this;
 
         if(savedInstanceState != null){
             savedInstances = savedInstanceState;
@@ -110,24 +119,34 @@ public class FormCheckSecurity extends Activity {
         b.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
 
     public void onClick_back(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                ((Activity)mContext).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea salir del CheckList?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
+
     }
 
     public void enviar_form(View v){
@@ -426,6 +445,7 @@ public class FormCheckSecurity extends Activity {
         private final String ASYNCTAG = "OBTENERFORMULARIO";
         Context context;
         ProgressDialog dialog;
+        String mensaje = "";
 
         public ObtenerFormulario(Context context) {
             this.context = context;
@@ -435,7 +455,7 @@ public class FormCheckSecurity extends Activity {
         protected void onPreExecute() {
             dialog = new ProgressDialog(context);
             dialog.setCancelable(false);
-            dialog.setMessage("Obteniendo Checklist...");
+            dialog.setMessage("Obteniendo Checklist de Seguridad...");
             dialog.show();
         }
 
@@ -450,11 +470,15 @@ public class FormCheckSecurity extends Activity {
                 Log.w("FORMCHECK", Response);
                 ArrayList<Modulo> m = XMLParserChecklists.getChecklistDaily(Response);
                 return m;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+                mensaje = dummy.ERROR_CONNECTION;
                 Log.e(ASYNCTAG, e.getMessage() + ": " + e.getCause());
-                return null;
+            } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
+                mensaje = dummy.ERROR_PARSE;
+                e.printStackTrace();
             }
+            return null;
         }
 
         @Override
@@ -464,7 +488,7 @@ public class FormCheckSecurity extends Activity {
                     formulario = response;
                     modulos = response;
             } else {
-                Toast.makeText(context, "Ha ocurrido un error al dibujar el checklist, por favor reintente", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show();
                 FormCheckSecurity.this.finish();
             }
             if (dialog.isShowing())

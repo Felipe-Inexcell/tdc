@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import cl.tdc.felipe.tdc.daemon.MyLocationListener;
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
+import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 
@@ -41,6 +42,8 @@ public class CercanosActivity extends FragmentActivity implements GoogleMap.OnMa
 
     MyLocationListener gps;
     private GoogleMap mapa;
+
+    boolean ubicacionOK = false;
 
     PositionTrackerTDC trackerTDC;
     ProgressDialog mapDialog;
@@ -117,27 +120,11 @@ public class CercanosActivity extends FragmentActivity implements GoogleMap.OnMa
                     t4.setText(datos[3].split(";")[1]);
                     TextView t5 = (TextView) v.findViewById(R.id.t5);
                     t5.setText(datos[4].split(";")[1]);
-                /*LinearLayout layout = (LinearLayout)v.findViewById(R.id.info_layout);
-                for(int i= 0; i< datos.length-2; i++){
-                    TextView textView = new TextView(getApplicationContext());
-                    textView.setText(datos[i]);
-                    layout.addView(textView);
-                }*/
                     return v;
                 }
             });
 
-        /*if(mapa != null){
-            if(mapa.getMyLocation() != null) {
-                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mapa.getMyLocation().getLatitude(), mapa.getMyLocation().getLongitude()), ZOOM_LEVEL));
-            }
-            else{
-                try {
-                    mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), ZOOM_LEVEL));
-                }catch(Exception e){
-                    Log.e("MAP ERROR", e.getMessage());}
-            }
-        }*/
+
         }
         else{
             new AlertDialog.Builder(this).setMessage("Compruebe que tiene la aplicacion de GoogleMap y PlayStore").setTitle("No se pudo cargar el mapa").setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
@@ -155,20 +142,60 @@ public class CercanosActivity extends FragmentActivity implements GoogleMap.OnMa
     // TODO: funcion onClick del botón apagar.
 
     public void onClick_apagar(View v) {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea cerrar Sitios Cercanos?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(MainActivity.actividad != null){
+                    MainActivity.actividad.finish();
+                }
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
         MainActivity.actividad.finish();
         finish();
     }
 
     public void onClick_search(View v) {
+
         mapa.clear();
         search_marker searchMarker = new search_marker();
         searchMarker.execute();
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
+
 
     public void onClick_back(View v) {
-        finish();
+
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea cerrar Sitios Cercanos?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
     @Override
@@ -179,13 +206,37 @@ public class CercanosActivity extends FragmentActivity implements GoogleMap.OnMa
     @Override
     public void onMapLoaded() {
         Log.i("MAP", "Map Loaded");
-        mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(trackerTDC.gps.getLatitude(), trackerTDC.gps.getLongitude()), ZOOM_LEVEL));
-        mapDialog.dismiss();
+        /*mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(trackerTDC.gps.getLatitude(), trackerTDC.gps.getLongitude()), ZOOM_LEVEL));
+        mapDialog.dismiss();*/
+
+        if (mapa.getMyLocation() != null && !ubicacionOK) {
+            LatLng punto = new LatLng(mapa.getMyLocation().getLatitude(), mapa.getMyLocation().getLongitude());
+            LatLng cero = new LatLng(0,0);
+
+            if(!punto.equals(cero) && !ubicacionOK) {
+                ubicacionOK = true;
+                mapa.addMarker(new MarkerOptions().position(punto).snippet("AQUI"));
+                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, ZOOM_LEVEL));
+                mapDialog.dismiss();
+            }
+            //mapa.addPolyline(new PolylineOptions().add(new LatLng(mapa.getMyLocation().getLatitude(), mapa.getMyLocation().getLongitude()),punto));
+        }
     }
 
     @Override
     public void onMyLocationChange(Location loc) {
+        if (loc != null && !ubicacionOK) {
+            LatLng punto = new LatLng(loc.getLatitude(), loc.getLongitude());
+            LatLng cero = new LatLng(0,0);
 
+            if(!punto.equals(cero) && !ubicacionOK) {
+                ubicacionOK = true;
+                mapa.addMarker(new MarkerOptions().position(punto).snippet("AQUI"));
+                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, ZOOM_LEVEL));
+                mapDialog.dismiss();
+            }
+            //mapa.addPolyline(new PolylineOptions().add(new LatLng(mapa.getMyLocation().getLatitude(), mapa.getMyLocation().getLongitude()),punto));
+        }
     }
 
     /**

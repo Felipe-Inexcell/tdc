@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -74,6 +75,8 @@ public class RelevarRecomendadoActivity extends Activity {
     ArrayList<FormImage> imagenes = new ArrayList<>();
     FormImage imgTmp;
 
+    public static Activity actividad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,7 @@ public class RelevarRecomendadoActivity extends Activity {
         tituloActivity.setText("CheckList Recomendado");
 
         mContext = this;
+        actividad = this;
         reg = new FormCheckReg(this, "RECOMENDADO");
         contenido = (LinearLayout) findViewById(R.id.relevo_content);
         name = Environment.getExternalStorageDirectory() + "/TDC@/RelevoRecomendadoCaptura.jpg";
@@ -326,7 +330,7 @@ public class RelevarRecomendadoActivity extends Activity {
         comentario.setBackgroundResource(R.drawable.fondo_edittext);
         comentario.setLines(3);
         comentario.setText(comment);
-        comentario.setHint("Comentario");
+        comentario.setHint("Observaciones");
 
         item.setDescription(comentario);
         contenido.addView(comentario);
@@ -512,7 +516,7 @@ public class RelevarRecomendadoActivity extends Activity {
 
                 saveData();
 
-                ((Activity) mContext).finish();
+                actividad.finish();
                 if (RelevarActivity.actividad != null) RelevarActivity.actividad.finish();
                 if (MainActivity.actividad != null)
                     MainActivity.actividad.finish();
@@ -527,26 +531,35 @@ public class RelevarRecomendadoActivity extends Activity {
         b.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
 
     public void onClick_back(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea salir del CheckList?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                    if(RelevarActivity.actividad != null) RelevarActivity.actividad.finish();
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
 
-                saveData();
-                if (RelevarActivity.actividad != null) RelevarActivity.actividad.finish();
-                ((Activity) mContext).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
     }
 
     public void onClick_enviar(View v) {

@@ -21,6 +21,7 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xml.sax.SAXException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -39,6 +42,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
@@ -51,6 +55,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
 import cl.tdc.felipe.tdc.daemon.MyLocationListener;
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.objects.Averia.Item;
@@ -59,13 +66,12 @@ import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
-/**
- * Created by Felipe on 13/02/2015.
- */
 public class AveriaActivity extends Activity {
     public static Activity actividad;
     private Context context;
     private PositionTrackerTDC trackerTDC;
+
+
 
     private ArrayList<Item> departamentos, provincias, distritos, estaciones;
 
@@ -212,12 +218,53 @@ public class AveriaActivity extends Activity {
     // TODO: funcion onClick del botón apagar.
 
     public void onClick_apagar(View v) {
-        MainActivity.actividad.finish();
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea cerrar Notificar Avería?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (MainActivity.actividad != null) {
+                    MainActivity.actividad.finish();
+                }
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
     }
 
     public void onClick_back(View v) {
-        finish();
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea cerrar Notificar Avería?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
+
     }
 
     public void onClick_enviar(View v) {
@@ -303,26 +350,6 @@ public class AveriaActivity extends Activity {
      */
     public void onClick_foto(View view) {
 
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Escoja una Opcion:");
-        builder.setIcon(R.drawable.ic_camera);
-        builder.setItems(opcionCaptura, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                int code = TAKE_PICTURE;
-                if (item == TAKE_PICTURE) {
-                    Uri output = Uri.fromFile(new File(name));
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
-                } else if (item == SELECT_PICTURE) {
-                    intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    code = SELECT_PICTURE;
-                }
-                startActivityForResult(intent, code);
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();*/
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         int code = TAKE_PICTURE;
         Uri output = Uri.fromFile(new File(name));
@@ -380,6 +407,8 @@ public class AveriaActivity extends Activity {
             this.mContext = context;
             progressDialog = new ProgressDialog(mContext);
             progressDialog.setMessage("Enviando averia...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -542,6 +571,8 @@ public class AveriaActivity extends Activity {
             this.context = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Buscando Elementos...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -599,6 +630,8 @@ public class AveriaActivity extends Activity {
             this.mContext = context;
             progressDialog = new ProgressDialog(mContext);
             progressDialog.setMessage("Buscando Componentes...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -659,6 +692,8 @@ public class AveriaActivity extends Activity {
             this.context = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Buscando Departamentos...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -679,9 +714,21 @@ public class AveriaActivity extends Activity {
                 } else
                     return parse.get(1);
 
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e("ELEMENTS", e.getMessage() + ": \n" + e.getCause());
-                return e.getMessage();
+                return dummy.ERROR_CONNECTION;
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return dummy.ERROR_GENERAL;
             }
         }
 
@@ -697,8 +744,11 @@ public class AveriaActivity extends Activity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, e);
                     depto.setAdapter(adapter);
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), dummy.ERROR_CONNECTION, Toast.LENGTH_LONG).show();
+                    esta.finish();
+                } catch (ParserConfigurationException | SAXException e) {
+                    Toast.makeText(getApplicationContext(), dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                     esta.finish();
                 }
             } else {
@@ -724,6 +774,8 @@ public class AveriaActivity extends Activity {
             this.context = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Buscando Provincias...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -789,6 +841,8 @@ public class AveriaActivity extends Activity {
             this.context = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Buscando Distritos...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override
@@ -854,6 +908,8 @@ public class AveriaActivity extends Activity {
             this.context = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage("Buscando Estaciones...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
 
         @Override

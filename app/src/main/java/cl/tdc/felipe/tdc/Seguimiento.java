@@ -1,8 +1,10 @@
 package cl.tdc.felipe.tdc;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import javax.xml.xpath.XPathExpressionException;
 import cl.tdc.felipe.tdc.objects.Seguimiento.Proyecto;
 import cl.tdc.felipe.tdc.webservice.SoapRequestSeguimiento;
 import cl.tdc.felipe.tdc.webservice.XMLParserSeguimiento;
+import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class Seguimiento extends Activity {
     private static final String TAG = "SEGUIMIENTO";
@@ -71,8 +74,30 @@ public class Seguimiento extends Activity {
         MainActivity.actividad.finish();
         finish();
 
-    } public void onClick_back(View v) {
-        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
+
+    public void onClick_back(View v) {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir de Seguimiento de Obras?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
 
@@ -139,6 +164,8 @@ public class Seguimiento extends Activity {
         protected void onPreExecute() {
             dialog = new ProgressDialog(aContext);
             dialog.setMessage("Buscando Proyectos...");
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
             dialog.show();
         }
 
@@ -160,9 +187,21 @@ public class Seguimiento extends Activity {
                     return result[1];
                 }
 
-            }catch (Exception e){
+            }catch (IOException e){
                 e.printStackTrace();
-                return null;
+                return dummy.ERROR_CONNECTION;
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return dummy.ERROR_GENERAL;
             }
         }
 
@@ -190,17 +229,11 @@ public class Seguimiento extends Activity {
                     });
                     mRecyclerView.setAdapter(mAdapter);
 
-                }catch (ParserConfigurationException e){
-                    Toast.makeText(aContext, "ParseConfigurationException", Toast.LENGTH_LONG).show();
+                }catch (ParserConfigurationException | XPathExpressionException | SAXException e){
+                    Toast.makeText(aContext, dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                     actividad.finish();
-                }catch (SAXException e){
-                    Toast.makeText(aContext, "SAXException", Toast.LENGTH_LONG).show();
-                    actividad.finish();
-                }catch (IOException e){
-                    Toast.makeText(aContext, "IOException", Toast.LENGTH_LONG).show();
-                    actividad.finish();
-                }catch (XPathExpressionException e){
-                    Toast.makeText(aContext, "XPathExpressionException", Toast.LENGTH_LONG).show();
+                } catch (IOException e){
+                    Toast.makeText(aContext, dummy.ERROR_CONNECTION, Toast.LENGTH_LONG).show();
                     actividad.finish();
                 }
             }else{

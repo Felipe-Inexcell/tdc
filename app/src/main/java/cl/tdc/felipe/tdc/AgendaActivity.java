@@ -1,8 +1,10 @@
 package cl.tdc.felipe.tdc;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -36,8 +38,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.adapters.Actividad;
 import cl.tdc.felipe.tdc.adapters.Actividades;
@@ -132,13 +140,48 @@ public class AgendaActivity extends Activity {
     // TODO: funcion onClick del botón apagar.
 
     public void onClick_apagar(View v) {
-        if (MainActivity.actividad != null)
-            MainActivity.actividad.finish();
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir de Agenda?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (MainActivity.actividad != null)
+                    MainActivity.actividad.finish();
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
     }
 
     public void onClick_back(View v) {
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir de Agenda?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
 
@@ -218,7 +261,7 @@ public class AgendaActivity extends Activity {
         @Override
         protected void onPreExecute() {
             dialog = new ProgressDialog(tContext);
-            dialog.setMessage("Solicitando Checklist...");
+            dialog.setMessage("Solicitando Checklist de Mantenimiento...");
             dialog.setCancelable(false);
             dialog.show();
         }
@@ -265,6 +308,7 @@ public class AgendaActivity extends Activity {
         Context tContext;
         String ATAG = "AGENDATASK";
 
+
         String message = "";
         Boolean connected = false;
 
@@ -295,11 +339,23 @@ public class AgendaActivity extends Activity {
                 Agenda agenda = XMLParser.getMaintenance(query);
 
                 return agenda;
+            } catch (IOException e) {
+                Log.e("ELEMENTS", e.getMessage() + ": \n" + e.getCause());
+                message = dummy.ERROR_CONNECTION;
+            } catch (SAXException e) {
+                e.printStackTrace();
+                message = dummy.ERROR_PARSE;
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                message = dummy.ERROR_PARSE;
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                message = dummy.ERROR_PARSE;
             } catch (Exception e) {
-                Log.e(ATAG, e.getMessage() + ":\n" + e.getCause());
-                return null; //Error
+                e.printStackTrace();
+                message = dummy.ERROR_GENERAL;
             }
-
+               return null;
         }
 
         @Override
@@ -309,7 +365,7 @@ public class AgendaActivity extends Activity {
                 progressDialog.dismiss();
 
             if (s == null) {
-                Toast.makeText(tContext, "No se pudo establecer conexión, por favor reintente", Toast.LENGTH_LONG).show();
+                Toast.makeText(tContext, message, Toast.LENGTH_LONG).show();
                 finish();
             } else {
                 if (s.getCode().compareTo("0") == 0) {
@@ -362,7 +418,7 @@ public class AgendaActivity extends Activity {
                                         CompletarActividad c = new CompletarActividad(tContext, Integer.parseInt(m.getIdMaintenance()));
                                         c.execute();
                                     }else{
-                                        Toast.makeText(actividad.getApplicationContext(), "Debe completar el checklist antes de continuar.",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(actividad.getApplicationContext(), "Debe completar el Checklist de Mantenimiento antes de continuar.",Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });

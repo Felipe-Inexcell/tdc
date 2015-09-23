@@ -84,7 +84,7 @@
         android:background="@drawable/fondo_general">
 
         <LinearLayout
-            android:id="@+id/relevo_content"
+            android:id="@+id/content"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -139,13 +139,11 @@
             android:background="@drawable/custom_button_shutdown"
             android:onClick="onClick_apagar" />
 
-        <ImageButton
+        <Button
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:id="@+id/imageButton3"
-            android:src="@drawable/ic_ready1white"
             android:background="@drawable/custom_button_rounded_green"
-            android:onClick="onClick_enviar"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/imageButton"
             android:layout_alignParentTop="true"

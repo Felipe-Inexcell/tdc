@@ -11,14 +11,45 @@ import java.util.ArrayList;
 import cl.tdc.felipe.tdc.extras.Funciones;
 
 public class Item {
+    int nAerial;
     int id;
     String name;
     String type;
     ArrayList<String> values;
+    String valor;
     View vista;
     ArrayList<CheckBox> checkBoxes;
     EditText description;
+    ArrayList<Item> subItems;
+    ArrayList<ArrayList<Item>> vistas = new ArrayList<>();
 
+    public int getnAerial() {
+        return nAerial;
+    }
+
+    public void setnAerial(int nAerial) {
+        this.nAerial = nAerial;
+    }
+
+    public ArrayList<ArrayList<Item>> getVistas() {
+        return vistas;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public void addArrayListViews (ArrayList<Item> Item){
+        vistas.add(Item);
+    }
+
+    public ArrayList<Item> getSubItems() {
+        return subItems;
+    }
+
+    public void setSubItems(ArrayList<Item> subItems) {
+        this.subItems = subItems;
+    }
 
     public View getVista() {
         return vista;
@@ -46,7 +77,10 @@ public class Item {
             return Funciones.getChecked(this.checkBoxes);
         }else if(this.type.equals("NUM") || this.type.equals("VARCHAR")){
             return ((EditText)this.vista).getText().toString();
-        }else{
+        }else if(this.type.equals("COMPLEX")) {
+            return this.valor;
+        }else
+        {
             return "";
         }
     }

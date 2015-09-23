@@ -51,7 +51,7 @@ public class UploadImage extends AsyncTask<String, String, String> {
 
         for (ImagenDia img : imagenes) {
             try {
-                String fileName = img.getIdproject()+"_"+img.getIdday()+"_"+timestamp_name.format(img.getTimestamp())+".png";
+                String fileName = img.getFilename();
 
                 Log.i("ENVIANDO", fileName);
                 HttpURLConnection conn;

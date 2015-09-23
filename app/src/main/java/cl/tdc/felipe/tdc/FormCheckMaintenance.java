@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -47,6 +48,7 @@ public class FormCheckMaintenance extends Activity {
     ScrollView scrollViewMain;
     Bitmap firma;
     String ID;
+    public static Activity actividad;
     FormCheckReg reg;
 
     ArrayList<View> vistas = new ArrayList<>();
@@ -58,6 +60,7 @@ public class FormCheckMaintenance extends Activity {
 
         reg = new FormCheckReg(this, "MAINTENANCEREG");
         mContext = this;
+        actividad = this;
         scrollViewMain = (ScrollView) findViewById(R.id.cerca_content);
         Response = getIntent().getStringExtra("RESPONSE");
         ID = getIntent().getStringExtra("ID");
@@ -67,12 +70,12 @@ public class FormCheckMaintenance extends Activity {
 
     public void onClick_apagar(View v) {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
+        b.setMessage("¿Seguro que desea salir del CheckList de Mantención?");
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
-                ((Activity)mContext).finish();
+                actividad.finish();
                 if (AgendaActivity.actividad != null)
                     AgendaActivity.actividad.finish();
                 if (MainActivity.actividad != null)
@@ -88,24 +91,33 @@ public class FormCheckMaintenance extends Activity {
         b.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
 
     public void onClick_back(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                ((Activity)mContext).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea salir del CheckList de Mantención?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
     }
 
     public void enviar_form(View v) {

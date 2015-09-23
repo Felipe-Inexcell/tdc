@@ -11,11 +11,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -95,6 +98,8 @@ public class DetalleProyecto1 extends Activity {
         inicio.setText(mProyecto.getFecha_inicio());
         fin.setText(mProyecto.getFecha_final());
 
+        name = Environment.getExternalStorageDirectory() + "/TDC@/SeguimientoCaptura.jpg";
+
         mAvances = new ArrayList<>();
 
         imgToSendList = new ArrayList<>();
@@ -132,15 +137,77 @@ public class DetalleProyecto1 extends Activity {
 
     public void onClick_enviar(View view) {
 
-
-        Enviar task = new Enviar(this);
-        if (!error) {
+        if(fechasOK()) {
+            Enviar task = new Enviar(this);
             task.execute();
-        } else {
-            Toast.makeText(mContext, "Revisar formato de fechas y reintentar.", Toast.LENGTH_LONG).show();
+            /*if (!error) {
+                task.execute();
+            } else {
+                Toast.makeText(mContext, "Revisar formato de fechas y reintentar.", Toast.LENGTH_LONG).show();
+            }*/
         }
 
     }
+
+    private boolean fechasOK() {
+        for(final Dia d: mDias){
+            String fecha = d.getFecha().getText().toString();
+            if(fecha.length() > 0){
+                if(!Funciones.validateDate(fecha)){
+                    AlertDialog.Builder b1 = new AlertDialog.Builder(mContext);
+                    b1.setIcon(android.R.drawable.ic_dialog_alert);
+                    b1.setMessage("Formato de fecha Incorrecto.\nDebe ser AAAA-MM-DD");
+                    b1.setTitle("Dia " + d.getDayNumber());
+                    b1.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(d.getlContenido().getVisibility() == View.GONE){
+                                d.getlContenido().setVisibility(View.VISIBLE);
+                            }
+                            d.getFecha().requestFocus();
+                            dialogInterface.dismiss();
+
+                        }
+                    });
+                    b1.show();
+                    return false;
+                }else {
+                    try {
+                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        Date hoy = new Date();
+                        Date fecha_envia = formatter.parse(fecha);
+
+                        Log.d("FECHAS", hoy + "  " + fecha_envia);
+                        if (formatter.format(fecha_envia).compareTo(formatter.format(hoy)) < 0) {
+                            AlertDialog.Builder b1 = new AlertDialog.Builder(mContext);
+                            b1.setIcon(android.R.drawable.ic_dialog_alert);
+                            b1.setMessage("No puede ingresar una fecha anterior al día de hoy.");
+                            b1.setTitle("Dia " + d.getDayNumber());
+                            b1.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if(d.getlContenido().getVisibility() == View.GONE){
+                                        d.getlContenido().setVisibility(View.VISIBLE);
+                                    }
+                                    d.getFecha().requestFocus();
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            b1.show();
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(mContext, "Ocurrió un error al comprobar la fecha, por favor reintente", Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return true;
+    }
+
 
     private void dibujarDias() {
         for (int i = 0; i < mDias.size(); i++) {
@@ -159,14 +226,14 @@ public class DetalleProyecto1 extends Activity {
             final ImageButton expand = (ImageButton) vDia.findViewById(R.id.expand);
             ImageButton dia_foto = (ImageButton) vDia.findViewById(R.id.foto);
 
-            p_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /*p_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         p_fecha.setText("");
                     }
                 }
-            });
+            });*/
             dia_foto.setVisibility(View.GONE);
 
             expand.setOnClickListener(new View.OnClickListener() {
@@ -186,9 +253,10 @@ public class DetalleProyecto1 extends Activity {
             final ArrayList<Actividad> actividadArrayList = dia.getActividades();
             dia.setAdvanceToday("0");
 
+
             p_fecha.setText(dia.getDate());
 
-            p_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /*p_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
@@ -235,12 +303,15 @@ public class DetalleProyecto1 extends Activity {
                         }
                     }
                 }
-            });
+            });*/
 
             p_observacion.setText(dia.getDescriptionDay());
             dia_p_programado.setText(dia.getProgrammedAdvance());
             dia_p_real.setText(dia.getRealAdvance());
             dia_n.setText("DIA " + dia.getDayNumber());
+
+            dia.setFecha(p_fecha);
+            dia.setlContenido(dia_contenido);
 
             ArrayList<CheckBox> checkBoxes = new ArrayList<>();
             for (int j = 0; j < actividadArrayList.size(); j++) {
@@ -309,7 +380,9 @@ public class DetalleProyecto1 extends Activity {
             dia_foto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    imgActual = new ImagenDia(mProyecto.getId(), dia.getDayNumber(), null, null);
+                    DateFormat timestamp_name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+                    imgActual = new ImagenDia(mProyecto.getId(), dia.getDayNumber(), null, new Date());
+                    imgActual.setFilename(imgActual.getIdproject()+"_"+imgActual.getIdday()+"_"+timestamp_name.format(imgActual.getTimestamp())+".png");
                     tomarFotografia();
                 }
             });
@@ -351,6 +424,7 @@ public class DetalleProyecto1 extends Activity {
         });
         AlertDialog alert = builder.create();
         alert.show();*/
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         int code = TAKE_PICTURE;
         Uri output = Uri.fromFile(new File(name));
@@ -383,9 +457,7 @@ public class DetalleProyecto1 extends Activity {
         try {
             b = Bitmap.createScaledBitmap(b, 640, 480, true);
 
-            Date fecha = new Date();
             imgActual.setBitmap(b);
-            imgActual.setTimestamp(fecha);
             imgToSendList.add(imgActual);
             imgActual = null;
         } catch (Exception ex) {
@@ -408,6 +480,8 @@ public class DetalleProyecto1 extends Activity {
         protected void onPreExecute() {
             dialog = new ProgressDialog(aContext);
             dialog.setMessage("Buscando Actividades...");
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
             dialog.show();
         }
 
@@ -477,6 +551,7 @@ public class DetalleProyecto1 extends Activity {
             dialog = new ProgressDialog(aContext);
             dialog.setMessage("Enviando Checklist");
             dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
             dialog.show();
         }
 
@@ -520,14 +595,54 @@ public class DetalleProyecto1 extends Activity {
 
 
     public void onClick_apagar(View v) {
-        if (Seguimiento.actividad != null)
-            Seguimiento.actividad.finish();
-        if (MainActivity.actividad != null)
-            MainActivity.actividad.finish();
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea cerrar el Detalle del Proyecto");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (Seguimiento.actividad != null)
+                    Seguimiento.actividad.finish();
+                if (MainActivity.actividad != null)
+                    MainActivity.actividad.finish();
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
     }
 
     public void onClick_back(View v) {
-        finish();
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea cerrar el Detalle del Proyecto?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
+
     }
 }

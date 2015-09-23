@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Xml;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,6 +37,7 @@ import cl.tdc.felipe.tdc.webservice.SoapRequestPreAsBuilt;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
+import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class MainActivity extends ActionBarActivity {
     Context mContext;
@@ -50,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_horizontal);
+        setContentView(R.layout.activity_main_horizontal_bak);
         Log.i(TAG, "MainActyvity Start");
         actividad = this;
         preferencesTDC = new PreferencesTDC(this);
@@ -105,7 +108,21 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClick_apagar(View v) {
-        finish();
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setMessage("¿Seguro que desea salir la aplicación?");
+        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                actividad.finish();
+            }
+        });
+        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        b.show();
     }
 
 
@@ -212,6 +229,7 @@ public class MainActivity extends ActionBarActivity {
         ProgressDialog d;
         boolean ok = false;
         int type;
+        String message;
 
         private PreAsBuilt(Context context, int type) {
             this.context = context;
@@ -249,20 +267,21 @@ public class MainActivity extends ActionBarActivity {
                     return parse.get(1);
             } catch (SAXException e) {
                 e.printStackTrace();
-                return e.getMessage();
+                message = dummy.ERROR_PARSE;
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
-                return e.getMessage();
+                message =dummy.ERROR_PARSE;
             } catch (XPathExpressionException e) {
                 e.printStackTrace();
-                return e.getMessage();
+                message = dummy.ERROR_PARSE;
             } catch (IOException e) {
                 e.printStackTrace();
-                return e.getMessage();
+                message =dummy.ERROR_CONNECTION;
             } catch (Exception e) {
                 e.printStackTrace();
-                return e.getMessage();
+                message = dummy.ERROR_GENERAL;
             }
+            return null;
         }
 
         @Override
@@ -278,19 +297,30 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(i);
                 } catch (ParserConfigurationException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                 } catch (SAXException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, dummy.ERROR_CONNECTION, Toast.LENGTH_LONG).show();
                 } catch (XPathExpressionException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                 }
             }else{
-                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+
+                if(s == null)
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                else {
+                    try {
+                        String test = new String(s.getBytes(Xml.Encoding.ISO_8859_1.name()), Xml.Encoding.UTF_8.name());
+                        Log.d("PREASBUILT", test);
+                        Toast.makeText(context, test, Toast.LENGTH_LONG).show();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
             if(d.isShowing())d.dismiss();
         }
@@ -328,9 +358,21 @@ public class MainActivity extends ActionBarActivity {
                     return code[1];
                 }
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                return dummy.ERROR_CONNECTION;
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return dummy.ERROR_PARSE;
             } catch (Exception e) {
                 e.printStackTrace();
-                return "Ha ocurrido un error (" + e.getMessage() + "). Por favor reintente.";
+                return dummy.ERROR_GENERAL;
             }
         }
 
@@ -353,6 +395,7 @@ public class MainActivity extends ActionBarActivity {
         ProgressDialog progressDialog;
         Context tContext;
         String ATAG = "MAINTASK";
+        String mensaje;
 
         public AgendaTask(Context context) {
             this.tContext = context;
@@ -377,13 +420,18 @@ public class MainActivity extends ActionBarActivity {
             try {
                 publishProgress("Verificando Jornada...");
                 String query = SoapRequest.updateTechnician(IMEI);
-                ArrayList<String> response = XMLParser.getReturnCode(query);
-                return response;
-            } catch (Exception e) {
+                return XMLParser.getReturnCode(query);
+            } catch (IOException e) {
                 Log.e(ATAG, e.getMessage() + ":\n" + e.getCause());
-                return null; //Error
+                mensaje = dummy.ERROR_CONNECTION;
+            } catch (SAXException | XPathExpressionException | ParserConfigurationException e) {
+                e.printStackTrace();
+                mensaje = dummy.ERROR_PARSE;
+            } catch (Exception e) {
+                e.printStackTrace();
+                mensaje = dummy.ERROR_GENERAL;
             }
-
+            return null;
         }
 
         @Override
@@ -392,7 +440,7 @@ public class MainActivity extends ActionBarActivity {
                 progressDialog.dismiss();
 
             if (s == null) {
-                Toast.makeText(tContext, "Error en la conexion. Intente nuevamente.", Toast.LENGTH_LONG).show();
+                Toast.makeText(tContext, mensaje, Toast.LENGTH_LONG).show();
             } else {
                 if (s.get(0).compareTo("0") == 0) {
                     Intent i = new Intent(tContext, AgendaActivity.class);

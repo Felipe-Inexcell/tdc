@@ -67,6 +67,7 @@ import cl.tdc.felipe.tdc.webservice.dummy;
 public class FormCheckActivity extends Activity {
     Context mContext;
     String Response;
+    public static Activity actividad;
     FormularioCheck formulario;
     ScrollView scrollViewMain;
     ArrayList<String> idsActividades;
@@ -85,6 +86,7 @@ public class FormCheckActivity extends Activity {
         setContentView(R.layout.activity_formcheck);
 
         mContext = this;
+        actividad = this;
         reg = new FormCheckReg(this, "ACTIVITYREG");
 
         imagenes = new ArrayList<>();
@@ -103,7 +105,7 @@ public class FormCheckActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
-                ((Activity) mContext).finish();
+                actividad.finish();
                 if (AgendaActivity.actividad != null)
                     AgendaActivity.actividad.finish();
                 if (MainActivity.actividad != null)
@@ -120,24 +122,35 @@ public class FormCheckActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
+
 
     public void onClick_back(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                ((Activity) mContext).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea salir del CheckList?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    actividad.finish();
+
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
+
     }
 
 

@@ -21,6 +21,8 @@ import org.apache.http.util.EntityUtils;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -61,7 +63,7 @@ public class SoapRequestPreAsBuilt {
     }
 
 
-    public static String getNodob(String IMEI) throws Exception {
+    public static String getNodob(String IMEI) throws IOException {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
         String URL = dummy.URL_RF;
         String response = null;
@@ -116,7 +118,7 @@ public class SoapRequestPreAsBuilt {
         return response;
     }
 
-    public static String getNodoMW(String IMEI) throws Exception {
+    public static String getNodoMW(String IMEI)  throws IOException {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
         String URL = dummy.URL_MW;
         String response = null;
@@ -296,9 +298,73 @@ public class SoapRequestPreAsBuilt {
         return response;
     }
 
-    public static String sendCheckRF(String IMEI, int ID) throws Exception {
+    public static String sendCheckRF(int ID, String itemsXML, String aerialsXML) throws Exception {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
-        String URL = dummy.URL_R_CHECK;
+        String URL = dummy.URL_RF_SEND;
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Checklist xsi:type=\"urn:Checklist\">" +
+                                             "<CommentChecklist xsi:type=\"xsd:string\">?</CommentChecklist>" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Items xsi:type=\"urn:Items\">"+
+                                            itemsXML+
+                                            "<Aerial xsi:type=\"urn:Aerial\">" +
+                                                   aerialsXML+
+                                                "</Aerial>"+
+
+                                            "</Items>" +
+                                          "</Checklist>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Id_NodoB xsi:type=\"xsd:string\">"+ID+"</Id_NodoB>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, URL);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        return response;
+    }
+
+    public static String sendCheckMW(int ID, String items, String aerials) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#request";
+        String URL = dummy.URL_MW_SEND;
         String response = null;
         String xml = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -313,7 +379,42 @@ public class SoapRequestPreAsBuilt {
         envelope.implicitTypes = true;
 
         String bodyOut =
-                "";
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                           "<soapenv:Header/>" +
+                           "<soapenv:Body>" +
+                              "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                                 "<Service xsi:type=\"urn:Service\">" +
+                                    "<Request xsi:type=\"urn:Request\">" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
+                                          "<!--Zero or more repetitions:-->" +
+                                          "<Checklist xsi:type=\"urn:Checklist\">" +
+                                             "<CommentChecklist xsi:type=\"xsd:string\">?</CommentChecklist>" +
+                                             "<!--Zero or more repetitions:-->" +
+                                             "<Items xsi:type=\"urn:Items\">" +
+                                               items+
+                                                "<!--Zero or more repetitions:-->" +
+                                                "<Aerial xsi:type=\"urn:Aerial\">" +
+                                                   "<!--Zero or more repetitions:-->" +
+                                                   aerials+
+                                                "</Aerial>" +
+                                             "</Items>" +
+                                          "</Checklist>" +
+                                       "</Form_Detail>" +
+                                       "<!--Optional:-->" +
+                                       "<Header xsi:type=\"urn:Header\">" +
+                                          "<Date xsi:type=\"xsd:string\">"+formatter.format(fecha)+"</Date>" +
+                                          "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                                       "</Header>" +
+                                       "<!--Optional:-->" +
+                                       "<Form_Header xsi:type=\"urn:Form_Header\">" +
+                                          "<Id_NodoB xsi:type=\"xsd:string\">"+ID+"</Id_NodoB>" +
+                                       "</Form_Header>" +
+                                    "</Request>" +
+                                 "</Service>" +
+                              "</urn:request>" +
+                           "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
         xml = bodyOut;
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
@@ -326,35 +427,69 @@ public class SoapRequestPreAsBuilt {
         return response;
     }
 
-    public static String sendCheckMW(String IMEI, int ID) throws Exception {
-        final String SOAP_ACTION = "urn:Configurationwsdl#request";
-        String URL = dummy.URL_R_CHECK;
-        String response = null;
-        String xml = null;
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date fecha = new Date();
+    public static String generateItemsXML(ArrayList<Modulo> modulos, ArrayList<FormImage> imagenes) {
+        String bodyOut = "";
+        for(Modulo m: modulos){
+            for(Modulo sm: m.getSubModulo()){
+                for(Item i: sm.getItems()){
+                    bodyOut+="<Item xsi:type=\"urn:Item\">" +
+                            "<NameItem xsi:type=\"xsd:string\">"+i.getName()+"</NameItem>" +
+                            "<IdItem xsi:type=\"xsd:string\">"+i.getId()+"</IdItem>" +
+                            "<Answer xsi:type=\"xsd:string\">"+i.getValor()+"</Answer>" +
+                            "<CommentItem xsi:type=\"xsd:string\">"+i.getDescription().getText().toString()+"</CommentItem>";
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(URL);
+                    String imgs = "<Photo xsi:type=\"xsd:string\">?</Photo>";
+                    for(FormImage img: imagenes){
+                        if(img.getIdSystem() == i.getId()){
+                            imgs="<Photo xsi:type=\"xsd:string\">"+img.getName()+"</Photo>";
+                            break;
+                        }
+                    }
+                    bodyOut+=imgs+"</Item>";
 
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
-        envelope.dotNet = false;
-        envelope.implicitTypes = true;
 
-        String bodyOut =
-                "";
-        xml = bodyOut;
-        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
-        se.setContentType("text/xml");
-        httpPost.addHeader(SOAP_ACTION, URL);
-
-        httpPost.setEntity(se);
-        HttpResponse httpResponse = httpClient.execute(httpPost);
-        HttpEntity resEntity = httpResponse.getEntity();
-        response = EntityUtils.toString(resEntity);
-        return response;
+                }
+            }
+        }
+        return  bodyOut;
     }
 
+    public static String AddItemToXML(Item i, ArrayList<FormImage> imagenes) {
+        String bodyOut="<Item xsi:type=\"urn:Item\">" +
+                "<NameItem xsi:type=\"xsd:string\">"+i.getName()+"</NameItem>" +
+                "<IdItem xsi:type=\"xsd:string\">"+i.getId()+"</IdItem>" +
+                "<Answer xsi:type=\"xsd:string\">"+i.getValor()+"</Answer>" +
+                "<CommentItem xsi:type=\"xsd:string\"></CommentItem>";
+
+        String imgs = "<Photo xsi:type=\"xsd:string\"></Photo>";
+        for(FormImage img: imagenes){
+            if(img.getIdSystem() == i.getId() && img.isSend()){
+                imgs="<Photo xsi:type=\"xsd:string\">"+img.getName()+"</Photo>";
+                break;
+            }
+        }
+        bodyOut+=imgs+"</Item>";
+        return bodyOut;
+    }
+
+    public static String AddAerialToXML(Item i, ArrayList<FormImage> imagenes) {
+        String xml = "<ItemAerial xsi:type=\"urn:ItemAerial\">" +
+                "<NameItemAerial xsi:type=\"xsd:string\">"+i.getName()+"</NameItemAerial>" +
+                "<IdItemAerial xsi:type=\"xsd:string\">"+i.getId()+"</IdItemAerial>" +
+                "<NumAerial xsi:type=\"xsd:string\">"+i.getnAerial()+"</NumAerial>" +
+                "<AnswerAerial xsi:type=\"xsd:string\">"+i.getValor()+"</AnswerAerial>" +
+                "<CommentItemAerial xsi:type=\"xsd:string\">"+i.getDescription().getText().toString()+"</CommentItemAerial>";
+
+
+        String imgs = "<PhotoAerial xsi:type=\"xsd:string\"></PhotoAerial>";
+        for(FormImage img: imagenes){
+            if(img.getIdSystem() == i.getId() && img.getIdSubSystem() == i.getnAerial() && img.isSend()){
+                imgs="<PhotoAerial xsi:type=\"xsd:string\">"+img.getName()+"</PhotoAerial>";
+                break;
+            }
+        }
+        xml+=imgs+"</ItemAerial>";
+        return xml;
+    }
 }
 

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -124,7 +125,7 @@ public class RelevarActivity extends Activity {
 
     private void init() {
 
-        contenido = (LinearLayout) findViewById(R.id.relevo_content);
+        contenido = (LinearLayout) findViewById(R.id.contenidoCheck);
         depto = (Spinner) findViewById(R.id.cb_dpto);
         province = (Spinner) findViewById(R.id.cb_prov);
         district = (Spinner) findViewById(R.id.cd_dist);
@@ -204,10 +205,8 @@ public class RelevarActivity extends Activity {
         b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                 saveData();
-
-                ((Activity) context).finish();
+                actividad.finish();
                 if (MainActivity.actividad != null)
                     MainActivity.actividad.finish();
             }
@@ -221,26 +220,35 @@ public class RelevarActivity extends Activity {
         b.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        onClick_back(null);
+    }
+
 
     public void onClick_back(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        InputMethodManager imm = (InputMethodManager) actividad.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View foco = actividad.getCurrentFocus();
+        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setMessage("¿Seguro que desea salir del CheckList?");
+            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                    actividad.finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.show();
+        }
 
-                saveData();
-
-                ((Activity) context).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
     }
 
     public void onClick_enviar(View v) {
@@ -375,9 +383,21 @@ public class RelevarActivity extends Activity {
                 } else
                     return parse.get(1);
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "No se pudo conectar con el servidor, compruebe se conexión a internet y reintente";
+            } catch (SAXException e) {
+                e.printStackTrace();
+                return "Error al leer el XML, por favor reintente";
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+                return "Error al leer el XML, por favor reintente";
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+                return "Error al leer el XML, por favor reintente";
             } catch (Exception e) {
-                Log.e("ELEMENTS", e.getMessage() + ": \n" + e.getCause());
-                return e.getMessage();
+                e.printStackTrace();
+                return "Ha ocurrido un error, por favor reintente";
             }
         }
 
@@ -395,8 +415,14 @@ public class RelevarActivity extends Activity {
                     depto.setAdapter(adapter);
 
                     depto.setSelection(adapter.getPosition(reg.getString("SELECT" + depto.getId())));
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "No se pudo conectar con el servidor, compruebe se conexión a internet y reintente", Toast.LENGTH_LONG).show();
+                    esta.finish();
+                }catch (ParserConfigurationException e) {
+                    Toast.makeText(getApplicationContext(), "Error al leer el XML, por favor reintente", Toast.LENGTH_LONG).show();
+                    esta.finish();
+                }catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Ha ocurrido un error, por favor reintente", Toast.LENGTH_LONG).show();
                     esta.finish();
                 }
             } else {
@@ -669,6 +695,8 @@ public class RelevarActivity extends Activity {
 
     private void dibujarCheck() {
 
+        contenido.removeAllViews();
+
         for (Modulo m : modulos) {
             TextView mTitulo = new TextView(this);
             mTitulo.setText(m.getName());
@@ -813,14 +841,16 @@ public class RelevarActivity extends Activity {
             comment = reg.getString("COMMENTTEXT" + e.getId());
         }
 
-        EditText comentario = new EditText(this);
-        comentario.setLayoutParams(params);
-        comentario.setBackgroundResource(R.drawable.fondo_edittext);
-        comentario.setLines(3);
-        comentario.setText(comment);
-        comentario.setHint("Comentario");
-        item.setDescription(comentario);
-        contenido.addView(comentario);
+        if(!item.getName().equals("COMENTARIOS")) {
+            EditText comentario = new EditText(this);
+            comentario.setLayoutParams(params);
+            comentario.setBackgroundResource(R.drawable.fondo_edittext);
+            comentario.setLines(3);
+            comentario.setText(comment);
+            comentario.setHint("Observaciones");
+            item.setDescription(comentario);
+            contenido.addView(comentario);
+        }
         return contenido;
 
     }
@@ -873,7 +903,8 @@ public class RelevarActivity extends Activity {
                 }
                 if (v instanceof EditText) {
                     reg.addValue("TEXT" + v.getId(), ((EditText) v).getText().toString());
-                    reg.addValue("COMMENTTEXT" + v.getId(), ((EditText) c).getText().toString());
+                    if(c != null)
+                        reg.addValue("COMMENTTEXT" + v.getId(), ((EditText) c).getText().toString());
                 }
 
             }

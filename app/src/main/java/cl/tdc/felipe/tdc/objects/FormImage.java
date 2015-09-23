@@ -11,6 +11,7 @@ import java.util.Date;
  * Created by felip on 19/08/2015.
  */
 public class FormImage {
+    int id;
     int idSystem;
     int idSubSystem;
     String comment;
@@ -23,6 +24,14 @@ public class FormImage {
         this.idSubSystem = idSubSystem;
         this.comment = comment;
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public FormImage(){}
@@ -46,7 +55,11 @@ public class FormImage {
     }
     public void newNameRF(int id, String elemento){
         DateFormat f = new SimpleDateFormat("yyyyMMddhhmmss");
-        this.name = f.format(new Date())+"_"+id+"_"+elemento+".png";
+        this.name = f.format(new Date())+"_"+this.id+"_"+elemento+".png";
+    }
+    public void newNameRFAerial(int id, String elemento, int numero){
+        DateFormat f = new SimpleDateFormat("yyyyMMddhhmmss");
+        this.name = f.format(new Date())+"_"+this.id+"_"+elemento+"_"+numero+".png";
     }
     public int getIdSystem() {
         return idSystem;

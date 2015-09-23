@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -64,113 +63,57 @@ import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
 
-public class FormPreAsBuiltActivityMW extends Activity {
+public class FormPreAsBuiltActivityRF_RESPALDO extends Activity {
     Context mContext;
     int ID;
     ArrayList<Modulo> modulos;
     ArrayList<FormImage> imagenes = new ArrayList<>();
     FormImage imgTmp;
-    Button continuar;
-    String queryResp;
-    String itemsXML;
-
-
-    public static Activity activity;
 
     FormCheckReg reg;
     String name;
     private static int TAKE_PICTURE = 0;
 
-    ArrayList<Item> aerial;
-    ArrayList<ArrayList<Item>> aerialList = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checklist_mw);
+        setContentView(R.layout.activity_checklist_rf);
 
         mContext = this;
-        activity = this;
         ID = getIntent().getIntExtra("ID", -1);
-        name = Environment.getExternalStorageDirectory() + "/TDC@/MWCaptura.jpg";
-        reg = new FormCheckReg(this, "CHECKMW");
+        name = Environment.getExternalStorageDirectory() + "/TDC@/RFCaptura.jpg";
+        reg = new FormCheckReg(this, "CHECKRF");
         ObtenerCheck task = new ObtenerCheck();
         task.execute();
-
-        continuar = (Button) findViewById(R.id.imageButton3);
-        continuar.setText("CONTINUAR");
-
-        aerial = new ArrayList<>();
     }
 
 
     public void onClick_apagar(View v) {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setMessage("¿Seguro que desea salir del CheckList de MW?");
-        b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                if (PreAsBuiltActivity.activity != null)
-                    PreAsBuiltActivity.activity.finish();
-                if (MainActivity.actividad != null)
-                    MainActivity.actividad.finish();
-                ((Activity) mContext).finish();
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        b.show();
 
-    }
+        if (PreAsBuiltActivity.activity != null)
+            PreAsBuiltActivity.activity.finish();
+        if (MainActivity.actividad != null)
+            MainActivity.actividad.finish();
+        finish();
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        onClick_back(null);
     }
 
 
     public void onClick_back(View v) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        View foco = activity.getCurrentFocus();
-        if (foco == null || !imm.hideSoftInputFromWindow(foco.getWindowToken(), 0)){
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setMessage("¿Seguro que desea salir del CheckList de MW?");
-            b.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    saveData();
-                    activity.finish();
-                }
-            });
-            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            b.show();
-        }
-
+        finish();
     }
 
     public void onClick_enviar(View v) {
-        for (Modulo m : modulos) {
+        /*for (Modulo m : modulos) {
             for (Modulo sm : m.getSubModulo()) {
                 for (Item item : sm.getItems()) {
                     if (item.getValor().equals("NO RESPONDE") || item.getValor().length() == 0) {
                         Toast.makeText(this, "Debe responder el CheckList completo.", Toast.LENGTH_LONG).show();
-                        if(item.getVista() != null)item.getVista().requestFocus();
                         return;
                     }
                 }
             }
-        }
+        }*/
 
         UploadImage task = new UploadImage(mContext);
         task.execute();
@@ -197,8 +140,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
             try {
 
 
-                String query = SoapRequestPreAsBuilt.getCheckMW(ID);
-                queryResp = query;
+                String query = SoapRequestPreAsBuilt.getCheckRF(ID);
                 ArrayList<String> parse = XMLParser.getReturnCode2(query);
 
                 if (ok = parse.get(0).equals("0")) {
@@ -217,7 +159,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
         protected void onPostExecute(String s) {
             if (ok) {
                 try {
-                    modulos = XMLParserPreAsBuilt.getCheckMW(s);
+                    modulos = XMLParserPreAsBuilt.getCheckRF(s);
                     dibujar();
 
                 } catch (ParserConfigurationException e) {
@@ -239,19 +181,11 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
     private void dibujar() {
         LinearLayout contenido = (LinearLayout) findViewById(R.id.content);
-        LinearLayout.LayoutParams scontentParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams tituloParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        LinearLayout.LayoutParams photoParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tituloParams.weight = 4;
-        photoParams.weight = 1;
-
-        scontentParam.setMargins(0,0,0,15);
 
         for (Modulo m : modulos) {
             Button mTitulo = new Button(this);
             mTitulo.setText(m.getName());
-            mTitulo.setGravity(Gravity.CENTER);
+            mTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
             mTitulo.setTextColor(Color.WHITE);
             mTitulo.setBackgroundResource(R.drawable.module_bg);
 
@@ -259,47 +193,30 @@ public class FormPreAsBuiltActivityMW extends Activity {
             mContent.setOrientation(LinearLayout.VERTICAL);
             mContent.setGravity(Gravity.CENTER_HORIZONTAL);
 
-            for (final Item item : m.getItems()) {
-                LinearLayout titleItem = new LinearLayout(this);
-                titleItem.setBackgroundColor(Color.parseColor("#004D40"));
-                titleItem.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                titleItem.setOrientation(LinearLayout.HORIZONTAL);
-                titleItem.setGravity(Gravity.CENTER_HORIZONTAL);
+            for (Modulo s : m.getSubModulo()) {
+                TextView sTitulo = new TextView(this);
+                sTitulo.setText(s.getName());
+                sTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
+                sTitulo.setBackgroundColor(Color.parseColor("#226666"));
+                sTitulo.setTextColor(Color.WHITE);
+                LinearLayout sContent = new LinearLayout(this);
+                sContent.setGravity(Gravity.CENTER_HORIZONTAL);
+                sContent.setBackgroundResource(R.drawable.fondo_1);
+                sContent.setOrientation(LinearLayout.VERTICAL);
 
-                ImageButton photo = new ImageButton(this);
-                photo.setImageResource(R.drawable.ic_camerawhite);
-                photo.setBackgroundResource(R.drawable.custom_button_rounded_green);
-                photo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int position = buscarFoto(item.getId());
-                        if (position == -1) {
-                            imgTmp = new FormImage();
-                            imgTmp.setId(ID);
-                            imgTmp.setIdSystem(item.getId());
-                            imgTmp.setIdSubSystem(item.getnAerial());
-                            tomarFoto();
-                        } else {
-                            mostrarImagen(position);
-                        }
-                    }
-                });
+                for (Item item : s.getItems()) {
+                    TextView iTitulo = new TextView(this);
+                    iTitulo.setBackgroundColor(Color.GREEN);
+                    iTitulo.setText(item.getName());
+                    iTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
+                    View v = getView(m.getId(), s.getId(), item);
+                    if (v == null) continue;
+                    sContent.addView(iTitulo);
+                    sContent.addView(v);
+                }
 
-                TextView iTitulo = new TextView(this);
-                iTitulo.setBackgroundColor(Color.parseColor("#004D40"));
-                iTitulo.setTextColor(Color.WHITE);
-                iTitulo.setText(item.getName());
-                iTitulo.setGravity(Gravity.CENTER);
-                View v = getView(m.getId(), item, -1);
-                if (v == null) continue;
-
-
-                titleItem.addView(iTitulo, tituloParams);
-                titleItem.addView(photo, photoParams);
-
-
-                mContent.addView(titleItem, itemParam);
-                mContent.addView(v, scontentParam);
+                mContent.addView(sTitulo);
+                mContent.addView(sContent);
             }
 
             mTitulo.setOnClickListener(new View.OnClickListener() {
@@ -313,36 +230,12 @@ public class FormPreAsBuiltActivityMW extends Activity {
             contenido.addView(mTitulo);
             contenido.addView(mContent);
 
-            continuar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for (Modulo m : modulos) {
-                        for (Item i : m.getItems()) {
-                            if (i.getType().compareTo("COMPLEX") != 0) {
-                                if (i.getValor().equals("NO RESPONDE") || i.getValor().length() == 0) {
-                                    Toast.makeText(mContext, "Debe responder el CheckList completo.", Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-
-                            }
-                        }
-                    }
-
-                    UploadImage task = new UploadImage(mContext);
-                    task.execute();
-
-
-                }
-            });
-
-
         }
 
 
     }
 
-
-    private View getView(final int mId, final Item item, int flag) {
+    private View getView(final int mId, final int sId, final Item item) {
         loadImg(item.getId());
 
         String type = item.getType();
@@ -361,15 +254,13 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
 
         LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
         params1.weight = 1;
-        params2.weight = 2;
         params3.weight = 4;
 
         String comment = "";
 
-        String id = mId + item.getId() + item.getName() + flag;
+        String id = mId + sId + item.getId() + item.getName();
         if (type.equals("SELECT")) {
             Spinner s = new Spinner(this);
             s.setBackgroundResource(R.drawable.spinner_bg);
@@ -437,35 +328,116 @@ public class FormPreAsBuiltActivityMW extends Activity {
             itemLayout.addView(e, params3);
             comment = reg.getString("COMMENTTEXT" + e.getId());
         } else if (type.equals("COMPLEX")) {
-            aerial = item.getSubItems();
-            return null;
-            /*final EditText e = new EditText(this);
-            e.setBackgroundResource(R.drawable.fondo_edittext);
-            e.setInputType(InputType.TYPE_CLASS_NUMBER);
-            e.setEnabled(false);
-            e.setText("0");
-            e.setId(Funciones.str2int(id));
-            //e.setText(reg.getString("TEXT" + e.getId()));
-            e.setGravity(Gravity.CENTER_HORIZONTAL);
-            item.setVista(e);
-            itemLayout.addView(e, params3);
+            final LinearLayout subitems = new LinearLayout(this);
+            subitems.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            subitems.setOrientation(LinearLayout.HORIZONTAL);
 
-            ImageButton add = new ImageButton(mContext);
+            final EditText cantidad = new EditText(this);
+            cantidad.setId(Funciones.str2int(id));
+            cantidad.setEnabled(false);
+            final int cant = 0;
+            cantidad.setText("" + cant);
+            cantidad.setLayoutParams(new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ImageButton add = new ImageButton(this);
+            add.setBackgroundResource(R.drawable.custom_button_rounded_green);
             add.setImageResource(R.drawable.ic_add1white);
+
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addAerial(mId, sId,e);
+                    ScrollView scrollView = new ScrollView(mContext);
+
+
+                    LinearLayout vista = new LinearLayout(mContext);
+                    vista.setOrientation(LinearLayout.VERTICAL);
+
+                    final ArrayList<Item> subitemsList = new ArrayList<>();
+                    for (Item si : item.getSubItems()) {
+                        TextView iTitulo = new TextView(mContext);
+                        iTitulo.setBackgroundColor(Color.GREEN);
+                        iTitulo.setText(si.getName());
+                        iTitulo.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                        View v = getView(mId, sId, si);
+                        if (v != null) {
+
+                            vista.addView(iTitulo);
+                            //Item tmp = item;
+                            //tmp.setVista(v);
+                            si.setVista(v);
+                            vista.addView(v);
+                            subitemsList.add(si);
+
+                        }
+                    }
+
+                    scrollView.addView(vista);
+
+                    AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                    b.setView(scrollView);
+                    b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    b.setPositiveButton("Agregar", null);
+
+                    final AlertDialog dialog = b.create();
+                    dialog.show();
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            boolean all = true;
+                            for (Item si : item.getSubItems()) {
+                                if (si.getType().equals("NUM") || si.getType().equals("VARCHAR")) {
+                                    if (((EditText) si.getVista()).getText().length() > 0) {
+                                        continue;
+                                    } else {
+                                        all = false;
+                                        Toast.makeText(mContext, "Debe Completar todos los Campos", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                            if (all) {
+                                int cantid = Integer.parseInt(cantidad.getText().toString()) + 1;
+                                cantidad.setText(cantid + "");
+                                dialog.dismiss();
+                                item.addArrayListViews(subitemsList);
+                            }
+                        }
+                    });
                 }
             });
-            itemLayout.addView(add, params1);
-            comment = reg.getString("COMMENTTEXT" + e.getId());
-*/
+
+
+            item.setVista(cantidad);
+            subitems.addView(cantidad);
+            subitems.addView(add);
+
+
+            itemLayout.addView(subitems, params3);
+
         } else return null;
 
+        ImageButton photo = new ImageButton(this);
+        photo.setImageResource(R.drawable.ic_camerawhite);
+        photo.setBackgroundResource(R.drawable.custom_button_rounded_green);
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = buscarFoto(item.getId());
+                if (position == -1) {
+                    imgTmp = new FormImage();
+                    imgTmp.setIdSystem(item.getId());
+                    tomarFoto();
+                } else {
+                    mostrarImagen(position);
+                }
+            }
+        });
 
-
-        //itemLayout.addView(photo, params1);
+        itemLayout.addView(photo, params1);
         contenido.addView(itemLayout);
 
         EditText comentario = new EditText(this);
@@ -473,7 +445,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
         comentario.setBackgroundResource(R.drawable.fondo_edittext);
         comentario.setLines(3);
         comentario.setText(comment);
-        comentario.setHint("Observaciones");
+        comentario.setHint("Comentario");
 
         item.setDescription(comentario);
         contenido.addView(comentario);
@@ -482,8 +454,6 @@ public class FormPreAsBuiltActivityMW extends Activity {
         return contenido;
 
     }
-
-
 
     private void mostrarImagen(final int position) {
         FormImage photo = imagenes.get(position);
@@ -540,37 +510,46 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
                 }
 
-                String nombre = getNameItem(imgTmp.getIdSystem());
-                if (nombre != null) {
+                final EditText desc = new EditText(this);
+                desc.setLines(1);
+                desc.setMaxLines(1);
 
-                    imgTmp.newNameRF(imgTmp.getIdSystem(), nombre);
-                    imagenes.add(imgTmp);
-                }
-                imgTmp = null;
-            }
-        }
-        if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
-                reg.clearPreferences();
-                if (PreAsBuiltActivity.activity != null) ;
-                PreAsBuiltActivity.activity.finish();
-                finish();
-                Log.d("RESULT", "AERIAL " + resultCode);
-            }
-        }
-    }
+                desc.setBackgroundResource(R.drawable.fondo_edittext);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setView(desc);
 
-
-    private String getNameItem(int id) {
-        for (Modulo m : modulos) {
-                for (Item i : m.getItems()) {
-                    if (id == i.getId()) {
-                        return i.getName();
+                builder.setIcon(R.drawable.ic_camera);
+                builder.setTitle("¿Qué fotografió?");
+                builder.setPositiveButton("Guardar", null);
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        imgTmp = null;
+                        dialogInterface.dismiss();
                     }
-                }
+                });
+                builder.setCancelable(false);
 
+                final AlertDialog alert = builder.create();
+                alert.setCanceledOnTouchOutside(false);
+                alert.setCancelable(false);
+                alert.show();
+                alert.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (desc.getText().toString().length() == 0) {
+                            Toast.makeText(getApplicationContext(), "Ingrese una descripción de lo fotografiado", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        imgTmp.setComment(desc.getText().toString());
+                        imgTmp.newNameRelevoRecom(imgTmp.getIdSystem(), getIntent().getIntExtra("ID", -100), imgTmp.getComment());
+                        imagenes.add(imgTmp);
+                        imgTmp = null;
+                        alert.dismiss();
+                    }
+                });
+            }
         }
-        return null;
     }
 
     private void makeOnlyOneCheckable(final List<CheckBox> cbs) {
@@ -614,7 +593,8 @@ public class FormPreAsBuiltActivityMW extends Activity {
             reg.addValue("COMMENTIMG" + img.getIdSystem(), img.getComment());
         }
         for (Modulo m : modulos) {
-                for (Item i : m.getItems()) {
+            for (Modulo s : m.getSubModulo()) {
+                for (Item i : s.getItems()) {
                     View v = i.getVista();
                     View c = i.getDescription();
                     if (i.getCheckBoxes() != null) {
@@ -635,12 +615,12 @@ public class FormPreAsBuiltActivityMW extends Activity {
                     }
 
                 }
-
+            }
         }
 
     }
 
-   /* private class Enviar extends AsyncTask<String, String, String> {
+    /*private class Enviar extends AsyncTask<String, String, String> {
         ProgressDialog d;
         boolean ok = false;
         Context context;
@@ -700,14 +680,13 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
             if (d.isShowing()) d.dismiss();
         }
-    }*/
+    }
+*/
 
-
-    class UploadImage extends AsyncTask<String, String, String> {
+    private class UploadImage extends AsyncTask<String, String, String> {
 
         private Context mContext;
         ProgressDialog dialog;
-        private Item complex;
 
         public UploadImage(Context mContext) {
             this.mContext = mContext;
@@ -723,109 +702,107 @@ public class FormPreAsBuiltActivityMW extends Activity {
             String response = "";
 
             for (FormImage img : imagenes) {
-                if (!img.isSend()) {
-                    try {
-                        String fileName = img.getName();
+                try {
+                    String fileName = img.getName();
 
-                        publishProgress(fileName);
-                        Log.i("ENVIANDO", fileName);
-                        Log.i("ENVIANDO", "comentario: " + img.getComment());
-                        Log.i("ENVIANDO", "system: " + img.getIdSystem());
-                        Log.i("ENVIANDO", "subsystem: " + img.getIdSubSystem());
-                        HttpURLConnection conn;
-                        DataOutputStream dos;
-                        String lineEnd = "\r\n";
-                        String twoHyphens = "--";
-                        String boundary = "*****";
-                        int bytesRead, bytesAvailable, bufferSize;
+                    publishProgress(fileName);
+                    Log.i("ENVIANDO", fileName);
+                    Log.i("ENVIANDO", "comentario: " + img.getComment());
+                    Log.i("ENVIANDO", "system: " + img.getIdSystem());
+                    Log.i("ENVIANDO", "subsystem: " + img.getIdSubSystem());
+                    HttpURLConnection conn;
+                    DataOutputStream dos;
+                    String lineEnd = "\r\n";
+                    String twoHyphens = "--";
+                    String boundary = "*****";
+                    int bytesRead, bytesAvailable, bufferSize;
 
-                        File done = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
-                        done.createNewFile();
+                    File done = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+                    done.createNewFile();
 
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        img.getImage().compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-                        byte[] bitmapdata = bos.toByteArray();
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    img.getImage().compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
 
-                        FileOutputStream fos = new FileOutputStream(done);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
+                    FileOutputStream fos = new FileOutputStream(done);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
 
-                        if (!done.isFile())
-                            Log.e("DownloadManager", "no existe");
-                        else {
-                            FileInputStream fileInputStream = new FileInputStream(done);
-                            URL url = new URL(dummy.URL_MW_IMG);
+                    if (!done.isFile())
+                        Log.e("DownloadManager", "no existe");
+                    else {
+                        FileInputStream fileInputStream = new FileInputStream(done);
+                        URL url = new URL(dummy.URL_RF_IMG);
 
-                            conn = (HttpURLConnection) url.openConnection();
-                            conn.setDoInput(true);
-                            conn.setDoOutput(true);
-                            conn.setUseCaches(false);
-                            conn.setRequestMethod("POST");
-                            conn.setRequestProperty("Connection", "Keep-Alive");
-                            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-                            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                            conn.setRequestProperty("uploaded_file", fileName);
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Connection", "Keep-Alive");
+                        conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                        conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                        conn.setRequestProperty("uploaded_file", fileName);
 
-                            dos = new DataOutputStream(conn.getOutputStream());
+                        dos = new DataOutputStream(conn.getOutputStream());
 
-                            dos.writeBytes(twoHyphens + boundary + lineEnd);
-                            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + fileName + "\"" + lineEnd);
-                            dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + lineEnd);
+                        dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + fileName + "\"" + lineEnd);
+                        dos.writeBytes(lineEnd);
 
+                        bytesAvailable = fileInputStream.available();
+
+                        bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
+                        byte[] buf = new byte[bufferSize];
+
+                        bytesRead = fileInputStream.read(buf, 0, bufferSize);
+
+                        while (bytesRead > 0) {
+
+                            dos.write(buf, 0, bufferSize);
                             bytesAvailable = fileInputStream.available();
-
                             bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
-                            byte[] buf = new byte[bufferSize];
-
                             bytesRead = fileInputStream.read(buf, 0, bufferSize);
 
-                            while (bytesRead > 0) {
-
-                                dos.write(buf, 0, bufferSize);
-                                bytesAvailable = fileInputStream.available();
-                                bufferSize = Math.min(bytesAvailable, 1 * 1024 * 1024);
-                                bytesRead = fileInputStream.read(buf, 0, bufferSize);
-
-                            }
-
-                            dos.writeBytes(lineEnd);
-                            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                            int serverResponseCode = conn.getResponseCode();
-                            String serverResponseMessage = conn.getResponseMessage();
-
-
-                            Log.i("UploadManager", "HTTP response is: " + serverResponseMessage + ": " + serverResponseCode);
-
-                            fileInputStream.close();
-                            dos.flush();
-                            dos.close();
-
-                            InputStream responseStream = new BufferedInputStream(conn.getInputStream());
-
-                            BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                            String line = "";
-                            StringBuilder stringBuilder = new StringBuilder();
-                            while ((line = responseStreamReader.readLine()) != null) {
-                                stringBuilder.append(line).append("\n");
-                            }
-                            responseStreamReader.close();
-
-                            response = stringBuilder.toString();
-
-                            if (response.contains("<MESSAGE>OK</MESSAGE>")) {
-                                Log.d("ENVIANDO", "OK");
-                                img.setSend(true);
-                            } else {
-                                Log.d("ENVIANDO", "NOK");
-                            }
                         }
 
+                        dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                        int serverResponseCode = conn.getResponseCode();
+                        String serverResponseMessage = conn.getResponseMessage();
 
-                    } catch (Exception e) {
-                        Log.d("TAG", "Error: " + e.getMessage());
-                        response = "ERROR";
+
+                        Log.i("UploadManager", "HTTP response is: " + serverResponseMessage + ": " + serverResponseCode);
+
+                        fileInputStream.close();
+                        dos.flush();
+                        dos.close();
+
+                        InputStream responseStream = new BufferedInputStream(conn.getInputStream());
+
+                        BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                        String line = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((line = responseStreamReader.readLine()) != null) {
+                            stringBuilder.append(line).append("\n");
+                        }
+                        responseStreamReader.close();
+
+                        response = stringBuilder.toString();
+
+                        if (response.contains("<MESSAGE>OK</MESSAGE>")) {
+                            Log.d("ENVIANDO", "OK");
+                            img.setSend(true);
+                        } else {
+                            Log.d("ENVIANDO", "NOK");
+                        }
                     }
+
+
+                } catch (Exception e) {
+                    Log.d("TAG", "Error: " + e.getMessage());
+                    response = "ERROR";
                 }
             }
             return response;
@@ -841,61 +818,12 @@ public class FormPreAsBuiltActivityMW extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String ss) {
+        protected void onPostExecute(String s) {
             if (dialog.isShowing())
                 dialog.dismiss();
-            itemsXML = "";
-            complex = null;
-            for (Modulo m : modulos) {
-                    for (Item i : m.getItems()) {
-                        if (i.getType().compareTo("COMPLEX") != 0) {
-                            itemsXML += SoapRequestPreAsBuilt.AddItemToXML(i, imagenes);
-                        } else {
-                            complex = i;
-                        }
-                    }
-
-            }
-
-            if (complex != null) {
-                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
-                b.setTitle(complex.getName());
-                final EditText cantidad = new EditText(mContext);
-                cantidad.setBackgroundResource(R.drawable.fondo_edittext);
-                cantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
-                b.setView(cantidad);
-                b.setPositiveButton("Continuar", null);
-
-                b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                final AlertDialog d = b.create();
-                d.show();
-                d.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (cantidad.getText().length() > 0) {
-                            complex.setnAerial(Integer.parseInt(cantidad.getText().toString()));
-                            itemsXML += SoapRequestPreAsBuilt.AddItemToXML(complex, imagenes);
-                            Intent n = new Intent(mContext, MWAerials.class);
-                            n.putExtra("ID", ID);
-                            n.putExtra("QUERY", queryResp);
-                            n.putExtra("ITEMS", itemsXML);
-                            n.putExtra("CANTIDAD", Integer.parseInt(cantidad.getText().toString()));
-                            saveData();
-                            startActivityForResult(n, 100);
-                        } else {
-                            Toast.makeText(mContext, "Ingrese la cantidad de antenas.", Toast.LENGTH_LONG).show();
-                        }
-                        d.dismiss();
-                    }
-                });
-
-            }
-            super.onPostExecute(ss);
+           // Enviar task = new Enviar(mContext);
+            //task.execute();
+            super.onPostExecute(s);
         }
 
 

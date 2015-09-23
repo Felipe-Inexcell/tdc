@@ -12,12 +12,21 @@ public class ImagenDia {
     int idday;
     Bitmap bitmap;
     Date timestamp;
+    String filename;
 
     public ImagenDia(int idproject, int idday, Bitmap bitmap, Date timestamp) {
         this.idproject = idproject;
         this.idday = idday;
         this.bitmap = bitmap;
         this.timestamp = timestamp;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public int getIdproject() {
