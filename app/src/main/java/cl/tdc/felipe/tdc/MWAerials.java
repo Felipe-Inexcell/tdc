@@ -57,6 +57,7 @@ import cl.tdc.felipe.tdc.objects.FormImage;
 import cl.tdc.felipe.tdc.objects.Relevar.Item;
 import cl.tdc.felipe.tdc.objects.Relevar.Modulo;
 import cl.tdc.felipe.tdc.preferences.FormCheckReg;
+import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestPreAsBuilt;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
@@ -71,6 +72,7 @@ public class MWAerials extends Activity {
     FormImage imgTmp;
     Button continuar;
     String XMLITEMS;
+    String XMLPHOTOS;
     String QUERY;
     int cantidad;
     String itemsTags;
@@ -92,6 +94,7 @@ public class MWAerials extends Activity {
         mContext = this;
         QUERY = getIntent().getStringExtra("QUERY");
         XMLITEMS = getIntent().getStringExtra("ITEMS");
+        XMLPHOTOS = getIntent().getStringExtra("PHOTOS");
         ID = getIntent().getIntExtra("ID", -1);
         cantidad = getIntent().getIntExtra("CANTIDAD", 0);
         name = Environment.getExternalStorageDirectory() + "/TDC@/MWCaptura.jpg";
@@ -254,7 +257,7 @@ public class MWAerials extends Activity {
             sContent.setOrientation(LinearLayout.VERTICAL);
 
             for (final Item item : aerials) {
-                Item a = new Item();
+                final Item a = new Item();
                 a.setId(item.getId() + "");
                 a.setName(item.getName());
                 a.setType(item.getType());
@@ -273,12 +276,12 @@ public class MWAerials extends Activity {
                 photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int position = buscarFoto(item.getId(), item.getnAerial());
+                        int position = buscarFoto(a.getId(), a.getnAerial());
                         if (position == -1) {
                             imgTmp = new FormImage();
                             imgTmp.setId(ID);
-                            imgTmp.setIdSystem(item.getId());
-                            imgTmp.setIdSubSystem(item.getnAerial());
+                            imgTmp.setIdSystem(a.getId());
+                            imgTmp.setIdSubSystem(a.getnAerial());
                             tomarFoto();
                         } else {
                             mostrarImagen(position);
@@ -319,7 +322,7 @@ public class MWAerials extends Activity {
                             if(item.getVista() != null) item.getVista().requestFocus();
                             return;
                         } else {
-                            itemsTags += SoapRequestPreAsBuilt.AddAerialToXML(item, imagenes);
+                            itemsTags += SoapRequestPreAsBuilt.AddAerialToXML(item);
                         }
                     }
                 }
@@ -455,6 +458,7 @@ public class MWAerials extends Activity {
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setView(view);
+        b.setMessage("Tipo: "+photo.getType()+"\nDescripción: "+photo.getDescription()+"\nComentario: "+photo.getComment());
         b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -502,12 +506,55 @@ public class MWAerials extends Activity {
 
                 }
 
-                String nombre = getNameItem(imgTmp.getIdSystem(), imgTmp.getIdSubSystem());
-                if (nombre != null) {
-                    imgTmp.newNameRFAerial(imgTmp.getIdSystem(), nombre, imgTmp.getIdSubSystem());
-                    imagenes.add(imgTmp);
-                }
-                imgTmp = null;
+                LinearLayout vista = new LinearLayout(this);
+                vista.setOrientation(LinearLayout.VERTICAL);
+
+                final EditText type = new EditText(this);
+                type.setHint("Qué fotografió?");
+                final EditText description = new EditText(this);
+                description.setHint("Descripción");
+                final EditText comment = new EditText(this);
+                comment.setHint("Comentarios");
+
+                vista.addView(type);
+                vista.addView(description);
+                vista.addView(comment);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Detalles Fotografía");
+                builder.setView(vista);
+                builder.setPositiveButton("Guardar", null);
+                builder.setNegativeButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        imgTmp = null;
+                    }
+                });
+
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(type.getText().length() > 0 && description.getText().length()>0 && comment.getText().length() > 0 ){
+                            imgTmp.setType(type.getText().toString());
+                            imgTmp.setDescription(description.getText().toString());
+                            imgTmp.setComment(comment.getText().toString());
+                            String nombre = getNameItem(imgTmp.getIdSystem(), imgTmp.getIdSubSystem());
+                            if (nombre != null) {
+                                imgTmp.newNameRFAerial(imgTmp.getIdSystem(), nombre, imgTmp.getIdSubSystem());
+                                imagenes.add(imgTmp);
+                            }
+                            imgTmp = null;
+
+                            dialog.dismiss();
+                        }else{
+                            Toast.makeText(mContext, "Por favor ingrese toda la información para continuar", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
             }
         }
     }
@@ -552,8 +599,11 @@ public class MWAerials extends Activity {
             imgTmp = new FormImage();
             imgTmp.setIdSystem(idItem);
             imgTmp.setName(reg.getString("NAMEIMG" + idItem));
+            imgTmp.setIdSubSystem(reg.getInt("NAERIALIMG"+idItem));
             imgTmp.setImage(Funciones.decodeBase64(reg.getString("BITMAPIMG" + idItem)));
             imgTmp.setComment(reg.getString("COMMENTIMG" + idItem));
+            imgTmp.setDescription(reg.getString("DESCIMG" + idItem));
+            imgTmp.setType(reg.getString("TYPEIMG" + idItem));
             imagenes.add(imgTmp);
         }
     }
@@ -563,7 +613,10 @@ public class MWAerials extends Activity {
         for (FormImage img : imagenes) {
             reg.addValue("BITMAPIMG" + img.getIdSystem(), Funciones.encodeTobase64(img.getImage()));
             reg.addValue("NAMEIMG" + img.getIdSystem(), img.getName());
+            reg.addValue("NAERIALIMG"+img.getIdSystem(), img.getIdSubSystem());
             reg.addValue("COMMENTIMG" + img.getIdSystem(), img.getComment());
+            reg.addValue("DESCIMG" + img.getIdSystem(), img.getDescription());
+            reg.addValue("TYPEIMG" + img.getIdSystem(), img.getType());
         }
         for (ArrayList<Item> a : aEnviar) {
             for (Item i : a) {
@@ -614,7 +667,8 @@ public class MWAerials extends Activity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String query = SoapRequestPreAsBuilt.sendCheckMW(getIntent().getIntExtra("ID", -100), XMLITEMS, itemsTags);
+                XMLPHOTOS += SoapRequestPreAsBuilt.AddPhotosToXML(imagenes);
+                String query = SoapRequestPreAsBuilt.sendCheckMW(getIntent().getIntExtra("ID", -100), XMLITEMS, itemsTags, XMLPHOTOS);
 
                 ArrayList<String> reponse = XMLParser.getReturnCode2(query);
 

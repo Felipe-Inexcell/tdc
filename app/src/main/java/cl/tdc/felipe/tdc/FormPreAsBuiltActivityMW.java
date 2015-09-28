@@ -58,6 +58,7 @@ import cl.tdc.felipe.tdc.objects.FormImage;
 import cl.tdc.felipe.tdc.objects.Relevar.Item;
 import cl.tdc.felipe.tdc.objects.Relevar.Modulo;
 import cl.tdc.felipe.tdc.preferences.FormCheckReg;
+import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestPreAsBuilt;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
@@ -73,6 +74,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
     Button continuar;
     String queryResp;
     String itemsXML;
+    String photosXML = "";
 
 
     public static Activity activity;
@@ -323,6 +325,9 @@ public class FormPreAsBuiltActivityMW extends Activity {
                         for (Item i : m.getItems()) {
                             if (i.getType().compareTo("COMPLEX") != 0) {
                                 if (i.getValor().equals("NO RESPONDE") || i.getValor().length() == 0) {
+                                    if(i.getVista() != null && i.getVista() instanceof EditText){
+                                        i.getVista().requestFocus();
+                                    }
                                     Toast.makeText(mContext, "Debe responder el CheckList completo.", Toast.LENGTH_LONG).show();
                                     return;
                                 }
@@ -496,6 +501,7 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setView(view);
+        b.setMessage("Tipo: "+photo.getType()+"\nDescripción: "+photo.getDescription()+"\nComentario: "+photo.getComment());
         b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -543,13 +549,56 @@ public class FormPreAsBuiltActivityMW extends Activity {
 
                 }
 
-                String nombre = getNameItem(imgTmp.getIdSystem());
-                if (nombre != null) {
+                LinearLayout vista = new LinearLayout(this);
+                vista.setOrientation(LinearLayout.VERTICAL);
 
-                    imgTmp.newNameRF(imgTmp.getIdSystem(), nombre);
-                    imagenes.add(imgTmp);
-                }
-                imgTmp = null;
+                final EditText type = new EditText(this);
+                type.setHint("Qué fotografió?");
+                final EditText description = new EditText(this);
+                description.setHint("Descripción");
+                final EditText comment = new EditText(this);
+                comment.setHint("Comentarios");
+
+                vista.addView(type);
+                vista.addView(description);
+                vista.addView(comment);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Detalles Fotografía");
+                builder.setView(vista);
+                builder.setPositiveButton("Guardar", null);
+                builder.setNegativeButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        imgTmp = null;
+                    }
+                });
+
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(type.getText().length() > 0 && description.getText().length()>0 && comment.getText().length() > 0 ){
+                            imgTmp.setType(type.getText().toString());
+                            imgTmp.setDescription(description.getText().toString());
+                            imgTmp.setComment(comment.getText().toString());
+                            String nombre = getNameItem(imgTmp.getIdSystem());
+                            if (nombre != null) {
+                                imgTmp.newNameRF(imgTmp.getIdSystem(), nombre);
+                                imagenes.add(imgTmp);
+                            }
+                            imgTmp = null;
+
+                            dialog.dismiss();
+                        }else{
+                            Toast.makeText(mContext, "Por favor ingrese toda la información para continuar", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+
             }
         }
         if (requestCode == 100) {
@@ -605,6 +654,8 @@ public class FormPreAsBuiltActivityMW extends Activity {
             imgTmp.setName(reg.getString("NAMEIMG" + idItem));
             imgTmp.setImage(Funciones.decodeBase64(reg.getString("BITMAPIMG" + idItem)));
             imgTmp.setComment(reg.getString("COMMENTIMG" + idItem));
+            imgTmp.setDescription(reg.getString("DESCIMG" + idItem));
+            imgTmp.setType(reg.getString("TYPEIMG" + idItem));
             imagenes.add(imgTmp);
         }
     }
@@ -615,6 +666,8 @@ public class FormPreAsBuiltActivityMW extends Activity {
             reg.addValue("BITMAPIMG" + img.getIdSystem(), Funciones.encodeTobase64(img.getImage()));
             reg.addValue("NAMEIMG" + img.getIdSystem(), img.getName());
             reg.addValue("COMMENTIMG" + img.getIdSystem(), img.getComment());
+            reg.addValue("DESCIMG" + img.getIdSystem(), img.getDescription());
+            reg.addValue("TYPEIMG" + img.getIdSystem(), img.getType());
         }
         for (Modulo m : modulos) {
                 for (Item i : m.getItems()) {
@@ -852,7 +905,8 @@ public class FormPreAsBuiltActivityMW extends Activity {
             for (Modulo m : modulos) {
                     for (Item i : m.getItems()) {
                         if (i.getType().compareTo("COMPLEX") != 0) {
-                            itemsXML += SoapRequestPreAsBuilt.AddItemToXML(i, imagenes);
+                            itemsXML += SoapRequestPreAsBuilt.AddItemToXML(i);
+                            photosXML = SoapRequestPreAsBuilt.AddPhotosToXML(imagenes);
                         } else {
                             complex = i;
                         }
@@ -887,13 +941,14 @@ public class FormPreAsBuiltActivityMW extends Activity {
                             n.putExtra("ID", ID);
                             n.putExtra("QUERY", queryResp);
                             n.putExtra("ITEMS", itemsXML);
+                            n.putExtra("PHOTOS", photosXML);
                             n.putExtra("CANTIDAD", Integer.parseInt(cantidad.getText().toString()));
                             saveData();
+                            d.dismiss();
                             startActivityForResult(n, 100);
                         } else {
                             Toast.makeText(mContext, "Ingrese la cantidad de antenas.", Toast.LENGTH_LONG).show();
                         }
-                        d.dismiss();
                     }
                 });
 

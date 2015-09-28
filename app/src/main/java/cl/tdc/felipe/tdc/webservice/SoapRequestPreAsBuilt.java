@@ -362,7 +362,7 @@ public class SoapRequestPreAsBuilt {
         return response;
     }
 
-    public static String sendCheckMW(int ID, String items, String aerials) throws Exception {
+    public static String sendCheckMW(int ID, String items, String aerials, String photos) throws Exception {
         final String SOAP_ACTION = "urn:Configurationwsdl#request";
         String URL = dummy.URL_MW_SEND;
         String response = null;
@@ -385,12 +385,8 @@ public class SoapRequestPreAsBuilt {
                               "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
                                  "<Service xsi:type=\"urn:Service\">" +
                                     "<Request xsi:type=\"urn:Request\">" +
-                                       "<!--Optional:-->" +
                                        "<Form_Detail xsi:type=\"urn:Form_Detail\">" +
-                                          "<!--Zero or more repetitions:-->" +
                                           "<Checklist xsi:type=\"urn:Checklist\">" +
-                                             "<CommentChecklist xsi:type=\"xsd:string\">?</CommentChecklist>" +
-                                             "<!--Zero or more repetitions:-->" +
                                              "<Items xsi:type=\"urn:Items\">" +
                                                items+
                                                 "<!--Zero or more repetitions:-->" +
@@ -399,6 +395,9 @@ public class SoapRequestPreAsBuilt {
                                                    aerials+
                                                 "</Aerial>" +
                                              "</Items>" +
+                                             "<Photos xsi:type=\"urn:Photos\">" +
+                                                photos+
+                                             " </Photos>"+
                                           "</Checklist>" +
                                        "</Form_Detail>" +
                                        "<!--Optional:-->" +
@@ -408,7 +407,7 @@ public class SoapRequestPreAsBuilt {
                                        "</Header>" +
                                        "<!--Optional:-->" +
                                        "<Form_Header xsi:type=\"urn:Form_Header\">" +
-                                          "<Id_NodoB xsi:type=\"xsd:string\">"+ID+"</Id_NodoB>" +
+                                          "<IdMW xsi:type=\"xsd:string\">"+ID+"</IdMW>" +
                                        "</Form_Header>" +
                                     "</Request>" +
                                  "</Service>" +
@@ -472,6 +471,16 @@ public class SoapRequestPreAsBuilt {
         return bodyOut;
     }
 
+    public static String AddItemToXML(Item i) {
+        String bodyOut="<Item xsi:type=\"urn:Item\">" +
+                "<NameItem xsi:type=\"xsd:string\">"+i.getName()+"</NameItem>" +
+                "<IdItem xsi:type=\"xsd:string\">"+i.getId()+"</IdItem>" +
+                "<Answer xsi:type=\"xsd:string\">"+i.getValor()+"</Answer>" +
+                "<CommentItem xsi:type=\"xsd:string\"></CommentItem>";
+        bodyOut+="</Item>";
+        return bodyOut;
+    }
+
     public static String AddAerialToXML(Item i, ArrayList<FormImage> imagenes) {
         String xml = "<ItemAerial xsi:type=\"urn:ItemAerial\">" +
                 "<NameItemAerial xsi:type=\"xsd:string\">"+i.getName()+"</NameItemAerial>" +
@@ -489,6 +498,33 @@ public class SoapRequestPreAsBuilt {
             }
         }
         xml+=imgs+"</ItemAerial>";
+        return xml;
+    }
+
+    public static String AddAerialToXML(Item i) {
+        String xml = "<ItemAerial xsi:type=\"urn:ItemAerial\">" +
+                "<NameItemAerial xsi:type=\"xsd:string\">"+i.getName()+"</NameItemAerial>" +
+                "<IdItemAerial xsi:type=\"xsd:string\">"+i.getId()+"</IdItemAerial>" +
+                "<NumAerial xsi:type=\"xsd:string\">"+i.getnAerial()+"</NumAerial>" +
+                "<AnswerAerial xsi:type=\"xsd:string\">"+i.getValor()+"</AnswerAerial>" +
+                "<CommentItemAerial xsi:type=\"xsd:string\">"+i.getDescription().getText().toString()+"</CommentItemAerial>";
+
+        xml+="</ItemAerial>";
+        return xml;
+    }
+
+    public static String AddPhotosToXML(ArrayList<FormImage> imagenes){
+        String xml = "";
+        for(FormImage img: imagenes){
+            if(img.isSend()) {
+                xml += "<Photo xsi:type=\"urn:Photo\">" +
+                        "<NamePhoto xsi:type=\"xsd:string\">" + img.getName() + "</NamePhoto>" +
+                        "<TypePhoto xsi:type=\"xsd:string\">" + img.getType() + "</TypePhoto>" +
+                        "<DescriptionPhoto xsi:type=\"xsd:string\">" + img.getDescription() + "</DescriptionPhoto>" +
+                        "<CommentPhoto xsi:type=\"xsd:string\">" + img.getComment() + "</CommentPhoto>" +
+                        "</Photo>";
+            }
+        }
         return xml;
     }
 }

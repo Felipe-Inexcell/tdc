@@ -18,12 +18,30 @@ public class FormImage {
     String name;
     Bitmap image;
     boolean send = false;
+    String type;
+    String description;
 
     public FormImage(int idSystem, int idSubSystem, String comment, String name) {
         this.idSystem = idSystem;
         this.idSubSystem = idSubSystem;
         this.comment = comment;
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {
