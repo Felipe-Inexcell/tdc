@@ -62,6 +62,9 @@
         <activity android:name=".FormPreAsBuiltActivityMW" android:screenOrientation="portrait"/>
         <activity android:name=".RFAerials" android:screenOrientation="portrait"/>
         <activity android:name=".MWAerials" android:screenOrientation="portrait"/>
+
+        <activity android:name=".ActividadCierreActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ActividadCierreFormActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

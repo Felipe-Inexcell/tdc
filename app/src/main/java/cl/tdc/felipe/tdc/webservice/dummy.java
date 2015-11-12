@@ -3,6 +3,7 @@ package cl.tdc.felipe.tdc.webservice;
 public class dummy {
     /* TODO URL WS */
     public static final String IP = "190.12.95.42";
+    public static final String URL_TDC = "http://"+ IP +"/tdc/ServiceTDC/TDC.php";
     public static final String URL_SITES = "http://" + IP + "/tdc/Service/NeighborSite.php";
     public static final String URL_WIFI = "http://" + IP + "/tdc/Service/collection_wifi.php";
     public static final String URL_TRACKING = "http://" + IP + "/tdc/Service/position.php";

@@ -327,7 +327,6 @@ public class MWAerials extends Activity {
                     }
                 }
 
-
                 UploadImage task = new UploadImage(mContext);
                 task.execute();
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -58,6 +60,12 @@ public class MainActivity extends ActionBarActivity {
         actividad = this;
         preferencesTDC = new PreferencesTDC(this);
         mContext = this;
+
+        File carpetaTDC = new File(Environment.getExternalStorageDirectory() + "/TDC@");
+        if(!carpetaTDC.exists())
+            if(!carpetaTDC.mkdirs()){
+                Log.e("TDC", "fallo en crear carpeta TDC@");
+            }
 
         agendabtn = (ImageButton) findViewById(R.id.btn_agenda);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

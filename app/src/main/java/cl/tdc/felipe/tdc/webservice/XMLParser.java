@@ -433,7 +433,7 @@ public class XMLParser {
             maintenance.setIdMaintenance(getCharacterDataFromElement((Element) element.getElementsByTagName("IdMaintenance").item(0)));
             maintenance.setType(getCharacterDataFromElement((Element) element.getElementsByTagName("Type").item(0)));
 
-            NodeList Systems = element.getElementsByTagName("Systems").item(0).getChildNodes();
+            NodeList Systems = element.getElementsByTagName("SystemsPlan").item(0).getChildNodes();
             ArrayList<MainSystem> mList = new ArrayList<>();
             for (int k = 0; k < Systems.getLength(); k++) {
                 MainSystem mainSystem = new MainSystem();

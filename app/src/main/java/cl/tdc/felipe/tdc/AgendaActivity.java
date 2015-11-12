@@ -58,6 +58,7 @@ import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
+import cl.tdc.felipe.tdc.webservice.SoapRequestTDC;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.dummy;
@@ -78,6 +79,8 @@ public class AgendaActivity extends Activity {
     ProgressBar progressBar;
     ImageButton complete;
 
+    int ultimaMantencion = -1;
+
     ArrayList<String> idsActivities = new ArrayList<>();
 
 
@@ -87,15 +90,18 @@ public class AgendaActivity extends Activity {
         setContentView(R.layout.activity_agenda_new);
         actividad = this;
         pref = new MaintenanceReg(this);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEI = telephonyManager.getDeviceId();
+        mPager = (ViewPager) findViewById(R.id.agenda_contentPager);
+        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
         init();
         init_ImageLoader();
     }
 
     private void init() {
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI = telephonyManager.getDeviceId();
 
-        checklist = (Button) findViewById(R.id.checklist);
+
+        /*checklist = (Button) findViewById(R.id.checklist);
         checklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,14 +114,18 @@ public class AgendaActivity extends Activity {
 
 
             }
-        });
+        });*/
 
-        mPager = (ViewPager) findViewById(R.id.agenda_contentPager);
-        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+
         AgendaTask agenda = new AgendaTask(this);
         agenda.execute();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     private void init_ImageLoader() {
         DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -333,7 +343,7 @@ public class AgendaActivity extends Activity {
         protected Agenda doInBackground(String... strings) {
             try {
                 publishProgress("Cargando Actividades...");
-                String query = SoapRequest.getInformationNew(IMEI);
+                String query = SoapRequestTDC.getPlanningMaintenance(IMEI);
                 Log.d("FRAGMENT", query);
 
                 Agenda agenda = XMLParser.getMaintenance(query);
@@ -342,13 +352,7 @@ public class AgendaActivity extends Activity {
             } catch (IOException e) {
                 Log.e("ELEMENTS", e.getMessage() + ": \n" + e.getCause());
                 message = dummy.ERROR_CONNECTION;
-            } catch (SAXException e) {
-                e.printStackTrace();
-                message = dummy.ERROR_PARSE;
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-                message = dummy.ERROR_PARSE;
-            } catch (XPathExpressionException e) {
+            } catch (SAXException | XPathExpressionException | ParserConfigurationException e) {
                 e.printStackTrace();
                 message = dummy.ERROR_PARSE;
             } catch (Exception e) {
@@ -377,11 +381,12 @@ public class AgendaActivity extends Activity {
 
                         @Override
                         public CharSequence getPageTitle(int position) {
-                            if (position == 0) {
+                            /*if (position == 0) {
                                 return "ASIGNADA";
                             } else {
                                 return "FINALIZADA " + position;
-                            }
+                            }*/
+                            return "Mantenimiento "+(position+1);
                         }
 
                         @Override
@@ -414,12 +419,16 @@ public class AgendaActivity extends Activity {
                             bComplete.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if(pref.getChecklistState()) {
+                                    /*if(pref.getChecklistState()) {
                                         CompletarActividad c = new CompletarActividad(tContext, Integer.parseInt(m.getIdMaintenance()));
                                         c.execute();
                                     }else{
                                         Toast.makeText(actividad.getApplicationContext(), "Debe completar el Checklist de Mantenimiento antes de continuar.",Toast.LENGTH_LONG).show();
-                                    }
+                                    }*/
+                                    Intent c = new Intent(actividad, ActividadCierreActivity.class);
+                                    c.putExtra("MAINTENANCE", m.getIdMaintenance());
+
+                                    startActivity(c);
                                 }
                             });
                             bComplete.setEnabled(false);
@@ -535,6 +544,7 @@ public class AgendaActivity extends Activity {
                             return rootView;
                         }
                     };
+                    mPager.setAdapter(null);
                     mPager.setAdapter(mPagerAdapter);
 
                     Log.d(ATAG, s.toString());
@@ -558,7 +568,6 @@ public class AgendaActivity extends Activity {
                 AgendaTask agenda = new AgendaTask(this);
                 agenda.execute();
             }
-
         }
     }
 
