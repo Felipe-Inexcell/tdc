@@ -169,6 +169,148 @@ public class ActividadCierreFormActivity extends Activity {
         b.show();
     }
 
+    private LinearLayout create_itemLayout() {
+        LinearLayout itemLayout = new LinearLayout(mContext);
+        LinearLayout.LayoutParams itemLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        itemLayoutParam.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+        itemLayoutParam.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+        itemLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        itemLayout.setBackgroundResource(R.drawable.fondo_spinner1);
+        itemLayout.setLayoutParams(itemLayoutParam);
+        itemLayout.setOrientation(LinearLayout.VERTICAL);
+        itemLayout.setPadding(6, 6, 6, 6);
+        return itemLayout;
+    }
+
+    private LinearLayout create_questionLayout() {
+        LinearLayout layquest = new LinearLayout(mContext);
+        layquest.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams questionLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        questionLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
+        questionLayoutParam.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        layquest.setLayoutParams(questionLayoutParam);
+        layquest.setGravity(Gravity.CENTER_VERTICAL);
+        return layquest;
+    }
+
+    private LinearLayout create_setLayout() {
+        LinearLayout.LayoutParams questionLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        questionLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+        questionLayoutParam.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+
+
+        LinearLayout setLayout = new LinearLayout(mContext);
+        setLayout.setLayoutParams(questionLayoutParam);
+        setLayout.setOrientation(LinearLayout.VERTICAL);
+        setLayout.setBackgroundResource(R.drawable.fondo_general);
+        setLayout.setPadding(10, 10, 10, 10);
+        return setLayout;
+    }
+
+    private ImageButton create_photoButton(final QUESTION Q) {
+        ImageButton photo = new ImageButton(mContext);
+        photo.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics()),
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics())));
+        photo.setImageResource(R.drawable.ic_camerawhite);
+        photo.setPadding(10, 10, 10, 10);
+        photo.setBackgroundResource(R.drawable.button_gray_rounded);
+
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questionTMP = Q;
+
+                AlertDialog.Builder b = new AlertDialog.Builder(actividad);
+                final ArrayList<PHOTO> fotos = Q.getFotos();
+                int n_fotos = 0;
+                if (fotos != null) {
+                    n_fotos = fotos.size();
+                }
+                b.setTitle("Actualmente tiene " + n_fotos + " fotos");
+                b.setItems(new CharSequence[]{"Tomar Fotografía", "Ver Fotografías"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            photoTMP = new PHOTO();
+                            tomarFotos();
+                        } else {
+                            if (fotos != null && fotos.size() > 0)
+                                verFotos();
+                            else
+                                Toast.makeText(mContext, "No tiene fotografías", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                b.show();
+            }
+        });
+        return photo;
+    }
+
+    private LinearLayout create_normalVerticalLayout() {
+        LinearLayout l = new LinearLayout(mContext);
+        l.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        l.setOrientation(LinearLayout.VERTICAL);
+        return l;
+    }
+
+    private void cargar_fotos(QUESTION Q, String tag) {
+        int as = 0;
+        ArrayList<PHOTO> fotos = new ArrayList<>();
+        String name;
+        while (!(name = REG.getString("PHOTONAME" + tag + as)).equals("")) {
+            File tmp = new File(name);
+            if (tmp.exists()) {
+                PHOTO f = new PHOTO();
+                f.setNamePhoto(REG.getString("PHOTONAME" + tag + as));
+                f.setTitlePhoto(REG.getString("PHOTOTITLE" + tag + as));
+                f.setDateTime(REG.getString("PHOTODATE" + tag + as));
+                f.setCoordX(REG.getString("PHOTOCOORDX" + tag + as));
+                f.setCoordY(REG.getString("PHOTOCOORDY" + tag + as));
+
+                fotos.add(f);
+            }
+            as++;
+        }
+
+        if (fotos.size() > 0) Q.setFotos(fotos);
+    }
+
+    private Button crear_botonRepeat() {
+        LinearLayout.LayoutParams botonparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        botonparam.setMargins(
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()),   //left
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),   //top
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),   //right
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics())    //bottom
+        );
+        Button boton = new Button(mContext);
+        boton.setBackgroundResource(R.drawable.button_gray);
+        boton.setLayoutParams(botonparam);
+        boton.setTextColor(Color.WHITE);
+        boton.setTypeface(Typeface.DEFAULT_BOLD);
+        boton.setVisibility(View.GONE);
+        return boton;
+    }
+
+    private QUESTION copiar_question(QUESTION Q) {
+        QUESTION qAux = new QUESTION();
+        qAux.setIdQuestion(Q.getIdQuestion());
+        qAux.setPhoto(Q.getPhoto());
+        qAux.setNumberPhoto(Q.getNumberPhoto());
+        qAux.setNameType(Q.getNameType());
+        qAux.setNameQuestion(Q.getNameQuestion());
+        qAux.setIdType(Q.getIdType());
+        qAux.setValues(Q.getValues());
+        return qAux;
+    }
+
     private void init() {
         /**
          * Se dibuja el checklist
@@ -189,187 +331,32 @@ public class ActividadCierreFormActivity extends Activity {
                     for (final ITEM I : A.getItems()) {
                         /**         CABECERA ITEMS **/
                         CONTENIDO.addView(I.getTitle(mContext));
-
-                        LinearLayout itemLayout = new LinearLayout(mContext);
-                        LinearLayout.LayoutParams itemLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        itemLayoutParam.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-                        itemLayoutParam.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-                        itemLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-                        itemLayout.setBackgroundResource(R.drawable.fondo_spinner1);
-                        itemLayout.setLayoutParams(itemLayoutParam);
-                        itemLayout.setOrientation(LinearLayout.VERTICAL);
-                        itemLayout.setPadding(6, 6, 6, 6);
+                        LinearLayout itemLayout = create_itemLayout();
 
                         View v = I.generateView(mContext);
-                            if (v != null) {
+                        if (v != null) {
                             itemLayout.addView(v);
                         }
                         if (I.getQuestions() != null) {
 
                             for (final QUESTION Q : I.getQuestions()) {
                                 /**         CABECERA QUESTION  **/
-                                LinearLayout.LayoutParams questionLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                questionLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
-                                questionLayoutParam.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-                                LinearLayout layquest = new LinearLayout(mContext);
-                                layquest.setLayoutParams(questionLayoutParam);
-                                layquest.setOrientation(LinearLayout.HORIZONTAL);
-                                if (Q.getPhoto().equals("OK")) {
-
-
-                                    ImageButton photo = new ImageButton(mContext);
-                                    photo.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics()),
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics())));
-                                    photo.setImageResource(R.drawable.ic_camerawhite);
-                                    photo.setPadding(10, 10, 10, 10);
-                                    photo.setBackgroundResource(R.drawable.button_gray_rounded);
-
-                                    photo.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            questionTMP = Q;
-
-                                            AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                            final ArrayList<PHOTO> fotos = Q.getFotos();
-                                            int n_fotos = 0;
-                                            if (fotos != null) {
-                                                n_fotos = fotos.size();
-                                            }
-                                            b.setTitle("Actualmente tiene " + n_fotos + " fotos");
-                                            b.setItems(new CharSequence[]{"Tomar Fotografía", "Ver Fotografías"}, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    if (i == 0) {
-                                                        photoTMP = new PHOTO();
-                                                        tomarFotos();
-                                                    } else {
-                                                        if (fotos != null && fotos.size() > 0)
-                                                            verFotos();
-                                                        else
-                                                            Toast.makeText(mContext, "No tiene fotografías", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                            b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    dialogInterface.dismiss();
-                                                }
-                                            });
-                                            b.show();
-                                        }
-                                    });
-
-
+                                LinearLayout layquest = create_questionLayout();
+                                if (Q.getPhoto().equals("OK")) { //Si requiere fotos agregamos el boton foto
+                                    ImageButton photo = create_photoButton(Q);
                                     layquest.addView(photo);
-
-
                                 }
                                 layquest.addView(Q.getTitle(mContext));
-                                layquest.setGravity(Gravity.CENTER_VERTICAL);
+
 
                                 View question = Q.generateView(mContext);
                                 if (question != null) {
                                     String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
 
-                                    if (Q.getPhoto().equals("OK")) {
-                                        int as = 0;
-                                        ArrayList<PHOTO> fotos = new ArrayList<>();
-                                        String name;
-                                        while (!(name = REG.getString("PHOTONAME" + tag + as)).equals("")) {
-                                            File tmp = new File(name);
-                                            if(tmp.exists()) {
-                                                PHOTO f = new PHOTO();
-                                                f.setNamePhoto(REG.getString("PHOTONAME" + tag + as));
-                                                f.setTitlePhoto(REG.getString("PHOTOTITLE" + tag + as));
-                                                f.setDateTime(REG.getString("PHOTODATE" + tag + as));
-                                                f.setCoordX(REG.getString("PHOTOCOORDX" + tag + as));
-                                                f.setCoordY(REG.getString("PHOTOCOORDY" + tag + as));
-
-                                                fotos.add(f);
-                                            }
-                                            as++;
-
-                                        }
-
-                                        if (fotos.size() > 0) Q.setFotos(fotos);
+                                    if (Q.getPhoto().equals("OK")) { //Si requiere foto, buscamos si hay fotos gardadas
+                                        cargar_fotos(Q, tag);
                                     }
 
-
-                                    /*if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                        final ArrayList<Button> buttons = Q.getButtons();
-                                        String name = REG.getString("PHOTONAME" + tag);
-                                        if (!name.equals("")) {
-                                            File tmp = new File(name);
-                                            if (tmp.exists()) {
-                                                PHOTO p = new PHOTO();
-                                                String title = REG.getString("PHOTOTITLE" + tag);
-                                                String date = REG.getString("PHOTODATE" + tag);
-                                                String lon = REG.getString("PHOTOCOORDX" + tag);
-                                                String lat = REG.getString("PHOTOCOORDY" + tag);
-
-                                                p.setNamePhoto(name);
-                                                p.setTitlePhoto(title);
-                                                p.setDateTime(date);
-                                                p.setCoordX(lon);
-                                                p.setCoordY(lat);
-                                                Q.setFoto(p);
-                                            }
-                                        }
-
-                                        if (Q.getFoto() != null) {
-                                            buttons.get(1).setEnabled(true);
-                                        }
-
-
-                                        buttons.get(0).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                questionTMP = Q;
-                                                photoTMP = new PHOTO();
-                                                buttonTMP = buttons.get(1);
-                                                tomarFoto();
-                                            }
-                                        });
-
-                                        buttons.get(1).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                if (Q.getFoto() != null) {
-                                                    AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                                    b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            dialogInterface.dismiss();
-                                                        }
-                                                    });
-                                                    b.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            File delete = new File(Q.getFoto().getNamePhoto());
-                                                            if (delete.exists())
-                                                                if (delete.delete()) {
-                                                                    Log.d("FOTO", "Imagen eliminada");
-                                                                }
-                                                            Q.setFoto(null);
-                                                            Toast.makeText(mContext, "Imagen eliminada", Toast.LENGTH_SHORT).show();
-                                                            buttons.get(1).setEnabled(false);
-                                                            dialogInterface.dismiss();
-                                                        }
-                                                    });
-                                                    ImageView joto = new ImageView(mContext);
-                                                    File foto = new File(Q.getFoto().getNamePhoto());
-                                                    if (foto.exists()) {
-                                                        Bitmap tmp = BitmapFactory.decodeFile(Q.getFoto().getNamePhoto());
-                                                        joto.setImageBitmap(tmp);
-                                                        b.setView(joto);
-                                                        b.setTitle(Q.getFoto().getTitlePhoto());
-                                                        b.show();
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }*/
                                     if (Q.getIdType().equals(Constantes.RADIO)) {
                                         int pos = REG.getInt("RADIO" + tag);
                                         if (pos != -100) {
@@ -396,7 +383,7 @@ public class ActividadCierreFormActivity extends Activity {
                                     }
 
                                     itemLayout.addView(layquest);
-                                    if(!Q.getIdType().equals(Constantes.PHOTO))
+                                    if (!Q.getIdType().equals(Constantes.PHOTO))
                                         itemLayout.addView(question);
 
                                 }
@@ -408,22 +395,17 @@ public class ActividadCierreFormActivity extends Activity {
                             /** Generar vista del IteamRepeat **/
                             final ArrayList<View> repeatContentList = new ArrayList<>();
                             final ArrayList<Button> repeatButtontList = new ArrayList<>();
-                            LinearLayout.LayoutParams repeatLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            //repeatLayoutParam.bottomMargin =(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
 
-                            LinearLayout repeatLayout = new LinearLayout(mContext);
-                            repeatLayout.setLayoutParams(repeatLayoutParam);
-                            repeatLayout.setOrientation(LinearLayout.VERTICAL);
+                            LinearLayout repeatLayout = create_normalVerticalLayout();
 
                             if (I.getIdType().equals(Constantes.TABLE)) {
                                 //Preparamos la tabla o lo que sea
                                 for (int x = 0; x < I.getValues().size(); x++) {
                                     VALUE value = I.getValues().get(x);
-                                    Button boton = new Button(mContext);
+                                    Button boton = crear_botonRepeat();
                                     boton.setText(value.getNameValue());
 
-                                    final LinearLayout contentSetLayout = new LinearLayout(mContext);
-                                    contentSetLayout.setOrientation(LinearLayout.VERTICAL);
+                                    final LinearLayout contentSetLayout = create_normalVerticalLayout();
 
                                     ArrayList<SET> listaAuxSet = new ArrayList<>();
                                     for (SET set : I.getSetArrayList()) {
@@ -432,191 +414,29 @@ public class ActividadCierreFormActivity extends Activity {
                                         setAux.setIdSet(set.getIdSet());
                                         setAux.setNameSet(set.getNameSet());
                                         setAux.setValueSet(set.getValueSet());
-                                        //setAux.setQuestions(set.getQuestions());
-                                        LinearLayout.LayoutParams questionLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                        questionLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
-                                        questionLayoutParam.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
 
-
-                                        LinearLayout setLayout = new LinearLayout(mContext);
-                                        setLayout.setLayoutParams(questionLayoutParam);
-                                        setLayout.setOrientation(LinearLayout.VERTICAL);
-                                        setLayout.setBackgroundResource(R.drawable.fondo_general);
-                                        setLayout.setPadding(10, 10, 10, 10);
-
+                                        LinearLayout setLayout = create_setLayout();
                                         if (set.getQuestions() != null) {
                                             ArrayList<QUESTION> listadoQ = new ArrayList<>();
 
                                             for (final QUESTION Q : set.getQuestions()) {
-                                                final QUESTION qAux = new QUESTION();
-                                                qAux.setIdQuestion(Q.getIdQuestion());
-                                                qAux.setPhoto(Q.getPhoto());
-                                                qAux.setNumberPhoto(Q.getNumberPhoto());
-                                                qAux.setNameType(Q.getNameType());
-                                                qAux.setNameQuestion(Q.getNameQuestion());
-                                                qAux.setIdType(Q.getIdType());
-                                                qAux.setValues(Q.getValues());
-
-                                                /**         CABECERA QUESTION  **/
-
-
-                                                LinearLayout questTitle = new LinearLayout(mContext);
-                                                questTitle.setLayoutParams(questionLayoutParam);
-                                                questTitle.setOrientation(LinearLayout.HORIZONTAL);
+                                                final QUESTION qAux = copiar_question(Q);
+                                                LinearLayout questTitle = create_questionLayout();
 
                                                 if (Q.getPhoto().equals("OK")) {
-
-                                                    final ImageButton photo = new ImageButton(mContext);
-                                                    photo.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics()),
-                                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics())));
-                                                    photo.setImageResource(R.drawable.ic_camerawhite);
-                                                    photo.setPadding(10, 10, 10, 10);
-                                                    photo.setBackgroundResource(R.drawable.button_gray_rounded);
-
-                                                    photo.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            questionTMP = qAux;
-
-                                                            AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                                            final ArrayList<PHOTO> fotos = qAux.getFotos();
-                                                            int n_fotos = 0;
-                                                            if (fotos != null) {
-                                                                n_fotos = fotos.size();
-                                                            }
-                                                            b.setTitle("Actualmente tiene " + n_fotos + " fotos");
-                                                            b.setItems(new CharSequence[]{"Tomar Fotografía", "Ver Fotografías"}, new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    if (i == 0) {
-                                                                        photoTMP = new PHOTO();
-                                                                        tomarFotos();
-                                                                    } else {
-                                                                        if (fotos != null && fotos.size() > 0)
-                                                                            verFotos();
-                                                                        else
-                                                                            Toast.makeText(mContext, "No tiene fotografías", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }
-                                                            });
-                                                            b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    dialogInterface.dismiss();
-                                                                }
-                                                            });
-                                                            b.show();
-                                                        }
-                                                    });
-
+                                                    final ImageButton photo = create_photoButton(qAux);
                                                     questTitle.addView(photo);
                                                 }
                                                 questTitle.addView(qAux.getTitle(mContext));
-                                                questTitle.setGravity(Gravity.CENTER_VERTICAL);
 
                                                 View question = qAux.generateView(mContext);
                                                 if (question != null) {
                                                     String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + value.getIdValue() + value.getNameValue() + "-" + setAux.getIdSet() + setAux.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
 
                                                     if (Q.getPhoto().equals("OK")) {
-                                                        int as = 0;
-                                                        ArrayList<PHOTO> fotos = new ArrayList<>();
-
-                                                        String name;
-                                                        while (!(name = REG.getString("PHOTONAME" + tag + as)).equals("")) {
-                                                            File tmp = new File(name);
-                                                            if(tmp.exists()) {
-                                                                PHOTO f = new PHOTO();
-                                                                f.setNamePhoto(REG.getString("PHOTONAME" + tag + as));
-                                                                f.setTitlePhoto(REG.getString("PHOTOTITLE" + tag + as));
-                                                                f.setDateTime(REG.getString("PHOTODATE" + tag + as));
-                                                                f.setCoordX(REG.getString("PHOTOCOORDX" + tag + as));
-                                                                f.setCoordY(REG.getString("PHOTOCOORDY" + tag + as));
-                                                                //f.setBitmap(Funciones.decodeBase64(bmp));
-
-                                                                fotos.add(f);
-                                                            }
-                                                            as++;
-
-                                                        }
-
-                                                        if (fotos.size() > 0) Q.setFotos(fotos);
+                                                        cargar_fotos(qAux, tag);
                                                     }
 
-                                                    /*if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                                        final ArrayList<Button> buttons = qAux.getButtons();
-                                                        String name = REG.getString("PHOTONAME" + tag);
-                                                        if (!name.equals("")) {
-                                                            File tmp = new File(name);
-                                                            if(tmp.exists()) {
-                                                                PHOTO p = new PHOTO();
-                                                                String title = REG.getString("PHOTOTITLE" + tag);
-                                                                String date = REG.getString("PHOTODATE" + tag);
-                                                                String lon = REG.getString("PHOTOCOORDX" + tag);
-                                                                String lat = REG.getString("PHOTOCOORDY" + tag);
-
-                                                                p.setNamePhoto(name);
-                                                                p.setTitlePhoto(title);
-                                                                p.setDateTime(date);
-                                                                p.setCoordX(lon);
-                                                                p.setCoordY(lat);
-                                                                qAux.setFoto(p);
-                                                            }
-                                                        }
-
-                                                        if (qAux.getFoto() != null) {
-                                                            buttons.get(1).setEnabled(true);
-                                                        }
-
-                                                        buttons.get(0).setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                questionTMP = qAux;
-                                                                photoTMP = new PHOTO();
-                                                                buttonTMP = buttons.get(1);
-                                                                tomarFoto();
-                                                            }
-                                                        });
-
-                                                        buttons.get(1).setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                if (qAux.getFoto() != null) {
-                                                                    AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                                                    b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                                            dialogInterface.dismiss();
-                                                                        }
-                                                                    });
-                                                                    b.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                                            File delete = new File(qAux.getFoto().getNamePhoto());
-                                                                            if (delete.exists())
-                                                                                if (delete.delete()) {
-                                                                                    Log.d("FOTO", "Imagen eliminada");
-                                                                                }
-                                                                            qAux.setFoto(null);
-                                                                            Toast.makeText(mContext, "Imagen eliminada", Toast.LENGTH_SHORT).show();
-                                                                            buttons.get(1).setEnabled(false);
-                                                                            dialogInterface.dismiss();
-                                                                        }
-                                                                    });
-                                                                    ImageView joto = new ImageView(mContext);
-                                                                    File foto = new File(qAux.getFoto().getNamePhoto());
-                                                                    if (foto.exists()) {
-
-                                                                        Bitmap tmp = BitmapFactory.decodeFile(qAux.getFoto().getNamePhoto());
-                                                                        joto.setImageBitmap(tmp);
-                                                                        b.setView(joto);
-                                                                        b.setTitle(qAux.getFoto().getTitlePhoto());
-                                                                        b.show();
-                                                                    }
-                                                                }
-                                                            }
-                                                        });
-                                                    }*/
                                                     if (Q.getIdType().equals(Constantes.RADIO)) {
                                                         int pos = REG.getInt("RADIO" + tag);
                                                         if (pos != -100) {
@@ -644,7 +464,7 @@ public class ActividadCierreFormActivity extends Activity {
 
 
                                                     setLayout.addView(questTitle);
-                                                    if(!Q.getIdType().equals(Constantes.PHOTO))
+                                                    if (!Q.getIdType().equals(Constantes.PHOTO))
                                                         setLayout.addView(question);
                                                 }
                                                 listadoQ.add(qAux);
@@ -660,19 +480,6 @@ public class ActividadCierreFormActivity extends Activity {
                                         listaAuxSet.add(setAux);
                                     }
                                     I.addListSet(listaAuxSet);
-
-                                    LinearLayout.LayoutParams botonparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    botonparam.setMargins(
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()),   //left
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),   //top
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),   //right
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics())    //bottom
-                                    );
-
-                                    boton.setBackgroundResource(R.drawable.button_gray);
-                                    boton.setLayoutParams(botonparam);
-                                    boton.setTextColor(Color.WHITE);
-                                    boton.setTypeface(Typeface.DEFAULT_BOLD);
 
 
                                     boton.setOnClickListener(new View.OnClickListener() {
@@ -690,7 +497,7 @@ public class ActividadCierreFormActivity extends Activity {
                                             }
                                         }
                                     });
-                                    boton.setVisibility(View.GONE);
+
                                     contentSetLayout.setVisibility(View.GONE);
                                     repeatContentList.add(contentSetLayout);//para que al mostrar uno se oculten los demas
                                     repeatButtontList.add(boton);       //para que al mostrar uno se oculten los demas
@@ -725,11 +532,10 @@ public class ActividadCierreFormActivity extends Activity {
                                 for (int x = 0; x < I.getValues().size(); x++) {
                                     VALUE value = I.getValues().get(x);
 
-                                    Button boton = new Button(mContext);
+                                    Button boton = crear_botonRepeat();
                                     boton.setText(value.getNameValue());
 
-                                    final LinearLayout contentSetLayout = new LinearLayout(mContext);
-                                    contentSetLayout.setOrientation(LinearLayout.VERTICAL);
+                                    final LinearLayout contentSetLayout = create_normalVerticalLayout();
 
                                     ArrayList<SET> listaAuxSet = new ArrayList<>();
                                     for (SET set : I.getSetArrayList()) {
@@ -738,85 +544,20 @@ public class ActividadCierreFormActivity extends Activity {
                                         setAux.setIdSet(set.getIdSet());
                                         setAux.setNameSet(set.getNameSet());
                                         setAux.setValueSet(set.getValueSet());
-                                        //setAux.setQuestions(set.getQuestions());
-                                        LinearLayout.LayoutParams questionLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                        questionLayoutParam.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
-                                        questionLayoutParam.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-
-
-                                        LinearLayout setLayout = new LinearLayout(mContext);
-                                        setLayout.setLayoutParams(questionLayoutParam);
-                                        setLayout.setOrientation(LinearLayout.VERTICAL);
-                                        setLayout.setBackgroundResource(R.drawable.fondo_general);
-                                        setLayout.setPadding(10, 10, 10, 10);
+                                        LinearLayout setLayout = create_setLayout();
 
                                         if (set.getQuestions() != null) {
                                             ArrayList<QUESTION> listadoQ = new ArrayList<>();
 
                                             for (final QUESTION Q : set.getQuestions()) {
-                                                QUESTION qAux = new QUESTION();
-                                                qAux.setIdQuestion(Q.getIdQuestion());
-                                                qAux.setPhoto(Q.getPhoto());
-                                                qAux.setNumberPhoto(Q.getNumberPhoto());
-                                                qAux.setNameType(Q.getNameType());
-                                                qAux.setNameQuestion(Q.getNameQuestion());
-                                                qAux.setIdType(Q.getIdType());
-                                                qAux.setValues(Q.getValues());
-
-                                                /**         CABECERA QUESTION  **/
-
-
-                                                LinearLayout questTitle = new LinearLayout(mContext);
-                                                questTitle.setLayoutParams(questionLayoutParam);
-                                                questTitle.setOrientation(LinearLayout.HORIZONTAL);
+                                                QUESTION qAux = copiar_question(Q);
+                                                LinearLayout questTitle = create_questionLayout();
 
                                                 if (Q.getPhoto().equals("OK")) {
-
-                                                    final ImageButton photo = new ImageButton(mContext);
-                                                    photo.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics()),
-                                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics())));
-                                                    photo.setImageResource(R.drawable.ic_camerawhite);
-                                                    photo.setPadding(10, 10, 10, 10);
-                                                    photo.setBackgroundResource(R.drawable.button_gray_rounded);
-
-                                                    photo.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            questionTMP = Q;
-
-                                                            AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                                            final ArrayList<PHOTO> fotos = Q.getFotos();
-                                                            int n_fotos = 0;
-                                                            if (fotos != null) {
-                                                                n_fotos = fotos.size();
-                                                            }
-                                                            b.setTitle("Actualmente tiene " + n_fotos + " fotos");
-                                                            b.setItems(new CharSequence[]{"Tomar Fotografía", "Ver Fotografías"}, new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    if (i == 0) {
-                                                                        photoTMP = new PHOTO();
-                                                                        tomarFotos();
-                                                                    } else {
-                                                                        if (fotos != null && fotos.size() > 0)
-                                                                            verFotos();
-                                                                        else
-                                                                            Toast.makeText(mContext, "No tiene fotografías", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }
-                                                            });
-                                                            b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    dialogInterface.dismiss();
-                                                                }
-                                                            });
-                                                            b.show();
-                                                        }
-                                                    });
-
+                                                    final ImageButton photo = create_photoButton(qAux);
                                                     questTitle.addView(photo);
                                                 }
+
                                                 questTitle.addView(qAux.getTitle(mContext));
                                                 questTitle.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -825,7 +566,8 @@ public class ActividadCierreFormActivity extends Activity {
                                                     String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + value.getIdValue() + value.getNameValue() + "-" + setAux.getIdSet() + setAux.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
 
                                                     if (Q.getPhoto().equals("OK")) {
-                                                        int as = 0;
+                                                        cargar_fotos(qAux, tag);
+                                                        /*int as = 0;
                                                         ArrayList<PHOTO> fotos = new ArrayList<>();
 
                                                         //TODO ver si la imagen existe
@@ -846,82 +588,9 @@ public class ActividadCierreFormActivity extends Activity {
 
                                                         }
 
-                                                        if (fotos.size() > 0) Q.setFotos(fotos);
+                                                        if (fotos.size() > 0) Q.setFotos(fotos);*/
                                                     }
 
-                                                    /*if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                                        final ArrayList<Button> buttons = qAux.getButtons();
-
-                                                        String fotoname = REG.getString("PHOTONAME" + tag);
-                                                        File joto = new File(fotoname);
-                                                        if (joto.exists()) {
-                                                            PHOTO p = new PHOTO();
-                                                            String name = REG.getString("PHOTONAME" + tag);
-                                                            String title = REG.getString("PHOTOTITLE" + tag);
-                                                            String date = REG.getString("PHOTODATE" + tag);
-                                                            String lon = REG.getString("PHOTOCOORDX" + tag);
-                                                            String lat = REG.getString("PHOTOCOORDY" + tag);
-
-                                                            p.setNamePhoto(name);
-                                                            p.setTitlePhoto(title);
-                                                            p.setDateTime(date);
-                                                            p.setCoordX(lon);
-                                                            p.setCoordY(lat);
-                                                            qAux.setFoto(p);
-                                                        }
-
-                                                        if (qAux.getFoto() != null) {
-                                                            buttons.get(1).setEnabled(true);
-                                                        }
-
-                                                        buttons.get(0).setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                questionTMP = Q;
-                                                                photoTMP = new PHOTO();
-                                                                buttonTMP = buttons.get(1);
-                                                                tomarFoto();
-                                                            }
-                                                        });
-
-                                                        buttons.get(1).setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                if (Q.getFoto() != null) {
-                                                                    AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                                                                    b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                                            dialogInterface.dismiss();
-                                                                        }
-                                                                    });
-                                                                    b.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                                            File delete = new File(Q.getFoto().getNamePhoto());
-                                                                            if (delete.exists())
-                                                                                if (delete.delete()) {
-                                                                                    Log.d("FOTO", "Imagen eliminada");
-                                                                                }
-                                                                            Q.setPhoto(null);
-                                                                            Toast.makeText(mContext, "Imagen eliminada", Toast.LENGTH_SHORT).show();
-                                                                            buttons.get(1).setEnabled(false);
-                                                                            dialogInterface.dismiss();
-                                                                        }
-                                                                    });
-                                                                    ImageView joto = new ImageView(mContext);
-                                                                    File foto = new File(Q.getFoto().getNamePhoto());
-                                                                    if (foto.exists()) {
-                                                                        Bitmap tmp = BitmapFactory.decodeFile(Q.getFoto().getNamePhoto());
-                                                                        joto.setImageBitmap(tmp);
-                                                                        b.setView(joto);
-                                                                        b.setTitle(Q.getFoto().getTitlePhoto());
-                                                                        b.show();
-                                                                    }
-                                                                }
-                                                            }
-                                                        });
-                                                    }*/
                                                     if (Q.getIdType().equals(Constantes.RADIO)) {
                                                         int pos = REG.getInt("RADIO" + tag);
                                                         if (pos != -100) {
@@ -939,7 +608,6 @@ public class ActividadCierreFormActivity extends Activity {
                                                     }
                                                     if (Q.getIdType().equals(Constantes.CHECK)) {
                                                         ArrayList<CheckBox> ch = qAux.getCheckBoxes();
-
                                                         for (int j = 0; j < ch.size(); j++) {
                                                             Boolean check = REG.getBoolean("CHECK" + tag + j);
                                                             ch.get(j).setChecked(check);
@@ -947,9 +615,8 @@ public class ActividadCierreFormActivity extends Activity {
 
                                                     }
 
-
                                                     setLayout.addView(questTitle);
-                                                    if(!qAux.getIdType().equals(Constantes.PHOTO))
+                                                    if (!qAux.getIdType().equals(Constantes.PHOTO))
                                                         setLayout.addView(question);
                                                 }
                                                 listadoQ.add(qAux);
@@ -965,19 +632,6 @@ public class ActividadCierreFormActivity extends Activity {
                                         listaAuxSet.add(setAux);
                                     }
                                     I.addListSet(listaAuxSet);
-
-                                    LinearLayout.LayoutParams botonparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    botonparam.setMargins(
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()),   //left
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),   //top
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),   //right
-                                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics())    //bottom
-                                    );
-
-                                    boton.setBackgroundResource(R.drawable.button_gray);
-                                    boton.setLayoutParams(botonparam);
-                                    boton.setTextColor(Color.WHITE);
-                                    boton.setTypeface(Typeface.DEFAULT_BOLD);
 
 
                                     boton.setOnClickListener(new View.OnClickListener() {
@@ -997,9 +651,6 @@ public class ActividadCierreFormActivity extends Activity {
                                     });
 
                                     contentSetLayout.setVisibility(View.GONE);
-
-                                    boton.setVisibility(View.GONE);
-
                                     repeatContentList.add(contentSetLayout);//para que al mostrar uno se oculten los demas
                                     repeatButtontList.add(boton);
                                     repeatLayout.addView(boton);
@@ -1027,10 +678,11 @@ public class ActividadCierreFormActivity extends Activity {
                                     }
                                 });
 
-
-                                int checked = REG.getInt("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
-                                if (checked != -1)
-                                    group.check(checked);
+                                int pos = REG.getInt("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                Log.d("POSITION", "RADIO" + I.getIdItem() + " -pos: " + pos);
+                                if (pos != -100) {
+                                    ((RadioButton) ((RadioGroup) I.getView()).getChildAt(pos)).setChecked(true);
+                                }
 
 
                                 itemLayout.addView(repeatLayout);
@@ -1039,10 +691,23 @@ public class ActividadCierreFormActivity extends Activity {
 
                         } else {
                             if (I.getIdType().equals(Constantes.RADIO)) {
-                                RadioGroup group = (RadioGroup) I.getView();
-                                int checked = REG.getInt("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
-                                if (checked != -1)
-                                    group.check(checked);
+                                int pos = REG.getInt("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                Log.d("POSITION", "RADIO" + I.getIdItem() + " -pos: " + pos);
+                                if (pos != -100) {
+                                    ((RadioButton) ((RadioGroup) I.getView()).getChildAt(pos)).setChecked(true);
+                                }
+                            }
+                            if (I.getIdType().equals(Constantes.CHECK)) {
+                                for (CheckBox c : I.getCheckBoxes()) {
+                                    boolean check = REG.getBoolean("CHECK" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + I.getCheckBoxes().indexOf(c));
+                                    c.setChecked(check);
+                                }
+                            }
+                            if (I.getIdType().equals(Constantes.CHECK_PHOTO)) {
+                                for (CheckBox c : I.getCheckBoxes()) {
+                                    boolean check = REG.getBoolean("CHECK-PHOTO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + I.getCheckBoxes().indexOf(c));
+                                    c.setChecked(check);
+                                }
                             }
                         }
 
@@ -1051,7 +716,11 @@ public class ActividadCierreFormActivity extends Activity {
                 }
             }
 
-        } catch (ParserConfigurationException | SAXException | XPathExpressionException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | XPathExpressionException |
+                IOException e
+                )
+
+        {
             e.printStackTrace();
             AlertDialog.Builder b = new AlertDialog.Builder(this);
             b.setTitle("Error en XML");
@@ -1062,6 +731,7 @@ public class ActividadCierreFormActivity extends Activity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
+                    actividad.finish();
                 }
             });
             b.show();
@@ -1069,32 +739,27 @@ public class ActividadCierreFormActivity extends Activity {
         }
     }
 
+
     //TODO INICIO SAVEDATA
-    private void saveData() {
+    /*private void saveData() {
 
         for (SYSTEM S : SYSTEMS) {
             for (AREA A : S.getAreas())
                 for (ITEM I : A.getItems()) {
                     String preId = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem();
                     if (I.getIdType().equals("")) {
-                        Log.d("GUARDANDO", "ITEM NORMAL");
                         for (QUESTION Q : I.getQuestions()) {
                             String tagid = preId + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
-
                             if (Q.getPhoto().equals("OK")) {
                                 ArrayList<PHOTO> fotos = Q.getFotos();
                                 if (fotos != null) {
                                     for (int as = 0; as < fotos.size(); as++) {
                                         PHOTO f = fotos.get(as);
-                                        Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
                                         REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
                                         REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
                                         REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
                                         REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
                                         REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
-                                        //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
-
-
                                     }
                                 }
                             }
@@ -1105,16 +770,11 @@ public class ActividadCierreFormActivity extends Activity {
                                     RadioButton b = (RadioButton) Q.getView().findViewById(id);
                                     int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
                                     REG.addValue("RADIO" + tagid, pos);
-                                    Log.d("GUARDANDO", "Seleccionado-> " + pos);
-                                } else {
-                                    Log.d("GUARDANDO", "nada seleccionado");
                                 }
                             }
                             if (Q.getIdType().equals(Constantes.PHOTO)) {
                                 PHOTO p = Q.getFoto();
                                 if (p != null) {
-                                    Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
-
                                     REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
                                     REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
                                     REG.addValue("PHOTODATE" + tagid, p.getDateTime());
@@ -1127,7 +787,6 @@ public class ActividadCierreFormActivity extends Activity {
                             }
                             if (Q.getIdType().equals(Constantes.NUM)) {
                                 String text = ((TextView) Q.getView()).getText().toString();
-                                Log.d("GUARDANDO", text);
                                 if (text.length() > 0) {
                                     REG.addValue("NUM" + tagid, text);
                                 }
@@ -1152,6 +811,19 @@ public class ActividadCierreFormActivity extends Activity {
                             }
                         }
                     } else {
+                        if (I.getIdType().equals(Constantes.CHECK)) {
+                            for (int i = 0; i < I.getValues().size(); i++) {
+                                CheckBox c = I.getCheckBoxes().get(i);
+                                REG.addValue("CHECK" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
+                            }
+                        }
+                        if (I.getIdType().equals(Constantes.CHECK_PHOTO)) {
+                            for (int i = 0; i < I.getValues().size(); i++) {
+                                CheckBox c = I.getCheckBoxes().get(i);
+                                REG.addValue("CHECK-PHOTO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
+                            }
+                        }
+
                         if (I.getIdType().equals(Constantes.TABLE)) {
                             for (int i = 0; i < I.getValues().size(); i++) {
                                 CheckBox c = I.getCheckBoxes().get(i);
@@ -1238,16 +910,298 @@ public class ActividadCierreFormActivity extends Activity {
                             }
                         }
 
+
                         if (I.getIdType().equals(Constantes.RADIO)) {
                             ArrayList<VALUE> values = I.getValues();
                             RadioGroup radioGroup = (RadioGroup) I.getView();
-                            RadioButton btn = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-                            int position = radioGroup.indexOfChild(btn) + 1;
+                            if (radioGroup.getCheckedRadioButtonId() != -1) {
 
-                            REG.addValue("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), radioGroup.getCheckedRadioButtonId()); //GUARDAMOS LA SELECCION DE SECTORES
+
+                                RadioButton btn = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+
+                                int position = radioGroup.indexOfChild(btn);
+                                int n = position + 1;
+
+
+                                REG.addValue("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), position); //GUARDAMOS LA SELECCION DE SECTORES
+
+                                if (I.getSetArrayList() != null) {
+                                    for (int i = 0; i < n; i++) {
+
+                                        ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
+                                        VALUE valor = values.get(i);
+                                        for (SET SeT : list_i) {
+                                            for (QUESTION Q : SeT.getQuestions()) {
+                                                String tagid = preId + "-" + valor.getIdValue() + valor.getNameValue() + "-" + SeT.getIdSet() + SeT.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
+
+                                                if (Q.getPhoto().equals("OK")) {
+                                                    ArrayList<PHOTO> fotos = Q.getFotos();
+                                                    if (fotos != null) {
+                                                        for (int as = 0; as < fotos.size(); as++) {
+                                                            PHOTO f = fotos.get(as);
+                                                            Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
+                                                            REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
+                                                            REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
+                                                            REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
+                                                            REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
+                                                            REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
+                                                            //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
+
+
+                                                        }
+                                                    }
+                                                }
+
+                                                if (Q.getIdType().equals(Constantes.RADIO)) {
+                                                    int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
+                                                    if (id != -1) {
+                                                        RadioButton b = (RadioButton) Q.getView().findViewById(id);
+                                                        int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
+                                                        REG.addValue("RADIO" + tagid, pos);
+                                                        Log.d("GUARDANDO", "Seleccionado-> " + pos);
+                                                    } else {
+                                                        Log.d("GUARDANDO", "nada seleccionado");
+                                                    }
+                                                }
+                                                if (Q.getIdType().equals(Constantes.PHOTO)) {
+                                                    PHOTO p = Q.getFoto();
+                                                    if (p != null) {
+                                                        Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
+                                                        REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
+                                                        REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
+                                                        REG.addValue("PHOTODATE" + tagid, p.getDateTime());
+                                                        REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
+                                                        REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
+                                                        //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
+                                                    }
+
+                                                }
+                                                if (Q.getIdType().equals(Constantes.NUM)) {
+                                                    String text = ((TextView) Q.getView()).getText().toString();
+                                                    Log.d("GUARDANDO", text);
+                                                    if (text.length() > 0) {
+                                                        REG.addValue("NUM" + tagid, text);
+                                                    }
+                                                }
+                                                if (Q.getIdType().equals(Constantes.TEXT)) {
+                                                    String text = ((TextView) Q.getView()).getText().toString();
+                                                    Log.d("GUARDANDO", text);
+                                                    if (text.length() > 0) {
+                                                        REG.addValue("TEXT" + tagid, text);
+                                                    }
+                                                }
+                                                if (Q.getIdType().equals(Constantes.CHECK)) {
+                                                    ArrayList<CheckBox> ch = Q.getCheckBoxes();
+
+                                                    for (int j = 0; j < ch.size(); j++) {
+                                                        if (ch.get(j).isChecked()) {
+                                                            REG.addValue("CHECK" + tagid + j, true);
+                                                        } else {
+                                                            REG.addValue("CHECK" + tagid + j, false);
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+        }
+    }*/
+    private void saveData() {
+
+        for (SYSTEM S : SYSTEMS) {
+            for (AREA A : S.getAreas())
+                for (ITEM I : A.getItems()) {
+                    String preId = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem();
+
+                    if (I.getQuestions() != null) {
+                        for (QUESTION Q : I.getQuestions()) {
+                            String tagid = preId + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
+                            if (Q.getPhoto().equals("OK")) {
+                                ArrayList<PHOTO> fotos = Q.getFotos();
+                                if (fotos != null) {
+                                    for (int as = 0; as < fotos.size(); as++) {
+                                        PHOTO f = fotos.get(as);
+                                        REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
+                                        REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
+                                        REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
+                                        REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
+                                        REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
+                                    }
+                                }
+                            }
+
+                            if (Q.getIdType().equals(Constantes.RADIO)) {
+                                int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
+                                if (id != -1) {
+                                    RadioButton b = (RadioButton) Q.getView().findViewById(id);
+                                    int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
+                                    REG.addValue("RADIO" + tagid, pos);
+                                }
+                            }
+                            /*if (Q.getIdType().equals(Constantes.PHOTO)) {
+                                PHOTO p = Q.getFoto();
+                                if (p != null) {
+                                    REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
+                                    REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
+                                    REG.addValue("PHOTODATE" + tagid, p.getDateTime());
+                                    REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
+                                    REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
+                                    //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
+
+                                }
+
+                            }*/
+                            if (Q.getIdType().equals(Constantes.NUM)) {
+                                String text = ((TextView) Q.getView()).getText().toString();
+                                if (text.length() > 0) {
+                                    REG.addValue("NUM" + tagid, text);
+                                }
+                            }
+                            if (Q.getIdType().equals(Constantes.TEXT)) {
+                                String text = ((TextView) Q.getView()).getText().toString();
+                                Log.d("GUARDANDO", text);
+                                if (text.length() > 0) {
+                                    REG.addValue("TEXT" + tagid, text);
+                                }
+                            }
+                            if (Q.getIdType().equals(Constantes.CHECK)) {
+                                ArrayList<CheckBox> ch = Q.getCheckBoxes();
+                                for (int j = 0; j < ch.size(); j++) {
+                                    if (ch.get(j).isChecked()) {
+                                        REG.addValue("CHECK" + tagid + j, true);
+                                    } else {
+                                        REG.addValue("CHECK" + tagid + j, false);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (I.getIdType().equals(Constantes.CHECK)) {
+                        for (int i = 0; i < I.getValues().size(); i++) {
+                            CheckBox c = I.getCheckBoxes().get(i);
+                            REG.addValue("CHECK" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
+                        }
+                    }
+                    if (I.getIdType().equals(Constantes.CHECK_PHOTO)) {
+                        for (int i = 0; i < I.getValues().size(); i++) {
+                            CheckBox c = I.getCheckBoxes().get(i);
+                            REG.addValue("CHECK-PHOTO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
+                        }
+                    }
+
+                    if (I.getIdType().equals(Constantes.TABLE)) {
+                        for (int i = 0; i < I.getValues().size(); i++) {
+                            CheckBox c = I.getCheckBoxes().get(i);
+
+                            REG.addValue("TABLE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
+                            ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
+                            VALUE valor = I.getValues().get(i);
+                            for (SET SeT : list_i) {
+                                for (QUESTION Q : SeT.getQuestions()) {
+                                    String tagid = preId + "-" + valor.getIdValue() + valor.getNameValue() + "-" + SeT.getIdSet() + SeT.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
+
+                                    if (Q.getPhoto().equals("OK")) {
+                                        ArrayList<PHOTO> fotos = Q.getFotos();
+                                        if (fotos != null) {
+                                            for (int as = 0; as < fotos.size(); as++) {
+                                                PHOTO f = fotos.get(as);
+                                                Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
+                                                REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
+                                                REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
+                                                REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
+                                                REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
+                                                REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
+                                                //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
+
+
+                                            }
+                                        }
+                                    }
+
+                                    if (Q.getIdType().equals(Constantes.RADIO)) {
+                                        int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
+                                        if (id != -1) {
+                                            RadioButton b = (RadioButton) Q.getView().findViewById(id);
+                                            int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
+                                            REG.addValue("RADIO" + tagid, pos);
+                                            Log.d("GUARDANDO", "Seleccionado-> " + pos);
+                                        } else {
+                                            Log.d("GUARDANDO", "nada seleccionado");
+                                        }
+                                    }
+                                    if (Q.getIdType().equals(Constantes.PHOTO)) {
+                                        PHOTO p = Q.getFoto();
+                                        if (p != null) {
+                                            Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
+                                            REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
+                                            REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
+                                            REG.addValue("PHOTODATE" + tagid, p.getDateTime());
+                                            REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
+                                            REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
+                                            //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
+                                        }
+
+                                    }
+                                    if (Q.getIdType().equals(Constantes.NUM)) {
+                                        String text = ((TextView) Q.getView()).getText().toString();
+                                        Log.d("GUARDANDO", text);
+                                        if (text.length() > 0) {
+                                            REG.addValue("NUM" + tagid, text);
+                                        }
+                                    }
+                                    if (Q.getIdType().equals(Constantes.TEXT)) {
+                                        String text = ((TextView) Q.getView()).getText().toString();
+                                        Log.d("GUARDANDO", text);
+                                        if (text.length() > 0) {
+                                            REG.addValue("TEXT" + tagid, text);
+                                        }
+                                    }
+                                    if (Q.getIdType().equals(Constantes.CHECK)) {
+                                        ArrayList<CheckBox> ch = Q.getCheckBoxes();
+
+                                        for (int j = 0; j < ch.size(); j++) {
+                                            if (ch.get(j).isChecked()) {
+                                                REG.addValue("CHECK" + tagid + j, true);
+                                            } else {
+                                                REG.addValue("CHECK" + tagid + j, false);
+                                            }
+                                        }
+
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (I.getIdType().equals(Constantes.RADIO)) {
+                        ArrayList<VALUE> values = I.getValues();
+                        RadioGroup radioGroup = (RadioGroup) I.getView();
+                        if (radioGroup.getCheckedRadioButtonId() != -1) {
+
+
+                            RadioButton btn = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+
+                            int position = radioGroup.indexOfChild(btn);
+                            int n = position + 1;
+
+
+                            REG.addValue("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), position); //GUARDAMOS LA SELECCION DE SECTORES
 
                             if (I.getSetArrayList() != null) {
-                                for (int i = 0; i < position; i++) {
+                                for (int i = 0; i < n; i++) {
 
                                     ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
                                     VALUE valor = values.get(i);
@@ -1313,12 +1267,9 @@ public class ActividadCierreFormActivity extends Activity {
                                             }
                                             if (Q.getIdType().equals(Constantes.CHECK)) {
                                                 ArrayList<CheckBox> ch = Q.getCheckBoxes();
-
                                                 for (int j = 0; j < ch.size(); j++) {
                                                     if (ch.get(j).isChecked()) {
                                                         REG.addValue("CHECK" + tagid + j, true);
-                                                    } else {
-                                                        REG.addValue("CHECK" + tagid + j, false);
                                                     }
                                                 }
 
@@ -1330,6 +1281,7 @@ public class ActividadCierreFormActivity extends Activity {
                                 }
                             }
                         }
+
 
                     }
                 }
@@ -1344,7 +1296,7 @@ public class ActividadCierreFormActivity extends Activity {
             EnviarIden e = new EnviarIden();
             e.execute();
         }
-        if(TITLE.equals("3G")){
+        if (TITLE.equals("3G")) {
             Enviar3G e = new Enviar3G();
             e.execute();
 
@@ -1422,8 +1374,8 @@ public class ActividadCierreFormActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("CODE", "resultcode"+resultCode);
-        if(resultCode == -1) {
+        Log.d("CODE", "resultcode" + resultCode);
+        if (resultCode == -1) {
             if (requestCode == TAKE_PICTURE) {
             /*if (data != null) {
                 if (data.hasExtra("data")) {
@@ -1623,7 +1575,7 @@ public class ActividadCierreFormActivity extends Activity {
     }
 
 
-    public void subir_fotos(String mensaje){
+    public void subir_fotos(String mensaje) {
         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
         b.setMessage(mensaje);
         b.setCancelable(false);
@@ -1669,7 +1621,7 @@ public class ActividadCierreFormActivity extends Activity {
         if (p.size() > 0) {
             UploadImage up = new UploadImage(p, mensaje);
             up.execute(dummy.URL_UPLOAD_IMG_MAINTENANCE);
-        }else{
+        } else {
             b = new AlertDialog.Builder(actividad);
             b.setMessage(mensaje);
             b.setCancelable(false);

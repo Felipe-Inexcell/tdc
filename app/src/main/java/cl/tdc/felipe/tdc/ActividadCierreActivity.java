@@ -60,9 +60,16 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         TRESG = (Button) this.findViewById(R.id.TRESG);
         IDEN.setOnClickListener(this);
         TRESG.setOnClickListener(this);
-        boolean idenState = REG.getBoolean("IDEN" + idMain);
-        if (idenState)
+
+        boolean state = REG.getBoolean("IDEN" + idMain);
+        if (state)
             IDEN.setEnabled(false);
+
+        state = REG.getBoolean("3G"+idMain);
+        if(state){
+            TRESG.setEnabled(false);
+        }
+
 
 
     }
@@ -183,7 +190,9 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
                 int code;
                 if (type.equals("IDEN")) {
                     code = 0;
-                } else
+                }else if(type.equals("3G")) {
+                    code = 1;
+                }else
                     code = -1;
                 startActivityForResult(intent, code);
             } else {
@@ -208,6 +217,10 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
             if (requestCode == 0) {
                 IDEN.setEnabled(false);
                 REG.addValue("IDEN" + idMain, true);
+            }
+            if (requestCode == 1) {
+                TRESG.setEnabled(false);
+                REG.addValue("3G" + idMain, true);
             }
         }
     }

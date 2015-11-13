@@ -111,13 +111,10 @@ public class QUESTION {
     }
 
     public View generateView(Context ctx) {
-        Random r = new Random();
         if (idType.equals(Constantes.RADIO)) {
             view = new RadioGroup(ctx);
-            view.setId(r.nextInt(999999 - 10000) + 10000);
             for (VALUE v : values) {
                 RadioButton b = new RadioButton(ctx);
-                b.setId(r.nextInt(999999 - 10000) + 10000);
                 b.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 b.setText(v.getNameValue());
                 ((RadioGroup)view).addView(b);
@@ -130,13 +127,38 @@ public class QUESTION {
         }
         if (idType.equals(Constantes.CHECK)) {
             view = new LinearLayout(ctx);
+            ((LinearLayout) view).setOrientation(LinearLayout.VERTICAL);
+            checkBoxes = new ArrayList<>();
+            int count = 0;
+
+            LinearLayout tmp ;
+            tmp = new LinearLayout(ctx);
+            tmp.setOrientation(LinearLayout.HORIZONTAL);
+            for (VALUE v : values) {
+                CheckBox c = new CheckBox(ctx);
+                c.setText(v.getNameValue());
+                c.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                checkBoxes.add(c);
+                if(count == 0){
+                    tmp.addView(c);
+                    count++;
+                    if(checkBoxes.size() == values.size()){
+                        ((LinearLayout) view).addView(tmp);
+                    }
+                }else if(count == 1){
+                    tmp.addView(c);
+                    ((LinearLayout) view).addView(tmp);
+                    tmp = new LinearLayout(ctx);
+                    tmp.setOrientation(LinearLayout.HORIZONTAL);
+                    count = 0;
+                }
+            }
+            /*view = new LinearLayout(ctx);
             ((LinearLayout)view).setOrientation(LinearLayout.VERTICAL);
-            view.setId(r.nextInt(999999 - 10000) + 10000);
             checkBoxes = new ArrayList<>();
             int count = 0;
             for (VALUE v : values) {
                 CheckBox c = new CheckBox(ctx);
-                c.setId(r.nextInt(999999 - 10000) + 10000);
                 c.setText(v.getNameValue());
                 c.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 checkBoxes.add(c);
@@ -153,11 +175,10 @@ public class QUESTION {
                 }else{
                     ((LinearLayout) view).addView(c);
                 }
-            }
+            }*/
         }
         if(idType.equals(Constantes.TEXT) || idType.equals(Constantes.NUM)){
             view = new EditText(ctx);
-            view.setId(r.nextInt(999999 - 10000) + 10000);
             ((TextView)view).setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
             view.setBackgroundResource(R.drawable.fondo_edittext);
             view.setPadding(10,5,10,5);
@@ -180,12 +201,10 @@ public class QUESTION {
             Button show = new Button(ctx);
 
             take.setText("Tomar Foto");
-            take.setId(r.nextInt(999999 - 10000) + 10000);
             take.setLayoutParams(left);
             take.setBackgroundResource(R.drawable.custom_button_blue_left);
             take.setTextColor(Color.WHITE);
             show.setText("Ver");
-            show.setId(r.nextInt(999999 - 10000) + 10000);
             show.setLayoutParams(right);
             show.setBackgroundResource(R.drawable.custom_button_blue_right);
             show.setTextColor(Color.WHITE);
@@ -195,7 +214,6 @@ public class QUESTION {
             buttons.add(show);
 
             view = new LinearLayout(ctx);
-            view.setId(r.nextInt(999999 - 10000) + 10000);
             ((LinearLayout)view).setOrientation(LinearLayout.HORIZONTAL);
             ((LinearLayout)view).addView(take);
             ((LinearLayout)view).addView(show);

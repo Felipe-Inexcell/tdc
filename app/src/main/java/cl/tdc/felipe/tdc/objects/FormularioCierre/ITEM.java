@@ -40,6 +40,40 @@ public class ITEM {
     public ITEM() {
     }
 
+    public String getAnswer3G(){
+        String Answer = "";
+        if(idType.equals(Constantes.RADIO)){
+            RadioGroup rg = (RadioGroup) view;
+            int id = rg.getCheckedRadioButtonId();
+            if(id != -100) {
+                RadioButton rb = (RadioButton) rg.findViewById(id);
+                Answer = rb.getText().toString();
+            }else
+                Answer = "Sin selección";
+        }
+        if(idType.equals(Constantes.CHECK)){
+            int count= 0;
+            for(CheckBox c: checkBoxes){
+
+                if(c.isChecked()) {
+                    if(checkBoxes.indexOf(c)==0){
+                        Answer += c.getText().toString();
+                    }else{
+                        Answer += ";"+c.getText().toString();
+                    }
+                    count++;
+                }
+                if(count==0)
+                    Answer = "Sin Selección";
+            }
+        }
+        if(idType.equals(Constantes.TEXT) || idType.equals(Constantes.NUM)){
+            Answer = ((EditText)view).getText().toString();
+        }
+
+        return Answer;
+    }
+
 
     public View generateView(Context ctx) {
         if (idType.equals(Constantes.RADIO)) {
@@ -53,7 +87,7 @@ public class ITEM {
             ((RadioGroup) view).setGravity(Gravity.CENTER_HORIZONTAL);
             ((RadioGroup) view).setOrientation(LinearLayout.HORIZONTAL);
         }
-        if (idType.equals(Constantes.CHECK) || idType.equals(Constantes.TABLE)) {
+        if (idType.equals(Constantes.CHECK) || idType.equals(Constantes.TABLE) || idType.equals(Constantes.CHECK_PHOTO)) {
             view = new LinearLayout(ctx);
             ((LinearLayout) view).setOrientation(LinearLayout.VERTICAL);
             checkBoxes = new ArrayList<>();
@@ -85,9 +119,6 @@ public class ITEM {
             if(idType.equals(Constantes.NUM)){
                 ((TextView)view).setInputType(InputType.TYPE_CLASS_NUMBER);
             }
-        }
-        if(idType.equals(Constantes.TABLE)){
-
         }
 
 
