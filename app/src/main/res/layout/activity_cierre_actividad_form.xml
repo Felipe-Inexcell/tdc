@@ -156,7 +156,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/imageButton"
             android:layout_marginLeft="5dp"
-            android:onClick="enviar" />
+            android:onClick="enviar"
+            android:textColor="#FFFFFF" />
     </RelativeLayout>
 
     <ScrollView

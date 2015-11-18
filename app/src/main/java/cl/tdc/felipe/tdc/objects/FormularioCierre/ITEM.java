@@ -33,11 +33,16 @@ public class ITEM {
     ArrayList<ArrayList<SET>> setlistArrayList;
 
     TextView title;
-
+    Button button;
+    EditText editText;
     View view;
     ArrayList<CheckBox> checkBoxes;
 
     public ITEM() {
+    }
+
+    public void setTitle(TextView title) {
+        this.title = title;
     }
 
     public String getAnswer3G(){
@@ -76,6 +81,31 @@ public class ITEM {
 
 
     public View generateView(Context ctx) {
+        if (idType.equals(Constantes.ADD)) {
+            view = new TextView(ctx);
+            ((TextView)view).setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+
+            /*LinearLayout.LayoutParams buttonParam = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams numParam = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            buttonParam.weight = 3;
+            numParam.weight = 2;
+
+            view = new  LinearLayout(ctx);
+            button = new Button(ctx);
+            button.setText("Generar");
+            button.setLayoutParams(buttonParam);
+
+            editText = new EditText(ctx);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setLayoutParams(numParam);
+
+            ((LinearLayout)view).setOrientation(LinearLayout.HORIZONTAL);
+            ((LinearLayout) view).addView(editText);
+            ((LinearLayout) view).addView(button);*/
+
+
+        }
         if (idType.equals(Constantes.RADIO)) {
             view = new RadioGroup(ctx);
             for (VALUE v : values) {
@@ -97,8 +127,11 @@ public class ITEM {
             tmp = new LinearLayout(ctx);
             tmp.setOrientation(LinearLayout.HORIZONTAL);
             for (VALUE v : values) {
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                param.weight=1;
                 CheckBox c = new CheckBox(ctx);
                 c.setText(v.getNameValue());
+                c.setLayoutParams(param);
                 c.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 checkBoxes.add(c);
                 if(count == 0){
@@ -125,6 +158,7 @@ public class ITEM {
         return view;
     }
 
+
     public TextView getTitle(Context ctx) {
         title = new TextView(ctx);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -139,6 +173,22 @@ public class ITEM {
         if(this.setlistArrayList == null)
             setlistArrayList = new ArrayList<>();
         setlistArrayList.add(sets);
+    }
+
+    public Button getButton() {
+        return button;
+    }
+
+    public void setButton(Button button) {
+        this.button = button;
+    }
+
+    public EditText getEditText() {
+        return editText;
+    }
+
+    public void setEditText(EditText editText) {
+        this.editText = editText;
     }
 
     public ArrayList<CheckBox> getCheckBoxes() {

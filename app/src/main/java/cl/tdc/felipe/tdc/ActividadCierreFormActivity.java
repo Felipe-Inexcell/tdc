@@ -3,10 +3,11 @@ package cl.tdc.felipe.tdc;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -37,12 +39,9 @@ import org.xml.sax.SAXException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -51,15 +50,13 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.extras.Constantes;
-import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.AREA;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.ITEM;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.PHOTO;
@@ -67,7 +64,6 @@ import cl.tdc.felipe.tdc.objects.FormularioCierre.QUESTION;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.SET;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.SYSTEM;
 import cl.tdc.felipe.tdc.objects.FormularioCierre.VALUE;
-import cl.tdc.felipe.tdc.objects.Seguimiento.ImagenDia;
 import cl.tdc.felipe.tdc.preferences.FormCierreReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequestTDC;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
@@ -77,9 +73,12 @@ import cl.tdc.felipe.tdc.webservice.dummy;
 public class ActividadCierreFormActivity extends Activity {
     private static int TAKE_PICTURE = 1;
     private static int TAKE_PICTURES = 2;
+    boolean formSended = false;
+
+    private PositionTrackerTDC trackerTDC;
     FormCierreReg REG;
     private static String TITLE;
-    String QUERY, IDMAIN;
+    String QUERY, IDMAIN, NAIR;
     TextView PAGETITLE;
     public static Activity actividad;
     Context mContext;
@@ -92,6 +91,36 @@ public class ActividadCierreFormActivity extends Activity {
     Button buttonTMP;
     ArrayList<SYSTEM> SYSTEMS;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("AVERIA", "onResume");
+        Intent intent = new Intent(this, PositionTrackerTDC.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("AVERIA", "onPause");
+        unbindService(mConnection);
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            PositionTrackerTDC.MyBinder b = (PositionTrackerTDC.MyBinder) iBinder;
+            trackerTDC = b.getService();
+            Log.d("AVERIA", "SERVICE CONNECTED");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            trackerTDC = null;
+            Log.d("AVERIA", "SERVICE DISCONNECTED");
+        }
+    };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +130,10 @@ public class ActividadCierreFormActivity extends Activity {
         mContext = this;
         CONTENIDO = (LinearLayout) this.findViewById(R.id.contenido);
         TITLE = getIntent().getStringExtra("TITULO");
+
+        if (TITLE.equals("AIR")) {
+            NAIR = getIntent().getStringExtra("NAIR");
+        }
         QUERY = getIntent().getStringExtra("XML");
         IDMAIN = getIntent().getStringExtra("ID");
 
@@ -312,26 +345,23 @@ public class ActividadCierreFormActivity extends Activity {
     }
 
     private void init() {
-        /**
-         * Se dibuja el checklist
-         */
-
-
         try {
             SYSTEMS = XMLParserTDC.parseFormulario(QUERY);
 
-            for (SYSTEM S : SYSTEMS) {
+            for (final SYSTEM S : SYSTEMS) {
                 /**      CABECERA SYSTEMS  **/
                 CONTENIDO.addView(S.generateView(mContext));
 
-                for (AREA A : S.getAreas()) {
+                for (final AREA A : S.getAreas()) {
                     /**         CABECERA AREAS **/
                     CONTENIDO.addView(A.generateView(mContext));
-
+                    if (A.getItems() == null) {
+                        continue;
+                    }
                     for (final ITEM I : A.getItems()) {
                         /**         CABECERA ITEMS **/
                         CONTENIDO.addView(I.getTitle(mContext));
-                        LinearLayout itemLayout = create_itemLayout();
+                        final LinearLayout itemLayout = create_itemLayout();
 
                         View v = I.generateView(mContext);
                         if (v != null) {
@@ -340,7 +370,6 @@ public class ActividadCierreFormActivity extends Activity {
                         if (I.getQuestions() != null) {
 
                             for (final QUESTION Q : I.getQuestions()) {
-                                /**         CABECERA QUESTION  **/
                                 LinearLayout layquest = create_questionLayout();
                                 if (Q.getPhoto().equals("OK")) { //Si requiere fotos agregamos el boton foto
                                     ImageButton photo = create_photoButton(Q);
@@ -381,6 +410,23 @@ public class ActividadCierreFormActivity extends Activity {
                                         }
 
                                     }
+                                    if (Q.getIdType().equals(Constantes.DIV)) {
+                                        String textL = REG.getString("DIVL" + tag);
+                                        String textR = REG.getString("DIVR" + tag);
+
+                                        EditText left = Q.getEditTexts().get(0);
+                                        EditText right = Q.getEditTexts().get(1);
+
+                                        left.setText(textL);
+                                        right.setText(textR);
+
+
+                                    }
+                                    if (Q.getIdType().equals(Constantes.DATE)) {
+                                        EditText t = Q.getEditTexts().get(0);
+                                        String text = REG.getString("DATE" + tag);
+                                        t.setText(text);
+                                    }
 
                                     itemLayout.addView(layquest);
                                     if (!Q.getIdType().equals(Constantes.PHOTO))
@@ -396,7 +442,7 @@ public class ActividadCierreFormActivity extends Activity {
                             final ArrayList<View> repeatContentList = new ArrayList<>();
                             final ArrayList<Button> repeatButtontList = new ArrayList<>();
 
-                            LinearLayout repeatLayout = create_normalVerticalLayout();
+                            final LinearLayout repeatLayout = create_normalVerticalLayout();
 
                             if (I.getIdType().equals(Constantes.TABLE)) {
                                 //Preparamos la tabla o lo que sea
@@ -423,7 +469,7 @@ public class ActividadCierreFormActivity extends Activity {
                                                 final QUESTION qAux = copiar_question(Q);
                                                 LinearLayout questTitle = create_questionLayout();
 
-                                                if (Q.getPhoto().equals("OK")) {
+                                                if (qAux.getPhoto().equals("OK")) {
                                                     final ImageButton photo = create_photoButton(qAux);
                                                     questTitle.addView(photo);
                                                 }
@@ -433,26 +479,26 @@ public class ActividadCierreFormActivity extends Activity {
                                                 if (question != null) {
                                                     String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + value.getIdValue() + value.getNameValue() + "-" + setAux.getIdSet() + setAux.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
 
-                                                    if (Q.getPhoto().equals("OK")) {
+                                                    if (qAux.getPhoto().equals("OK")) {
                                                         cargar_fotos(qAux, tag);
                                                     }
 
-                                                    if (Q.getIdType().equals(Constantes.RADIO)) {
+                                                    if (qAux.getIdType().equals(Constantes.RADIO)) {
                                                         int pos = REG.getInt("RADIO" + tag);
                                                         if (pos != -100) {
                                                             ((RadioButton) ((RadioGroup) qAux.getView()).getChildAt(pos)).setChecked(true);
                                                         }
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.NUM)) {
+                                                    if (qAux.getIdType().equals(Constantes.NUM)) {
                                                         String text = REG.getString("NUM" + tag);
                                                         ((TextView) qAux.getView()).setText(text);
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.TEXT)) {
+                                                    if (qAux.getIdType().equals(Constantes.TEXT)) {
                                                         String text = REG.getString("TEXT" + tag);
                                                         ((TextView) qAux.getView()).setText(text);
 
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.CHECK)) {
+                                                    if (qAux.getIdType().equals(Constantes.CHECK)) {
                                                         ArrayList<CheckBox> ch = qAux.getCheckBoxes();
 
                                                         for (int j = 0; j < ch.size(); j++) {
@@ -461,10 +507,27 @@ public class ActividadCierreFormActivity extends Activity {
                                                         }
 
                                                     }
+                                                    if (qAux.getIdType().equals(Constantes.DIV)) {
+                                                        String textL = REG.getString("DIVL" + tag);
+                                                        String textR = REG.getString("DIVR" + tag);
+
+                                                        EditText left = qAux.getEditTexts().get(0);
+                                                        EditText right = qAux.getEditTexts().get(1);
+
+                                                        left.setText(textL);
+                                                        right.setText(textR);
+
+
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.DATE)) {
+                                                        EditText t = qAux.getEditTexts().get(0);
+                                                        String text = REG.getString("DATE" + tag);
+                                                        t.setText(text);
+                                                    }
 
 
                                                     setLayout.addView(questTitle);
-                                                    if (!Q.getIdType().equals(Constantes.PHOTO))
+                                                    if (!qAux.getIdType().equals(Constantes.PHOTO))
                                                         setLayout.addView(question);
                                                 }
                                                 listadoQ.add(qAux);
@@ -553,7 +616,7 @@ public class ActividadCierreFormActivity extends Activity {
                                                 QUESTION qAux = copiar_question(Q);
                                                 LinearLayout questTitle = create_questionLayout();
 
-                                                if (Q.getPhoto().equals("OK")) {
+                                                if (qAux.getPhoto().equals("OK")) {
                                                     final ImageButton photo = create_photoButton(qAux);
                                                     questTitle.addView(photo);
                                                 }
@@ -565,54 +628,49 @@ public class ActividadCierreFormActivity extends Activity {
                                                 if (question != null) {
                                                     String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + value.getIdValue() + value.getNameValue() + "-" + setAux.getIdSet() + setAux.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
 
-                                                    if (Q.getPhoto().equals("OK")) {
+                                                    if (qAux.getPhoto().equals("OK")) {
                                                         cargar_fotos(qAux, tag);
-                                                        /*int as = 0;
-                                                        ArrayList<PHOTO> fotos = new ArrayList<>();
-
-                                                        //TODO ver si la imagen existe
-                                                        String fotoname = REG.getString("PHOTONAME" + tag + as);
-                                                        File joto = new File(fotoname);
-                                                        while (joto.exists()) {
-                                                            PHOTO f = new PHOTO();
-                                                            f.setNamePhoto(REG.getString("PHOTONAME" + tag + as));
-                                                            f.setTitlePhoto(REG.getString("PHOTOTITLE" + tag + as));
-                                                            f.setDateTime(REG.getString("PHOTODATE" + tag + as));
-                                                            f.setCoordX(REG.getString("PHOTOCOORDX" + tag + as));
-                                                            f.setCoordY(REG.getString("PHOTOCOORDY" + tag + as));
-                                                            fotos.add(f);
-                                                            as++;
-
-                                                            fotoname = REG.getString("PHOTONAME" + tag + as);
-                                                            joto = new File(fotoname);
-
-                                                        }
-
-                                                        if (fotos.size() > 0) Q.setFotos(fotos);*/
                                                     }
 
-                                                    if (Q.getIdType().equals(Constantes.RADIO)) {
+                                                    if (qAux.getIdType().equals(Constantes.RADIO)) {
                                                         int pos = REG.getInt("RADIO" + tag);
                                                         if (pos != -100) {
                                                             ((RadioButton) ((RadioGroup) qAux.getView()).getChildAt(pos)).setChecked(true);
                                                         }
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.NUM)) {
+                                                    if (qAux.getIdType().equals(Constantes.NUM)) {
                                                         String text = REG.getString("NUM" + tag);
                                                         ((TextView) qAux.getView()).setText(text);
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.TEXT)) {
+                                                    if (qAux.getIdType().equals(Constantes.TEXT)) {
                                                         String text = REG.getString("TEXT" + tag);
                                                         ((TextView) qAux.getView()).setText(text);
 
                                                     }
-                                                    if (Q.getIdType().equals(Constantes.CHECK)) {
+                                                    if (qAux.getIdType().equals(Constantes.CHECK)) {
                                                         ArrayList<CheckBox> ch = qAux.getCheckBoxes();
                                                         for (int j = 0; j < ch.size(); j++) {
                                                             Boolean check = REG.getBoolean("CHECK" + tag + j);
                                                             ch.get(j).setChecked(check);
                                                         }
 
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.DIV)) {
+                                                        String textL = REG.getString("DIVL" + tag);
+                                                        String textR = REG.getString("DIVR" + tag);
+
+                                                        EditText left = qAux.getEditTexts().get(0);
+                                                        EditText right = qAux.getEditTexts().get(1);
+
+                                                        left.setText(textL);
+                                                        right.setText(textR);
+
+
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.DATE)) {
+                                                        EditText t = qAux.getEditTexts().get(0);
+                                                        String text = REG.getString("DATE" + tag);
+                                                        t.setText(text);
                                                     }
 
                                                     setLayout.addView(questTitle);
@@ -689,6 +747,138 @@ public class ActividadCierreFormActivity extends Activity {
                             }
 
 
+                            if (I.getIdType().equals(Constantes.ADD)) {
+                                ((TextView)I.getView()).setText("Aires Acondicionados: "+NAIR);
+
+                                int n = Integer.parseInt(NAIR);
+                                for (int x = 0; x < n; x++) {
+                                    Button boton = crear_botonRepeat();
+                                    boton.setVisibility(View.VISIBLE);
+                                    boton.setText("Aire Acondicionado " + (x + 1));
+
+                                    final LinearLayout contentSetLayout = create_normalVerticalLayout();
+
+                                    ArrayList<SET> listaAuxSet = new ArrayList<>();
+                                    for (SET set : I.getSetArrayList()) {
+                                        SET setAux = new SET();
+                                        setAux.setIdSet(set.getIdSet());
+                                        setAux.setNameSet(set.getNameSet());
+                                        setAux.setQuestions(set.getQuestions());
+
+                                        LinearLayout setLayout = create_setLayout();
+
+                                        if (setAux.getQuestions() != null) {
+                                            ArrayList<QUESTION> listadoQ = new ArrayList<>();
+
+                                            for (final QUESTION Q : setAux.getQuestions()) {
+                                                QUESTION qAux = copiar_question(Q);
+                                                LinearLayout questTitle = create_questionLayout();
+
+                                                if (qAux.getPhoto().equals("OK")) {
+                                                    final ImageButton photo = create_photoButton(qAux);
+                                                    questTitle.addView(photo);
+                                                }
+
+                                                questTitle.addView(qAux.getTitle(mContext));
+                                                questTitle.setGravity(Gravity.CENTER_VERTICAL);
+
+                                                View question = qAux.generateView(mContext);
+                                                if (question != null) {
+                                                    String tag = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + "-" + "AIR" + x + "-" + setAux.getIdSet() + setAux.getNameSet() + "-" + qAux.getIdQuestion() + "-" + qAux.getNameQuestion();
+
+                                                    if (qAux.getPhoto().equals("OK")) {
+                                                        cargar_fotos(qAux, tag);
+                                                    }
+
+                                                    if (qAux.getIdType().equals(Constantes.RADIO)) {
+                                                        int pos = REG.getInt("RADIO" + tag);
+                                                        if (pos != -100) {
+                                                            ((RadioButton) ((RadioGroup) qAux.getView()).getChildAt(pos)).setChecked(true);
+                                                        }
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.NUM)) {
+                                                        String text = REG.getString("NUM" + tag);
+                                                        ((TextView) qAux.getView()).setText(text);
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.TEXT)) {
+                                                        String text = REG.getString("TEXT" + tag);
+                                                        ((TextView) qAux.getView()).setText(text);
+
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.CHECK)) {
+                                                        ArrayList<CheckBox> ch = qAux.getCheckBoxes();
+                                                        for (int j = 0; j < ch.size(); j++) {
+                                                            Boolean check = REG.getBoolean("CHECK" + tag + j);
+                                                            ch.get(j).setChecked(check);
+                                                        }
+
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.DIV)) {
+                                                        String textL = REG.getString("DIVL" + tag);
+                                                        String textR = REG.getString("DIVR" + tag);
+
+                                                        EditText left = qAux.getEditTexts().get(0);
+                                                        EditText right = qAux.getEditTexts().get(1);
+
+                                                        left.setText(textL);
+                                                        right.setText(textR);
+
+
+                                                    }
+                                                    if (qAux.getIdType().equals(Constantes.DATE)) {
+                                                        EditText t = qAux.getEditTexts().get(0);
+                                                        String text = REG.getString("DATE" + tag);
+                                                        t.setText(text);
+                                                    }
+
+                                                    setLayout.addView(questTitle);
+                                                    if (!qAux.getIdType().equals(Constantes.PHOTO))
+                                                        setLayout.addView(question);
+                                                }
+                                                listadoQ.add(qAux);
+
+
+                                            }
+                                            setAux.setQuestions(listadoQ);
+                                            contentSetLayout.addView(setAux.getTitle(mContext));
+                                            contentSetLayout.addView(setLayout);
+                                        }
+
+
+                                        listaAuxSet.add(setAux);
+                                    }
+                                    I.addListSet(listaAuxSet);
+
+
+                                    boton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (contentSetLayout.getVisibility() == View.GONE) {
+                                                contentSetLayout.setVisibility(View.VISIBLE);
+                                                for (View layu : repeatContentList) {
+                                                    if (!layu.equals(contentSetLayout)) {
+                                                        layu.setVisibility(View.GONE);
+                                                    }
+                                                }
+                                            } else {
+                                                contentSetLayout.setVisibility(View.GONE);
+                                            }
+                                        }
+                                    });
+
+                                    contentSetLayout.setVisibility(View.GONE);
+                                    repeatContentList.add(contentSetLayout);//para que al mostrar uno se oculten los demas
+                                    repeatButtontList.add(boton);
+
+                                    repeatLayout.addView(boton);
+                                    repeatLayout.addView(contentSetLayout);
+
+                                }
+
+                                itemLayout.addView(repeatLayout);
+                            }
+
+
                         } else {
                             if (I.getIdType().equals(Constantes.RADIO)) {
                                 int pos = REG.getInt("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
@@ -739,286 +929,10 @@ public class ActividadCierreFormActivity extends Activity {
         }
     }
 
-
-    //TODO INICIO SAVEDATA
-    /*private void saveData() {
-
-        for (SYSTEM S : SYSTEMS) {
-            for (AREA A : S.getAreas())
-                for (ITEM I : A.getItems()) {
-                    String preId = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem();
-                    if (I.getIdType().equals("")) {
-                        for (QUESTION Q : I.getQuestions()) {
-                            String tagid = preId + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
-                            if (Q.getPhoto().equals("OK")) {
-                                ArrayList<PHOTO> fotos = Q.getFotos();
-                                if (fotos != null) {
-                                    for (int as = 0; as < fotos.size(); as++) {
-                                        PHOTO f = fotos.get(as);
-                                        REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
-                                        REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
-                                        REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
-                                        REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
-                                        REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
-                                    }
-                                }
-                            }
-
-                            if (Q.getIdType().equals(Constantes.RADIO)) {
-                                int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
-                                if (id != -1) {
-                                    RadioButton b = (RadioButton) Q.getView().findViewById(id);
-                                    int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
-                                    REG.addValue("RADIO" + tagid, pos);
-                                }
-                            }
-                            if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                PHOTO p = Q.getFoto();
-                                if (p != null) {
-                                    REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
-                                    REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
-                                    REG.addValue("PHOTODATE" + tagid, p.getDateTime());
-                                    REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
-                                    REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
-                                    //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
-
-                                }
-
-                            }
-                            if (Q.getIdType().equals(Constantes.NUM)) {
-                                String text = ((TextView) Q.getView()).getText().toString();
-                                if (text.length() > 0) {
-                                    REG.addValue("NUM" + tagid, text);
-                                }
-                            }
-                            if (Q.getIdType().equals(Constantes.TEXT)) {
-                                String text = ((TextView) Q.getView()).getText().toString();
-                                Log.d("GUARDANDO", text);
-                                if (text.length() > 0) {
-                                    REG.addValue("TEXT" + tagid, text);
-                                }
-                            }
-                            if (Q.getIdType().equals(Constantes.CHECK)) {
-                                ArrayList<CheckBox> ch = Q.getCheckBoxes();
-                                for (int j = 0; j < ch.size(); j++) {
-                                    if (ch.get(j).isChecked()) {
-                                        REG.addValue("CHECK" + tagid + j, true);
-                                    } else {
-                                        REG.addValue("CHECK" + tagid + j, false);
-                                    }
-                                }
-
-                            }
-                        }
-                    } else {
-                        if (I.getIdType().equals(Constantes.CHECK)) {
-                            for (int i = 0; i < I.getValues().size(); i++) {
-                                CheckBox c = I.getCheckBoxes().get(i);
-                                REG.addValue("CHECK" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
-                            }
-                        }
-                        if (I.getIdType().equals(Constantes.CHECK_PHOTO)) {
-                            for (int i = 0; i < I.getValues().size(); i++) {
-                                CheckBox c = I.getCheckBoxes().get(i);
-                                REG.addValue("CHECK-PHOTO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
-                            }
-                        }
-
-                        if (I.getIdType().equals(Constantes.TABLE)) {
-                            for (int i = 0; i < I.getValues().size(); i++) {
-                                CheckBox c = I.getCheckBoxes().get(i);
-
-                                REG.addValue("TABLE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
-                                ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
-                                VALUE valor = I.getValues().get(i);
-                                for (SET SeT : list_i) {
-                                    for (QUESTION Q : SeT.getQuestions()) {
-                                        String tagid = preId + "-" + valor.getIdValue() + valor.getNameValue() + "-" + SeT.getIdSet() + SeT.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
-
-                                        if (Q.getPhoto().equals("OK")) {
-                                            ArrayList<PHOTO> fotos = Q.getFotos();
-                                            if (fotos != null) {
-                                                for (int as = 0; as < fotos.size(); as++) {
-                                                    PHOTO f = fotos.get(as);
-                                                    Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
-                                                    REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
-                                                    REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
-                                                    REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
-                                                    REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
-                                                    REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
-                                                    //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
-
-
-                                                }
-                                            }
-                                        }
-
-                                        if (Q.getIdType().equals(Constantes.RADIO)) {
-                                            int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
-                                            if (id != -1) {
-                                                RadioButton b = (RadioButton) Q.getView().findViewById(id);
-                                                int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
-                                                REG.addValue("RADIO" + tagid, pos);
-                                                Log.d("GUARDANDO", "Seleccionado-> " + pos);
-                                            } else {
-                                                Log.d("GUARDANDO", "nada seleccionado");
-                                            }
-                                        }
-                                        if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                            PHOTO p = Q.getFoto();
-                                            if (p != null) {
-                                                Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
-                                                REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
-                                                REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
-                                                REG.addValue("PHOTODATE" + tagid, p.getDateTime());
-                                                REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
-                                                REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
-                                                //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
-                                            }
-
-                                        }
-                                        if (Q.getIdType().equals(Constantes.NUM)) {
-                                            String text = ((TextView) Q.getView()).getText().toString();
-                                            Log.d("GUARDANDO", text);
-                                            if (text.length() > 0) {
-                                                REG.addValue("NUM" + tagid, text);
-                                            }
-                                        }
-                                        if (Q.getIdType().equals(Constantes.TEXT)) {
-                                            String text = ((TextView) Q.getView()).getText().toString();
-                                            Log.d("GUARDANDO", text);
-                                            if (text.length() > 0) {
-                                                REG.addValue("TEXT" + tagid, text);
-                                            }
-                                        }
-                                        if (Q.getIdType().equals(Constantes.CHECK)) {
-                                            ArrayList<CheckBox> ch = Q.getCheckBoxes();
-
-                                            for (int j = 0; j < ch.size(); j++) {
-                                                if (ch.get(j).isChecked()) {
-                                                    REG.addValue("CHECK" + tagid + j, true);
-                                                } else {
-                                                    REG.addValue("CHECK" + tagid + j, false);
-                                                }
-                                            }
-
-                                        }
-                                    }
-
-
-                                }
-                            }
-                        }
-
-
-                        if (I.getIdType().equals(Constantes.RADIO)) {
-                            ArrayList<VALUE> values = I.getValues();
-                            RadioGroup radioGroup = (RadioGroup) I.getView();
-                            if (radioGroup.getCheckedRadioButtonId() != -1) {
-
-
-                                RadioButton btn = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-
-                                int position = radioGroup.indexOfChild(btn);
-                                int n = position + 1;
-
-
-                                REG.addValue("RADIO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), position); //GUARDAMOS LA SELECCION DE SECTORES
-
-                                if (I.getSetArrayList() != null) {
-                                    for (int i = 0; i < n; i++) {
-
-                                        ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
-                                        VALUE valor = values.get(i);
-                                        for (SET SeT : list_i) {
-                                            for (QUESTION Q : SeT.getQuestions()) {
-                                                String tagid = preId + "-" + valor.getIdValue() + valor.getNameValue() + "-" + SeT.getIdSet() + SeT.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
-
-                                                if (Q.getPhoto().equals("OK")) {
-                                                    ArrayList<PHOTO> fotos = Q.getFotos();
-                                                    if (fotos != null) {
-                                                        for (int as = 0; as < fotos.size(); as++) {
-                                                            PHOTO f = fotos.get(as);
-                                                            Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
-                                                            REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
-                                                            REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
-                                                            REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
-                                                            REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
-                                                            REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
-                                                            //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
-
-
-                                                        }
-                                                    }
-                                                }
-
-                                                if (Q.getIdType().equals(Constantes.RADIO)) {
-                                                    int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
-                                                    if (id != -1) {
-                                                        RadioButton b = (RadioButton) Q.getView().findViewById(id);
-                                                        int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
-                                                        REG.addValue("RADIO" + tagid, pos);
-                                                        Log.d("GUARDANDO", "Seleccionado-> " + pos);
-                                                    } else {
-                                                        Log.d("GUARDANDO", "nada seleccionado");
-                                                    }
-                                                }
-                                                if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                                    PHOTO p = Q.getFoto();
-                                                    if (p != null) {
-                                                        Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
-                                                        REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
-                                                        REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
-                                                        REG.addValue("PHOTODATE" + tagid, p.getDateTime());
-                                                        REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
-                                                        REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
-                                                        //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
-                                                    }
-
-                                                }
-                                                if (Q.getIdType().equals(Constantes.NUM)) {
-                                                    String text = ((TextView) Q.getView()).getText().toString();
-                                                    Log.d("GUARDANDO", text);
-                                                    if (text.length() > 0) {
-                                                        REG.addValue("NUM" + tagid, text);
-                                                    }
-                                                }
-                                                if (Q.getIdType().equals(Constantes.TEXT)) {
-                                                    String text = ((TextView) Q.getView()).getText().toString();
-                                                    Log.d("GUARDANDO", text);
-                                                    if (text.length() > 0) {
-                                                        REG.addValue("TEXT" + tagid, text);
-                                                    }
-                                                }
-                                                if (Q.getIdType().equals(Constantes.CHECK)) {
-                                                    ArrayList<CheckBox> ch = Q.getCheckBoxes();
-
-                                                    for (int j = 0; j < ch.size(); j++) {
-                                                        if (ch.get(j).isChecked()) {
-                                                            REG.addValue("CHECK" + tagid + j, true);
-                                                        } else {
-                                                            REG.addValue("CHECK" + tagid + j, false);
-                                                        }
-                                                    }
-
-                                                }
-                                            }
-
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-        }
-    }*/
     private void saveData() {
-
         for (SYSTEM S : SYSTEMS) {
-            for (AREA A : S.getAreas())
+            for (AREA A : S.getAreas()) {
+                if (A.getItems() == null) continue;
                 for (ITEM I : A.getItems()) {
                     String preId = S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem();
 
@@ -1047,19 +961,6 @@ public class ActividadCierreFormActivity extends Activity {
                                     REG.addValue("RADIO" + tagid, pos);
                                 }
                             }
-                            /*if (Q.getIdType().equals(Constantes.PHOTO)) {
-                                PHOTO p = Q.getFoto();
-                                if (p != null) {
-                                    REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
-                                    REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
-                                    REG.addValue("PHOTODATE" + tagid, p.getDateTime());
-                                    REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
-                                    REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
-                                    //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
-
-                                }
-
-                            }*/
                             if (Q.getIdType().equals(Constantes.NUM)) {
                                 String text = ((TextView) Q.getView()).getText().toString();
                                 if (text.length() > 0) {
@@ -1071,6 +972,28 @@ public class ActividadCierreFormActivity extends Activity {
                                 Log.d("GUARDANDO", text);
                                 if (text.length() > 0) {
                                     REG.addValue("TEXT" + tagid, text);
+                                }
+                            }
+                            if (Q.getIdType().equals(Constantes.DIV)) {
+                                EditText left = Q.getEditTexts().get(0);
+                                EditText right = Q.getEditTexts().get(1);
+                                String textL = left.getText().toString();
+                                String textR = right.getText().toString();
+                                Log.d("GUARDANDO", textL);
+                                Log.d("GUARDANDO", textR);
+                                if (textL.length() > 0) {
+                                    REG.addValue("DIVL" + tagid, textL);
+                                }
+                                if (textR.length() > 0) {
+                                    REG.addValue("DIVR" + tagid, textR);
+                                }
+                            }
+                            if (Q.getIdType().equals(Constantes.DATE)) {
+                                EditText t = Q.getEditTexts().get(0);
+                                String text = t.getText().toString();
+                                Log.d("GUARDANDO", text);
+                                if (text.length() > 0) {
+                                    REG.addValue("DATE" + tagid, text);
                                 }
                             }
                             if (Q.getIdType().equals(Constantes.CHECK)) {
@@ -1167,6 +1090,28 @@ public class ActividadCierreFormActivity extends Activity {
                                             REG.addValue("TEXT" + tagid, text);
                                         }
                                     }
+                                    if (Q.getIdType().equals(Constantes.DIV)) {
+                                        EditText left = Q.getEditTexts().get(0);
+                                        EditText right = Q.getEditTexts().get(1);
+                                        String textL = left.getText().toString();
+                                        String textR = right.getText().toString();
+                                        Log.d("GUARDANDO", textL);
+                                        Log.d("GUARDANDO", textR);
+                                        if (textL.length() > 0) {
+                                            REG.addValue("DIVL" + tagid, textL);
+                                        }
+                                        if (textR.length() > 0) {
+                                            REG.addValue("DIVR" + tagid, textR);
+                                        }
+                                    }
+                                    if (Q.getIdType().equals(Constantes.DATE)) {
+                                        EditText t = Q.getEditTexts().get(0);
+                                        String text = t.getText().toString();
+                                        Log.d("GUARDANDO", text);
+                                        if (text.length() > 0) {
+                                            REG.addValue("DATE" + tagid, text);
+                                        }
+                                    }
                                     if (Q.getIdType().equals(Constantes.CHECK)) {
                                         ArrayList<CheckBox> ch = Q.getCheckBoxes();
 
@@ -1185,6 +1130,108 @@ public class ActividadCierreFormActivity extends Activity {
                             }
                         }
                     }
+
+                    if (I.getIdType().equals(Constantes.ADD)) {
+                        if (I.getSetArrayList() != null) {
+                            for (int i = 0; i < Integer.parseInt(NAIR); i++) {
+
+                                ArrayList<SET> list_i = I.getSetlistArrayList().get(i);
+                                for (SET SeT : list_i) {
+                                    for (QUESTION Q : SeT.getQuestions()) {
+                                        String tagid = preId + "-" + "AIR" + i + "-" + SeT.getIdSet() + SeT.getNameSet() + "-" + Q.getIdQuestion() + "-" + Q.getNameQuestion();
+
+                                        if (Q.getPhoto().equals("OK")) {
+                                            ArrayList<PHOTO> fotos = Q.getFotos();
+                                            if (fotos != null) {
+                                                for (int as = 0; as < fotos.size(); as++) {
+                                                    PHOTO f = fotos.get(as);
+                                                    Log.d("GUARDANDO", "foto: " + f.getTitlePhoto());
+                                                    REG.addValue("PHOTONAME" + tagid + as, f.getNamePhoto());
+                                                    REG.addValue("PHOTOTITLE" + tagid + as, f.getTitlePhoto());
+                                                    REG.addValue("PHOTODATE" + tagid + as, f.getDateTime());
+                                                    REG.addValue("PHOTOCOORDX" + tagid + as, f.getCoordX());
+                                                    REG.addValue("PHOTOCOORDY" + tagid + as, f.getCoordY());
+                                                    //REG.addValue("PHOTOBMP" + tagid + as, Funciones.encodeTobase64(f.getBitmap()));
+
+
+                                                }
+                                            }
+                                        }
+
+                                        if (Q.getIdType().equals(Constantes.RADIO)) {
+                                            int id = ((RadioGroup) Q.getView()).getCheckedRadioButtonId();
+                                            if (id != -1) {
+                                                RadioButton b = (RadioButton) Q.getView().findViewById(id);
+                                                int pos = ((RadioGroup) Q.getView()).indexOfChild(b);
+                                                REG.addValue("RADIO" + tagid, pos);
+                                                Log.d("GUARDANDO", "Seleccionado-> " + pos);
+                                            } else {
+                                                Log.d("GUARDANDO", "nada seleccionado");
+                                            }
+                                        }
+                                        if (Q.getIdType().equals(Constantes.PHOTO)) {
+                                            PHOTO p = Q.getFoto();
+                                            if (p != null) {
+                                                Log.d("GUARDANDO", "foto: " + p.getTitlePhoto());
+                                                REG.addValue("PHOTONAME" + tagid, p.getNamePhoto());
+                                                REG.addValue("PHOTOTITLE" + tagid, p.getTitlePhoto());
+                                                REG.addValue("PHOTODATE" + tagid, p.getDateTime());
+                                                REG.addValue("PHOTOCOORDX" + tagid, p.getCoordX());
+                                                REG.addValue("PHOTOCOORDY" + tagid, p.getCoordY());
+                                                //REG.addValue("PHOTOBMP" + tagid, Funciones.encodeTobase64(p.getBitmap()));
+                                            }
+
+                                        }
+                                        if (Q.getIdType().equals(Constantes.NUM)) {
+                                            String text = ((TextView) Q.getView()).getText().toString();
+                                            Log.d("GUARDANDO", text);
+                                            if (text.length() > 0) {
+                                                REG.addValue("NUM" + tagid, text);
+                                            }
+                                        }
+                                        if (Q.getIdType().equals(Constantes.TEXT)) {
+                                            String text = ((TextView) Q.getView()).getText().toString();
+                                            Log.d("GUARDANDO", text);
+                                            if (text.length() > 0) {
+                                                REG.addValue("TEXT" + tagid, text);
+                                            }
+                                        }
+                                        if (Q.getIdType().equals(Constantes.DIV)) {
+                                            EditText left = Q.getEditTexts().get(0);
+                                            EditText right = Q.getEditTexts().get(1);
+                                            String textL = left.getText().toString();
+                                            String textR = right.getText().toString();
+                                            Log.d("GUARDANDO", textL);
+                                            Log.d("GUARDANDO", textR);
+                                            if (textL.length() > 0) {
+                                                REG.addValue("DIVL" + tagid, textL);
+                                            }
+                                            if (textR.length() > 0) {
+                                                REG.addValue("DIVR" + tagid, textR);
+                                            }
+                                        }
+                                        if (Q.getIdType().equals(Constantes.DATE)) {
+                                            EditText t = Q.getEditTexts().get(0);
+                                            String text = t.getText().toString();
+                                            Log.d("GUARDANDO", text);
+                                            if (text.length() > 0) {
+                                                REG.addValue("DATE" + tagid, text);
+                                            }
+                                        }
+                                        if (Q.getIdType().equals(Constantes.CHECK)) {
+                                            ArrayList<CheckBox> ch = Q.getCheckBoxes();
+                                            for (int j = 0; j < ch.size(); j++) {
+                                                if (ch.get(j).isChecked()) {
+                                                    REG.addValue("CHECK" + tagid + j, true);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
 
                     if (I.getIdType().equals(Constantes.RADIO)) {
                         ArrayList<VALUE> values = I.getValues();
@@ -1265,6 +1312,28 @@ public class ActividadCierreFormActivity extends Activity {
                                                     REG.addValue("TEXT" + tagid, text);
                                                 }
                                             }
+                                            if (Q.getIdType().equals(Constantes.DIV)) {
+                                                EditText left = Q.getEditTexts().get(0);
+                                                EditText right = Q.getEditTexts().get(1);
+                                                String textL = left.getText().toString();
+                                                String textR = right.getText().toString();
+                                                Log.d("GUARDANDO", textL);
+                                                Log.d("GUARDANDO", textR);
+                                                if (textL.length() > 0) {
+                                                    REG.addValue("DIVL" + tagid, textL);
+                                                }
+                                                if (textR.length() > 0) {
+                                                    REG.addValue("DIVR" + tagid, textR);
+                                                }
+                                            }
+                                            if (Q.getIdType().equals(Constantes.DATE)) {
+                                                EditText t = Q.getEditTexts().get(0);
+                                                String text = t.getText().toString();
+                                                Log.d("GUARDANDO", text);
+                                                if (text.length() > 0) {
+                                                    REG.addValue("DATE" + tagid, text);
+                                                }
+                                            }
                                             if (Q.getIdType().equals(Constantes.CHECK)) {
                                                 ArrayList<CheckBox> ch = Q.getCheckBoxes();
                                                 for (int j = 0; j < ch.size(); j++) {
@@ -1272,19 +1341,15 @@ public class ActividadCierreFormActivity extends Activity {
                                                         REG.addValue("CHECK" + tagid + j, true);
                                                     }
                                                 }
-
                                             }
                                         }
-
-
                                     }
                                 }
                             }
                         }
-
-
                     }
                 }
+            }
         }
     }
     //TODO FIN SAVEDATA
@@ -1299,6 +1364,12 @@ public class ActividadCierreFormActivity extends Activity {
         if (TITLE.equals("3G")) {
             Enviar3G e = new Enviar3G();
             e.execute();
+
+        }
+        if (TITLE.equals("AC")) {
+
+            //EnviarRAN e = new EnviarRAN();
+            //e.execute();
 
         }
 
@@ -1350,17 +1421,6 @@ public class ActividadCierreFormActivity extends Activity {
 
     }
 
-    private void tomarFoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        int code = TAKE_PICTURE;
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        photoTMP.setDateTime(timeStamp);
-        imgName = name + questionTMP.getIdQuestion() + questionTMP.getNameQuestion() + "_" + timeStamp + ".jpg";
-        Uri output = Uri.fromFile(new File(imgName));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
-        startActivityForResult(intent, code);
-    }
-
     private void tomarFotos() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         int code = TAKE_PICTURES;
@@ -1376,59 +1436,7 @@ public class ActividadCierreFormActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("CODE", "resultcode" + resultCode);
         if (resultCode == -1) {
-            if (requestCode == TAKE_PICTURE) {
-            /*if (data != null) {
-                if (data.hasExtra("data")) {
-                    photoTMP.setBitmap((Bitmap) data.getParcelableExtra("data"));
-                }
-            } else {
-                photoTMP.setBitmap(BitmapFactory.decodeFile(name));
-
-            }
-            photoTMP.setBitmap(Bitmap.createScaledBitmap(photoTMP.getBitmap(), (int) (photoTMP.getBitmap().getWidth() * 0.5), (int) (photoTMP.getBitmap().getHeight() * 0.5), true));
-*/
-                AlertDialog.Builder b = new AlertDialog.Builder(actividad);
-                final EditText titulo = new EditText(this);
-                b.setCancelable(false);
-                titulo.setHint("Título");
-                b.setTitle("Información Fotografía");
-                b.setView(titulo);
-                b.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        photoTMP.setTitlePhoto(titulo.getText().toString());
-                        photoTMP.setCoordX("1");
-                        photoTMP.setCoordY("1");
-                        photoTMP.setNamePhoto(imgName);
-                        questionTMP.setFoto(photoTMP);
-                        photoTMP = null;
-                        buttonTMP.setEnabled(true);
-                        buttonTMP = null;
-                        dialogInterface.dismiss();
-                    }
-                });
-                b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        photoTMP = null;
-                        dialogInterface.dismiss();
-                    }
-                });
-                b.show();
-
-
-            } else if (requestCode == TAKE_PICTURES) {
-                //photoTMP = new PHOTO();
-            /*if (data != null) {
-                if (data.hasExtra("data")) {
-                    photoTMP.setBitmap((Bitmap) data.getParcelableExtra("data"));
-                }
-            } else {
-                photoTMP.setBitmap(BitmapFactory.decodeFile(name));
-
-            }
-            photoTMP.setBitmap(Bitmap.createScaledBitmap(photoTMP.getBitmap(), (int) (photoTMP.getBitmap().getWidth() * 0.5), (int) (photoTMP.getBitmap().getHeight() * 0.5), true));
-*/
+            if (requestCode == TAKE_PICTURES) {
                 AlertDialog.Builder b = new AlertDialog.Builder(actividad);
                 final EditText titulo = new EditText(this);
 
@@ -1439,10 +1447,12 @@ public class ActividadCierreFormActivity extends Activity {
                 b.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         photoTMP.setTitlePhoto(titulo.getText().toString());
-                        photoTMP.setCoordX("1");
-                        photoTMP.setCoordY("1");
+                        photoTMP.setCoordX(String.valueOf(trackerTDC.gps.getLatitude()));
+                        photoTMP.setCoordY(String.valueOf(trackerTDC.gps.getLongitude()));
                         photoTMP.setNamePhoto(imgName);
+                        Log.d("PHOTO", "X " + photoTMP.getCoordX() + "  Y " + photoTMP.getCoordY());
                         questionTMP.addFoto(photoTMP);
                         dialogInterface.dismiss();
                     }
@@ -1501,6 +1511,7 @@ public class ActividadCierreFormActivity extends Activity {
         protected void onPostExecute(String s) {
             if (dialog.isShowing()) dialog.dismiss();
 
+            formSended = ok;
             if (ok) {
                 subir_fotos(s);
             } else {
@@ -1557,6 +1568,7 @@ public class ActividadCierreFormActivity extends Activity {
         protected void onPostExecute(String s) {
             if (dialog.isShowing()) dialog.dismiss();
 
+            formSended = ok;
             if (ok) {
                 subir_fotos(s);
             } else {
@@ -1596,17 +1608,42 @@ public class ActividadCierreFormActivity extends Activity {
                         }
                     }
                     if (I.getSetlistArrayList() != null && I.getValues() != null) {
-                        for (CheckBox c : I.getCheckBoxes()) {
-                            if (c.isChecked()) {
-                                for (SET Set : I.getSetlistArrayList().get(I.getCheckBoxes().indexOf(c))) {
-                                    if (Set.getQuestions() != null) {
-                                        for (QUESTION Q : Set.getQuestions()) {
-                                            if (Q.getFoto() != null) {
-                                                p.add(Q.getFoto());
+                        if (I.getIdType().equals(Constantes.TABLE)) {
+                            for (CheckBox c : I.getCheckBoxes()) {
+                                if (c.isChecked()) {
+                                    for (SET Set : I.getSetlistArrayList().get(I.getCheckBoxes().indexOf(c))) {
+                                        if (Set.getQuestions() != null) {
+                                            for (QUESTION Q : Set.getQuestions()) {
+                                                if (Q.getFoto() != null) {
+                                                    p.add(Q.getFoto());
+                                                }
+                                                if (Q.getFotos() != null) {
+                                                    for (PHOTO P : Q.getFotos()) {
+                                                        p.add(P);
+                                                    }
+                                                }
                                             }
-                                            if (Q.getFotos() != null) {
-                                                for (PHOTO P : Q.getFotos()) {
-                                                    p.add(P);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (I.getIdType().equals(Constantes.RADIO)) {
+                            RadioGroup rg = (RadioGroup) I.getView();
+                            if (rg.getCheckedRadioButtonId() != -1) {
+                                RadioButton rb = (RadioButton) rg.findViewById(rg.getCheckedRadioButtonId());
+                                int n = rg.indexOfChild(rb) + 1;
+                                for (int i = 0; i < n; i++) {
+                                    for (SET Set : I.getSetlistArrayList().get(i)) {
+                                        if (Set.getQuestions() != null) {
+                                            for (QUESTION Q : Set.getQuestions()) {
+                                                if (Q.getFoto() != null) {
+                                                    p.add(Q.getFoto());
+                                                }
+                                                if (Q.getFotos() != null) {
+                                                    for (PHOTO P : Q.getFotos()) {
+                                                        p.add(P);
+                                                    }
                                                 }
                                             }
                                         }
@@ -1786,6 +1823,15 @@ public class ActividadCierreFormActivity extends Activity {
             b.show();
             super.onPostExecute(s);
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(!formSended){
+            saveData();
+        }
+        super.onDestroy();
 
     }
 }

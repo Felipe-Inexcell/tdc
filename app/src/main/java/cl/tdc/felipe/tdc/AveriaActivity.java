@@ -71,11 +71,7 @@ public class AveriaActivity extends Activity {
     private Context context;
     private PositionTrackerTDC trackerTDC;
 
-
-
     private ArrayList<Item> departamentos, provincias, distritos, estaciones;
-
-
     private String name;
     private Spinner elementos, siniestros, depto, province, district, station;
     private Bitmap b = null, bmini = null;

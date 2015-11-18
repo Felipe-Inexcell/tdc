@@ -1,24 +1,34 @@
 package cl.tdc.felipe.tdc.objects.FormularioCierre;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v4.view.GravityCompat;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import cl.tdc.felipe.tdc.R;
@@ -40,6 +50,7 @@ public class QUESTION {
     TextView title;
     ArrayList<CheckBox> checkBoxes;
     ArrayList<Button> buttons;
+    ArrayList<EditText> editTexts;
 
     public QUESTION() {
     }
@@ -110,7 +121,102 @@ public class QUESTION {
          return view;
     }
 
-    public View generateView(Context ctx) {
+    public View generateView(final Context ctx) {
+        if(idType.equals(Constantes.DIV)){
+            view = new LinearLayout(ctx);
+            ((LinearLayout)view).setOrientation(LinearLayout.HORIZONTAL);
+
+            LinearLayout.LayoutParams pTEXT = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams pSEPARADOR = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pTEXT.weight= 4;
+            pSEPARADOR.weight = 1;
+            pSEPARADOR.setMargins(20,4,0,4);
+
+            EditText left = new EditText(ctx);
+            left.setLayoutParams(pTEXT);
+            left.setBackgroundResource(R.drawable.fondo_edittext);
+            left.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+            EditText right = new EditText(ctx);
+            right.setLayoutParams(pTEXT);
+            right.setBackgroundResource(R.drawable.fondo_edittext);
+            right.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+            TextView separador = new TextView(ctx);
+            separador.setLayoutParams(pSEPARADOR);
+
+            left.setInputType(InputType.TYPE_CLASS_NUMBER);
+            right.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            separador.setText("/");
+            separador.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            editTexts = new ArrayList<>();
+            editTexts.add(left);
+            editTexts.add(right);
+
+            ((LinearLayout)view).addView(left);
+            ((LinearLayout)view).addView(separador);
+            ((LinearLayout)view).addView(right);
+        }
+        if(idType.equals(Constantes.DATE)){
+            final Calendar myCalendar = Calendar.getInstance();
+            final EditText fecha = new EditText(ctx);
+            fecha.setBackgroundResource(R.drawable.fondo_edittext);
+            fecha.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            fecha.setEnabled(false);
+
+            ImageButton pick = new ImageButton(ctx);
+            pick.setBackgroundResource(R.drawable.button_gray);
+            pick.setImageResource(R.drawable.ic_calendarwhite);
+
+            LinearLayout.LayoutParams pButton = new LinearLayout.LayoutParams(0,(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, ctx.getResources().getDisplayMetrics()));
+            LinearLayout.LayoutParams pText = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pButton.weight=1;
+            pText.weight=4;
+            pText.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, ctx.getResources().getDisplayMetrics());
+
+            final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                @Override
+                public void onDateSet(DatePicker picker, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    // TODO Auto-generated method stub
+                    myCalendar.set(Calendar.YEAR, year);
+                    myCalendar.set(Calendar.MONTH, monthOfYear);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    String myFormat = "yyyy/MM/dd"; //In which you need put here
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                    fecha.setText(sdf.format(myCalendar.getTime()));
+                }
+
+            };
+
+            pick.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    new DatePickerDialog(ctx, date, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            });
+
+            view = new LinearLayout(ctx);
+            ((LinearLayout)view).setOrientation(LinearLayout.HORIZONTAL);
+            ((LinearLayout)view).setGravity(Gravity.CENTER_VERTICAL);
+
+            fecha.setLayoutParams(pText);
+            pick.setLayoutParams(pButton);
+
+            editTexts = new ArrayList<>();
+            editTexts.add(fecha);
+
+            ((LinearLayout)view).addView(pick);
+            ((LinearLayout)view).addView(fecha);
+
+        }
         if (idType.equals(Constantes.RADIO)) {
             view = new RadioGroup(ctx);
             for (VALUE v : values) {
@@ -124,6 +230,8 @@ public class QUESTION {
             ((RadioGroup) view).setGravity(Gravity.LEFT);
             view.setLayoutParams(p);
             ((RadioGroup) view).setOrientation(LinearLayout.HORIZONTAL);
+            if(values.size() > 3)
+                ((RadioGroup) view).setOrientation(LinearLayout.VERTICAL);
         }
         if (idType.equals(Constantes.CHECK)) {
             view = new LinearLayout(ctx);
@@ -250,6 +358,14 @@ public class QUESTION {
         if(fotos != null)
             return fotos.remove(p);
         else return false;
+    }
+
+    public ArrayList<EditText> getEditTexts() {
+        return editTexts;
+    }
+
+    public void setEditTexts(ArrayList<EditText> editTexts) {
+        this.editTexts = editTexts;
     }
 
     public ArrayList<PHOTO> getFotos() {

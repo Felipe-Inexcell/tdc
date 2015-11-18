@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xml.sax.SAXException;
 
@@ -37,7 +40,7 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
 
     FormCierreReg REG;
 
-    Button IDEN, TRESG;
+    Button IDEN, TRESG, AC, DC, SG, AIR;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +61,16 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
 
         IDEN = (Button) this.findViewById(R.id.IDEN);
         TRESG = (Button) this.findViewById(R.id.TRESG);
+        AC = (Button) this.findViewById(R.id.AC);
+        DC = (Button) this.findViewById(R.id.DC);
+        SG = (Button) this.findViewById(R.id.SG);
+        AIR = (Button) this.findViewById(R.id.AIR);
         IDEN.setOnClickListener(this);
         TRESG.setOnClickListener(this);
+        AC.setOnClickListener(this);
+        DC.setOnClickListener(this);
+        SG.setOnClickListener(this);
+        AIR.setOnClickListener(this);
 
         boolean state = REG.getBoolean("IDEN" + idMain);
         if (state)
@@ -70,8 +81,23 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
             TRESG.setEnabled(false);
         }
 
+        state = REG.getBoolean("AC"+idMain);
+        if(state){
+            AC.setEnabled(false);
+        }
+        state = REG.getBoolean("DC"+idMain);
+        if(state){
+            DC.setEnabled(false);
+        }
+        state = REG.getBoolean("SG"+idMain);
+        if(state){
+            SG.setEnabled(false);
+        }
 
-
+        state = REG.getBoolean("AIR"+idMain);
+        if(state){
+            SG.setEnabled(false);
+        }
     }
 
     public void onClick_apagar(View v) {
@@ -123,7 +149,6 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Intent intent;
         if (view.getId() == R.id.IDEN) {
             buscar_form task = new buscar_form("IDEN");
             task.execute();
@@ -132,11 +157,33 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
             buscar_form task = new buscar_form("3G");
             task.execute();
         }
+        if (view.getId() == R.id.AC) {
+            buscar_form task = new buscar_form("AC");
+            task.execute();
+        }
+
+        if (view.getId() == R.id.DC) {
+            buscar_form task = new buscar_form("DC");
+            task.execute();
+        }
+
+        if (view.getId() == R.id.SG) {
+            buscar_form task = new buscar_form("SYSTEM GROUND");
+            task.execute();
+        }
+        if (view.getId() == R.id.AIR) {
+            buscar_form task = new buscar_form("AIR");
+            task.execute();
+        }
     }
 
     private String getAction(String type) {
         if (type.equals("IDEN")) return SoapRequestTDC.ACTION_IDEN;
         if (type.equals("3G")) return SoapRequestTDC.ACTION_3G;
+        if (type.equals("AC")) return SoapRequestTDC.ACTION_AC;
+        if (type.equals("DC")) return SoapRequestTDC.ACTION_DC;
+        if (type.equals("SYSTEM GROUND")) return SoapRequestTDC.ACTION_SG;
+        if (type.equals("AIR")) return SoapRequestTDC.ACTION_AIR;
         else return "";
     }
 
@@ -183,18 +230,62 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         protected void onPostExecute(String s) {
             if (dialog.isShowing()) dialog.dismiss();
             if (flag) {
-                Intent intent = new Intent(actividad, ActividadCierreFormActivity.class);
+                final Intent intent = new Intent(actividad, ActividadCierreFormActivity.class);
                 intent.putExtra("TITULO", this.type);
                 intent.putExtra("ID", idMain);
                 intent.putExtra("XML", query);
-                int code;
+                final int code;
                 if (type.equals("IDEN")) {
                     code = 0;
                 }else if(type.equals("3G")) {
                     code = 1;
+                }else if(type.equals("AC")) {
+                    code = 2;
+                }else if(type.equals("DC")) {
+                    code = 3;
+                }else if(type.equals("SYSTEM GROUND")) {
+                    code = 4;
+                }else if(type.equals("AIR")) {
+                    code = 5;
                 }else
                     code = -1;
-                startActivityForResult(intent, code);
+
+                if(type.equals("AIR")){
+                    AlertDialog.Builder b = new AlertDialog.Builder(actividad);
+                    final EditText nText = new EditText(mContext);
+                    nText.setBackgroundResource(R.drawable.fondo_edittext);
+                    nText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                    String text = REG.getString("NAIR");
+                    nText.setText(text);
+                    b.setTitle("Ingrese cantidad de aires acondicionados");
+                    b.setView(nText);
+                    b.setPositiveButton("OK", null);
+                    b.setNegativeButton("SALIR", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    final AlertDialog d = b.create();
+                    d.show();
+
+                    d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(nText.getText().length() > 0){
+                                intent.putExtra("NAIR", nText.getText().toString());
+                                REG.addValue("NAIR", nText.getText().toString());
+                                d.dismiss();
+                                startActivityForResult(intent, code);
+                            }else{
+                                Toast.makeText(mContext,"Debe ingresar un número para continuar", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else {
+                    startActivityForResult(intent, code);
+                }
             } else {
                 AlertDialog.Builder b = new AlertDialog.Builder(actividad);
                 b.setTitle("Error");
@@ -313,4 +404,6 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
             b.show();
         }
     }
+
+
 }

@@ -46,6 +46,10 @@ public class SoapRequestTDC {
 
     public static final String ACTION_IDEN = "checkiDen";
     public static final String ACTION_3G = "check3G";
+    public static final String ACTION_AC = "checkAC";
+    public static final String ACTION_DC = "checkDC";
+    public static final String ACTION_SG = "checkSystemGround";
+    public static final String ACTION_AIR = "checkAir";
     /*
      * Clase Principal de Conexion SSL a WDSL
 	 */
@@ -379,6 +383,7 @@ public class SoapRequestTDC {
                         "<soapenv:Header/>" +
                         "<soapenv:Body>" +
                         "<urn:answer3G soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                        "<RequestAnswer3G xsi:type=\"urn:RequestAnswerIden\">"+
                         "<Request3G xsi:type=\"urn:Request3G\">" +
                         "<Header xsi:type=\"urn:Header\">" +
                         "<Date xsi:type=\"xsd:string\">" + formatter.format(fecha) + "</Date>" +
@@ -556,6 +561,7 @@ public class SoapRequestTDC {
         }
 
         xml += "</Request3G>" +
+                "</RequestAnswer3G>"+
                 "</urn:answer3G>" +
                 "</soapenv:Body>" +
                 "</soapenv:Envelope>";

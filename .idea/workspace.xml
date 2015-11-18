@@ -134,77 +134,82 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ActividadCierreFormActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java">
+      <file leaf-file-name="QUESTION.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/QUESTION.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-21.25" vertical-offset="20332" max-vertical-offset="30549">
-              <caret line="1231" column="0" selection-start-line="1231" selection-start-column="0" selection-end-line="1231" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3021" max-vertical-offset="6426">
+              <caret line="221" column="36" selection-start-line="221" selection-start-column="36" selection-end-line="221" selection-end-column="36" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4215#4779#0" expanded="true" />
-                <element signature="e#4768#4769#0" expanded="true" />
-                <element signature="e#4816#5018#0" expanded="true" />
-                <element signature="e#5007#5008#0" expanded="true" />
-                <element signature="e#5092#5093#0" expanded="true" />
-                <element signature="e#5126#5127#0" expanded="true" />
-                <element signature="e#5330#5553#0" expanded="true" />
-                <element signature="e#5542#5543#0" expanded="true" />
-                <element signature="e#5590#5792#0" expanded="true" />
-                <element signature="e#5781#5782#0" expanded="true" />
-                <element signature="e#8939#10473#0" expanded="true" />
-                <element signature="e#9495#10130#0" expanded="true" />
-                <element signature="e#10111#10112#0" expanded="true" />
-                <element signature="e#10179#10421#0" expanded="true" />
-                <element signature="e#10402#10403#0" expanded="true" />
-                <element signature="e#10462#10463#0" expanded="true" />
-                <element signature="e#22731#23710#0" expanded="true" />
-                <element signature="e#23671#23672#0" expanded="true" />
-                <element signature="e#24502#25245#0" expanded="true" />
-                <element signature="e#25206#25207#0" expanded="true" />
-                <element signature="e#32626#33605#0" expanded="true" />
-                <element signature="e#33566#33567#0" expanded="true" />
-                <element signature="e#34197#35219#0" expanded="true" />
-                <element signature="e#35184#35185#0" expanded="true" />
-                <element signature="e#37767#38029#0" expanded="true" />
-                <element signature="e#38014#38015#0" expanded="true" />
-                <element signature="e#74111#75635#0" expanded="true" />
-                <element signature="e#74560#74802#0" expanded="true" />
-                <element signature="e#74783#74784#0" expanded="true" />
-                <element signature="e#74851#75491#0" expanded="true" />
-                <element signature="e#75472#75473#0" expanded="true" />
-                <element signature="e#75624#75625#0" expanded="true" />
-                <element signature="e#77804#78467#0" expanded="true" />
-                <element signature="e#78448#78449#0" expanded="true" />
-                <element signature="e#78518#78801#0" expanded="true" />
-                <element signature="e#78782#78783#0" expanded="true" />
-                <element signature="e#79752#80280#0" expanded="true" />
-                <element signature="e#80261#80262#0" expanded="true" />
-                <element signature="e#80331#80614#0" expanded="true" />
-                <element signature="e#80595#80596#0" expanded="true" />
-                <element signature="e#81110#81111#0" expanded="true" />
-                <element signature="e#81147#81148#0" expanded="true" />
-                <element signature="e#82406#82648#0" expanded="true" />
-                <element signature="e#82629#82630#0" expanded="true" />
-                <element signature="e#83138#83139#0" expanded="true" />
-                <element signature="e#83175#83176#0" expanded="true" />
-                <element signature="e#84432#84674#0" expanded="true" />
-                <element signature="e#84655#84656#0" expanded="true" />
-                <element signature="e#87118#87467#0" expanded="true" />
-                <element signature="e#87452#87453#0" expanded="true" />
-                <element signature="e#92962#93311#0" expanded="true" />
-                <element signature="e#93296#93297#0" expanded="true" />
+                <element signature="e#6164#6891#0" expanded="true" />
+                <element signature="e#6875#6876#0" expanded="true" />
+                <element signature="e#6930#7337#0" expanded="true" />
+                <element signature="e#7322#7323#0" expanded="true" />
+                <element signature="e#13599#13600#0" expanded="true" />
+                <element signature="e#13631#13632#0" expanded="true" />
+                <element signature="e#13694#13695#0" expanded="true" />
+                <element signature="e#13736#13737#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SoapRequestTDC.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java">
+      <file leaf-file-name="ActividadCierreFormActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5987395" vertical-offset="9405" max-vertical-offset="10710">
-              <caret line="570" column="51" selection-start-line="570" selection-start-column="51" selection-end-line="570" selection-end-column="51" />
+            <state vertical-scroll-proportion="-7.607143" vertical-offset="12792" max-vertical-offset="31331">
+              <caret line="765" column="80" selection-start-line="765" selection-start-column="80" selection-end-line="765" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5221#5785#0" expanded="true" />
+                <element signature="e#5774#5775#0" expanded="true" />
+                <element signature="e#5822#6024#0" expanded="true" />
+                <element signature="e#6013#6014#0" expanded="true" />
+                <element signature="e#6098#6099#0" expanded="true" />
+                <element signature="e#6132#6133#0" expanded="true" />
+                <element signature="e#6336#6559#0" expanded="true" />
+                <element signature="e#6548#6549#0" expanded="true" />
+                <element signature="e#6596#6798#0" expanded="true" />
+                <element signature="e#6787#6788#0" expanded="true" />
+                <element signature="e#9945#11479#0" expanded="true" />
+                <element signature="e#10501#11136#0" expanded="true" />
+                <element signature="e#11117#11118#0" expanded="true" />
+                <element signature="e#11185#11427#0" expanded="true" />
+                <element signature="e#11408#11409#0" expanded="true" />
+                <element signature="e#11468#11469#0" expanded="true" />
+                <element signature="e#25807#26786#0" expanded="true" />
+                <element signature="e#26747#26748#0" expanded="true" />
+                <element signature="e#27578#28321#0" expanded="true" />
+                <element signature="e#28282#28283#0" expanded="true" />
+                <element signature="e#35163#36142#0" expanded="true" />
+                <element signature="e#36103#36104#0" expanded="true" />
+                <element signature="e#36734#37756#0" expanded="true" />
+                <element signature="e#37721#37722#0" expanded="true" />
+                <element signature="e#44977#45956#0" expanded="true" />
+                <element signature="e#45917#45918#0" expanded="true" />
+                <element signature="e#48531#48793#0" expanded="true" />
+                <element signature="e#48778#48779#0" expanded="true" />
+                <element signature="e#77676#79200#0" expanded="true" />
+                <element signature="e#78125#78367#0" expanded="true" />
+                <element signature="e#78348#78349#0" expanded="true" />
+                <element signature="e#78416#79056#0" expanded="true" />
+                <element signature="e#79037#79038#0" expanded="true" />
+                <element signature="e#79189#79190#0" expanded="true" />
+                <element signature="e#80364#81077#0" expanded="true" />
+                <element signature="e#81058#81059#0" expanded="true" />
+                <element signature="e#81128#81411#0" expanded="true" />
+                <element signature="e#81392#81393#0" expanded="true" />
+                <element signature="e#81907#81908#0" expanded="true" />
+                <element signature="e#81944#81945#0" expanded="true" />
+                <element signature="e#83232#83474#0" expanded="true" />
+                <element signature="e#83455#83456#0" expanded="true" />
+                <element signature="e#83964#83965#0" expanded="true" />
+                <element signature="e#84001#84002#0" expanded="true" />
+                <element signature="e#85287#85529#0" expanded="true" />
+                <element signature="e#85510#85511#0" expanded="true" />
+                <element signature="e#89573#89922#0" expanded="true" />
+                <element signature="e#89907#89908#0" expanded="true" />
+                <element signature="e#95417#95766#0" expanded="true" />
+                <element signature="e#95751#95752#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -213,29 +218,113 @@
       <file leaf-file-name="ITEM.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/ITEM.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="3009">
-              <caret line="113" column="13" selection-start-line="90" selection-start-column="12" selection-end-line="113" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2244" max-vertical-offset="4573">
+              <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
+              <folding>
+                <element signature="e#1047#1048#0" expanded="true" />
+                <element signature="e#1081#1082#0" expanded="true" />
+                <element signature="e#6104#6105#0" expanded="true" />
+                <element signature="e#6133#6134#0" expanded="true" />
+                <element signature="e#6177#6178#0" expanded="true" />
+                <element signature="e#6213#6214#0" expanded="true" />
+                <element signature="e#6250#6251#0" expanded="true" />
+                <element signature="e#6281#6282#0" expanded="true" />
+                <element signature="e#6331#6332#0" expanded="true" />
+                <element signature="e#6371#6372#0" expanded="true" />
+                <element signature="e#6421#6422#0" expanded="true" />
+                <element signature="e#6454#6455#0" expanded="true" />
+                <element signature="e#6519#6520#0" expanded="true" />
+                <element signature="e#6563#6564#0" expanded="true" />
+                <element signature="e#6592#6593#0" expanded="true" />
+                <element signature="e#6619#6620#0" expanded="true" />
+                <element signature="e#6657#6658#0" expanded="true" />
+                <element signature="e#6689#6690#0" expanded="true" />
+                <element signature="e#6751#6752#0" expanded="true" />
+                <element signature="e#6790#6791#0" expanded="true" />
+                <element signature="e#6962#6963#0" expanded="true" />
+                <element signature="e#6991#6992#0" expanded="true" />
+                <element signature="e#7035#7036#0" expanded="true" />
+                <element signature="e#7071#7072#0" expanded="true" />
+                <element signature="e#7104#7105#0" expanded="true" />
+                <element signature="e#7133#7134#0" expanded="true" />
+                <element signature="e#7177#7178#0" expanded="true" />
+                <element signature="e#7213#7214#0" expanded="true" />
+                <element signature="e#7248#7249#0" expanded="true" />
+                <element signature="e#7279#7280#0" expanded="true" />
+                <element signature="e#7327#7328#0" expanded="true" />
+                <element signature="e#7367#7368#0" expanded="true" />
+                <element signature="e#7402#7403#0" expanded="true" />
+                <element signature="e#7433#7434#0" expanded="true" />
+                <element signature="e#7481#7482#0" expanded="true" />
+                <element signature="e#7521#7522#0" expanded="true" />
+                <element signature="e#7554#7555#0" expanded="true" />
+                <element signature="e#7583#7584#0" expanded="true" />
+                <element signature="e#7627#7628#0" expanded="true" />
+                <element signature="e#7663#7664#0" expanded="true" />
+                <element signature="e#7712#7713#0" expanded="true" />
+                <element signature="e#7744#7745#0" expanded="true" />
+                <element signature="e#7807#7808#0" expanded="true" />
+                <element signature="e#7849#7850#0" expanded="true" />
+                <element signature="e#7892#7893#0" expanded="true" />
+                <element signature="e#7921#7922#0" expanded="true" />
+                <element signature="e#7975#7976#0" expanded="true" />
+                <element signature="e#8011#8012#0" expanded="true" />
+                <element signature="e#8058#8059#0" expanded="true" />
+                <element signature="e#8093#8094#0" expanded="true" />
+                <element signature="e#8157#8158#0" expanded="true" />
+                <element signature="e#8205#8206#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_cierre_actividad.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2771" max-vertical-offset="4539">
+              <caret line="163" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="163" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QUESTION.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/QUESTION.java">
+      <file leaf-file-name="activity_cierre_actividad_form.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad_form.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2359" max-vertical-offset="3213">
+              <caret line="162" column="4" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-37.035713" vertical-offset="952" max-vertical-offset="4624">
-              <caret line="141" column="31" selection-start-line="141" selection-start-column="31" selection-end-line="141" selection-end-column="31" />
+            <state vertical-scroll-proportion="-0.68" vertical-offset="51" max-vertical-offset="2431">
+              <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActividadCierreActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ActividadCierreActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2689" max-vertical-offset="4488">
-              <caret line="218" column="52" selection-start-line="218" selection-start-column="52" selection-end-line="218" selection-end-column="52" />
-              <folding />
+            <state vertical-scroll-proportion="0.56512606" vertical-offset="4474" max-vertical-offset="6018">
+              <caret line="331" column="42" selection-start-line="331" selection-start-column="42" selection-end-line="331" selection-end-column="42" />
+              <folding>
+                <element signature="e#9015#9277#0" expanded="true" />
+                <element signature="e#9254#9255#0" expanded="true" />
+                <element signature="e#9445#10147#0" expanded="true" />
+                <element signature="e#10124#10125#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1515,7 +1604,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_agenda_horizontal.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_averia.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_cercanos.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/click_seguimiento.xml" />
@@ -1544,7 +1632,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_agenda_new.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/VALUE.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Constantes.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/SYSTEM.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/AREA.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParserTDC.java" />
@@ -1555,17 +1642,19 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/button_gray_rounded.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/FormCierreReg.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/PHOTO.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad_form.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AgendaActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/daemon/PositionTrackerTDC.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Constantes.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad_form.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/QUESTION.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/ITEM.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/QUESTION.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad.xml" />
       </list>
     </option>
   </component>
@@ -1641,26 +1730,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tdc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tdc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tdc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1741,29 +1810,23 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="tdc" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+              <option name="myItemId" value="tdc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tdc" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="objects" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FormularioCierre" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1781,7 +1844,7 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/sdk" />
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="QWJBVWGMYDDMBY79" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="XCJE02BMTLXQPB3" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_21_x86" />
     <property name="LayoutCode.rearrangeEntriesGroovy" value="false" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
@@ -1791,7 +1854,7 @@
     <property name="FullScreen" value="false" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SPM" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Explorador" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="297" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
@@ -1969,7 +2032,7 @@
       <option name="DEPLOY" value="true" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="true" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -2081,10 +2144,10 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26732674" sideWeight="0.47974414" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44554454" sideWeight="0.554371" order="7" side_tool="false" content_ui="tabs" x="1769" y="114" width="970" height="470" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44554454" sideWeight="0.554371" order="7" side_tool="false" content_ui="tabs" x="1769" y="114" width="970" height="470" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32409382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1391258" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5764576" sideWeight="0.4706823" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2239,82 +2302,66 @@
           <option name="timeStamp" value="457" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java</url>
-          <line>562</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
+          <line>873</line>
           <properties />
-          <option name="timeStamp" value="621" />
+          <option name="timeStamp" value="665" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
-          <line>1268</line>
+          <line>872</line>
           <properties />
-          <option name="timeStamp" value="631" />
+          <option name="timeStamp" value="666" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
-          <line>1271</line>
+          <line>877</line>
           <properties />
-          <option name="timeStamp" value="650" />
+          <option name="timeStamp" value="667" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
-          <line>1270</line>
+          <line>868</line>
           <properties />
-          <option name="timeStamp" value="651" />
+          <option name="timeStamp" value="668" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
-          <line>1269</line>
+          <line>870</line>
           <properties />
-          <option name="timeStamp" value="652" />
+          <option name="timeStamp" value="669" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java</url>
+          <line>869</line>
+          <properties />
+          <option name="timeStamp" value="670" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="653" />
+      <option name="time" value="671" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/PreAsBuiltActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2363" max-vertical-offset="2601">
-          <caret line="139" column="38" selection-start-line="139" selection-start-column="38" selection-end-line="139" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MWAerials.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="13804" max-vertical-offset="14705">
-          <caret line="812" column="64" selection-start-line="812" selection-start-column="54" selection-end-line="812" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/preferences/PreferencesTDC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2951389" vertical-offset="0" max-vertical-offset="782">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_view.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="918">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_agenda_new.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3325527" vertical-offset="1195" max-vertical-offset="2907">
           <caret line="87" column="4" selection-start-line="87" selection-start-column="4" selection-end-line="87" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
@@ -2334,22 +2381,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Funciones.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.9171395" vertical-offset="0" max-vertical-offset="3740">
-          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/agenda_view.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2091">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/fondo_general1.xml">
@@ -2477,14 +2517,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Constantes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16113745" vertical-offset="0" max-vertical-offset="633">
-          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/UploadImage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2465">
@@ -2500,38 +2532,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7769">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal_bak.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_horizontal_bak.xml">
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8330">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/daemon/PositionTrackerTDC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2686">
-          <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="2431">
-          <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
           <folding />
         </state>
       </provider>
@@ -2540,19 +2557,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8925">
           <caret line="73" column="29" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_averia.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5712">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/MainActivity.java">
@@ -2560,13 +2576,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="544" max-vertical-offset="6766">
           <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="10965" max-vertical-offset="16507">
-          <caret line="645" column="50" selection-start-line="645" selection-start-column="50" selection-end-line="645" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -2596,7 +2605,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.9568346" vertical-offset="141" max-vertical-offset="3196">
           <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2604,30 +2612,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
           <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="18" selection-end-column="26" />
-          <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad_form.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2342" max-vertical-offset="3196">
-          <caret line="161" column="4" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2754" max-vertical-offset="3672">
-          <caret line="162" column="4" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/XMLParser.java">
@@ -2642,102 +2627,244 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="709" max-vertical-offset="1207">
           <caret line="53" column="15" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/daemon/PositionTrackerTDC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="816" max-vertical-offset="2686">
+          <caret line="100" column="62" selection-start-line="100" selection-start-column="52" selection-end-line="100" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Funciones.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3740">
+          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckMaintenance.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07718502" vertical-offset="0" max-vertical-offset="7327">
+          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10132">
+          <caret line="51" column="41" selection-start-line="51" selection-start-column="41" selection-end-line="51" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/AveriaActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5929" max-vertical-offset="14739">
+          <caret line="388" column="18" selection-start-line="388" selection-start-column="18" selection-end-line="388" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/FormCheckActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07718502" vertical-offset="0" max-vertical-offset="12648">
+          <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/extras/Constantes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30874008" vertical-offset="0" max-vertical-offset="881">
+          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_calendarwhite.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.68" vertical-offset="51" max-vertical-offset="2431">
+          <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/ITEM.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="3009">
-          <caret line="113" column="13" selection-start-line="90" selection-start-column="12" selection-end-line="113" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2244" max-vertical-offset="4573">
+          <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
+          <folding>
+            <element signature="e#1047#1048#0" expanded="true" />
+            <element signature="e#1081#1082#0" expanded="true" />
+            <element signature="e#6104#6105#0" expanded="true" />
+            <element signature="e#6133#6134#0" expanded="true" />
+            <element signature="e#6177#6178#0" expanded="true" />
+            <element signature="e#6213#6214#0" expanded="true" />
+            <element signature="e#6250#6251#0" expanded="true" />
+            <element signature="e#6281#6282#0" expanded="true" />
+            <element signature="e#6331#6332#0" expanded="true" />
+            <element signature="e#6371#6372#0" expanded="true" />
+            <element signature="e#6421#6422#0" expanded="true" />
+            <element signature="e#6454#6455#0" expanded="true" />
+            <element signature="e#6519#6520#0" expanded="true" />
+            <element signature="e#6563#6564#0" expanded="true" />
+            <element signature="e#6592#6593#0" expanded="true" />
+            <element signature="e#6619#6620#0" expanded="true" />
+            <element signature="e#6657#6658#0" expanded="true" />
+            <element signature="e#6689#6690#0" expanded="true" />
+            <element signature="e#6751#6752#0" expanded="true" />
+            <element signature="e#6790#6791#0" expanded="true" />
+            <element signature="e#6962#6963#0" expanded="true" />
+            <element signature="e#6991#6992#0" expanded="true" />
+            <element signature="e#7035#7036#0" expanded="true" />
+            <element signature="e#7071#7072#0" expanded="true" />
+            <element signature="e#7104#7105#0" expanded="true" />
+            <element signature="e#7133#7134#0" expanded="true" />
+            <element signature="e#7177#7178#0" expanded="true" />
+            <element signature="e#7213#7214#0" expanded="true" />
+            <element signature="e#7248#7249#0" expanded="true" />
+            <element signature="e#7279#7280#0" expanded="true" />
+            <element signature="e#7327#7328#0" expanded="true" />
+            <element signature="e#7367#7368#0" expanded="true" />
+            <element signature="e#7402#7403#0" expanded="true" />
+            <element signature="e#7433#7434#0" expanded="true" />
+            <element signature="e#7481#7482#0" expanded="true" />
+            <element signature="e#7521#7522#0" expanded="true" />
+            <element signature="e#7554#7555#0" expanded="true" />
+            <element signature="e#7583#7584#0" expanded="true" />
+            <element signature="e#7627#7628#0" expanded="true" />
+            <element signature="e#7663#7664#0" expanded="true" />
+            <element signature="e#7712#7713#0" expanded="true" />
+            <element signature="e#7744#7745#0" expanded="true" />
+            <element signature="e#7807#7808#0" expanded="true" />
+            <element signature="e#7849#7850#0" expanded="true" />
+            <element signature="e#7892#7893#0" expanded="true" />
+            <element signature="e#7921#7922#0" expanded="true" />
+            <element signature="e#7975#7976#0" expanded="true" />
+            <element signature="e#8011#8012#0" expanded="true" />
+            <element signature="e#8058#8059#0" expanded="true" />
+            <element signature="e#8093#8094#0" expanded="true" />
+            <element signature="e#8157#8158#0" expanded="true" />
+            <element signature="e#8205#8206#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2771" max-vertical-offset="4522">
+          <caret line="163" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="163" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2689" max-vertical-offset="4488">
-          <caret line="218" column="52" selection-start-line="218" selection-start-column="52" selection-end-line="218" selection-end-column="52" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cierre_actividad_form.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2359" max-vertical-offset="3213">
+          <caret line="162" column="4" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/objects/FormularioCierre/QUESTION.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-37.035713" vertical-offset="952" max-vertical-offset="4624">
-          <caret line="141" column="31" selection-start-line="141" selection-start-column="31" selection-end-line="141" selection-end-column="31" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3021" max-vertical-offset="6426">
+          <caret line="221" column="36" selection-start-line="221" selection-start-column="36" selection-end-line="221" selection-end-column="36" />
+          <folding>
+            <element signature="e#6164#6891#0" expanded="true" />
+            <element signature="e#6875#6876#0" expanded="true" />
+            <element signature="e#6930#7337#0" expanded="true" />
+            <element signature="e#7322#7323#0" expanded="true" />
+            <element signature="e#13599#13600#0" expanded="true" />
+            <element signature="e#13631#13632#0" expanded="true" />
+            <element signature="e#13694#13695#0" expanded="true" />
+            <element signature="e#13736#13737#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreFormActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-21.25" vertical-offset="20332" max-vertical-offset="30549">
-          <caret line="1231" column="0" selection-start-line="1231" selection-start-column="0" selection-end-line="1231" selection-end-column="0" />
+        <state vertical-scroll-proportion="-7.607143" vertical-offset="12792" max-vertical-offset="31331">
+          <caret line="765" column="80" selection-start-line="765" selection-start-column="80" selection-end-line="765" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4215#4779#0" expanded="true" />
-            <element signature="e#4768#4769#0" expanded="true" />
-            <element signature="e#4816#5018#0" expanded="true" />
-            <element signature="e#5007#5008#0" expanded="true" />
-            <element signature="e#5092#5093#0" expanded="true" />
-            <element signature="e#5126#5127#0" expanded="true" />
-            <element signature="e#5330#5553#0" expanded="true" />
-            <element signature="e#5542#5543#0" expanded="true" />
-            <element signature="e#5590#5792#0" expanded="true" />
-            <element signature="e#5781#5782#0" expanded="true" />
-            <element signature="e#8939#10473#0" expanded="true" />
-            <element signature="e#9495#10130#0" expanded="true" />
-            <element signature="e#10111#10112#0" expanded="true" />
-            <element signature="e#10179#10421#0" expanded="true" />
-            <element signature="e#10402#10403#0" expanded="true" />
-            <element signature="e#10462#10463#0" expanded="true" />
-            <element signature="e#22731#23710#0" expanded="true" />
-            <element signature="e#23671#23672#0" expanded="true" />
-            <element signature="e#24502#25245#0" expanded="true" />
-            <element signature="e#25206#25207#0" expanded="true" />
-            <element signature="e#32626#33605#0" expanded="true" />
-            <element signature="e#33566#33567#0" expanded="true" />
-            <element signature="e#34197#35219#0" expanded="true" />
-            <element signature="e#35184#35185#0" expanded="true" />
-            <element signature="e#37767#38029#0" expanded="true" />
-            <element signature="e#38014#38015#0" expanded="true" />
-            <element signature="e#74111#75635#0" expanded="true" />
-            <element signature="e#74560#74802#0" expanded="true" />
-            <element signature="e#74783#74784#0" expanded="true" />
-            <element signature="e#74851#75491#0" expanded="true" />
-            <element signature="e#75472#75473#0" expanded="true" />
-            <element signature="e#75624#75625#0" expanded="true" />
-            <element signature="e#77804#78467#0" expanded="true" />
-            <element signature="e#78448#78449#0" expanded="true" />
-            <element signature="e#78518#78801#0" expanded="true" />
-            <element signature="e#78782#78783#0" expanded="true" />
-            <element signature="e#79752#80280#0" expanded="true" />
-            <element signature="e#80261#80262#0" expanded="true" />
-            <element signature="e#80331#80614#0" expanded="true" />
-            <element signature="e#80595#80596#0" expanded="true" />
-            <element signature="e#81110#81111#0" expanded="true" />
-            <element signature="e#81147#81148#0" expanded="true" />
-            <element signature="e#82406#82648#0" expanded="true" />
-            <element signature="e#82629#82630#0" expanded="true" />
-            <element signature="e#83138#83139#0" expanded="true" />
-            <element signature="e#83175#83176#0" expanded="true" />
-            <element signature="e#84432#84674#0" expanded="true" />
-            <element signature="e#84655#84656#0" expanded="true" />
-            <element signature="e#87118#87467#0" expanded="true" />
-            <element signature="e#87452#87453#0" expanded="true" />
-            <element signature="e#92962#93311#0" expanded="true" />
-            <element signature="e#93296#93297#0" expanded="true" />
+            <element signature="e#5221#5785#0" expanded="true" />
+            <element signature="e#5774#5775#0" expanded="true" />
+            <element signature="e#5822#6024#0" expanded="true" />
+            <element signature="e#6013#6014#0" expanded="true" />
+            <element signature="e#6098#6099#0" expanded="true" />
+            <element signature="e#6132#6133#0" expanded="true" />
+            <element signature="e#6336#6559#0" expanded="true" />
+            <element signature="e#6548#6549#0" expanded="true" />
+            <element signature="e#6596#6798#0" expanded="true" />
+            <element signature="e#6787#6788#0" expanded="true" />
+            <element signature="e#9945#11479#0" expanded="true" />
+            <element signature="e#10501#11136#0" expanded="true" />
+            <element signature="e#11117#11118#0" expanded="true" />
+            <element signature="e#11185#11427#0" expanded="true" />
+            <element signature="e#11408#11409#0" expanded="true" />
+            <element signature="e#11468#11469#0" expanded="true" />
+            <element signature="e#25807#26786#0" expanded="true" />
+            <element signature="e#26747#26748#0" expanded="true" />
+            <element signature="e#27578#28321#0" expanded="true" />
+            <element signature="e#28282#28283#0" expanded="true" />
+            <element signature="e#35163#36142#0" expanded="true" />
+            <element signature="e#36103#36104#0" expanded="true" />
+            <element signature="e#36734#37756#0" expanded="true" />
+            <element signature="e#37721#37722#0" expanded="true" />
+            <element signature="e#44977#45956#0" expanded="true" />
+            <element signature="e#45917#45918#0" expanded="true" />
+            <element signature="e#48531#48793#0" expanded="true" />
+            <element signature="e#48778#48779#0" expanded="true" />
+            <element signature="e#77676#79200#0" expanded="true" />
+            <element signature="e#78125#78367#0" expanded="true" />
+            <element signature="e#78348#78349#0" expanded="true" />
+            <element signature="e#78416#79056#0" expanded="true" />
+            <element signature="e#79037#79038#0" expanded="true" />
+            <element signature="e#79189#79190#0" expanded="true" />
+            <element signature="e#80364#81077#0" expanded="true" />
+            <element signature="e#81058#81059#0" expanded="true" />
+            <element signature="e#81128#81411#0" expanded="true" />
+            <element signature="e#81392#81393#0" expanded="true" />
+            <element signature="e#81907#81908#0" expanded="true" />
+            <element signature="e#81944#81945#0" expanded="true" />
+            <element signature="e#83232#83474#0" expanded="true" />
+            <element signature="e#83455#83456#0" expanded="true" />
+            <element signature="e#83964#83965#0" expanded="true" />
+            <element signature="e#84001#84002#0" expanded="true" />
+            <element signature="e#85287#85529#0" expanded="true" />
+            <element signature="e#85510#85511#0" expanded="true" />
+            <element signature="e#89573#89922#0" expanded="true" />
+            <element signature="e#89907#89908#0" expanded="true" />
+            <element signature="e#95417#95766#0" expanded="true" />
+            <element signature="e#95751#95752#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/webservice/SoapRequestTDC.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/cl/tdc/felipe/tdc/ActividadCierreActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5987395" vertical-offset="9405" max-vertical-offset="10710">
-          <caret line="570" column="51" selection-start-line="570" selection-start-column="51" selection-end-line="570" selection-end-column="51" />
+        <state vertical-scroll-proportion="0.56512606" vertical-offset="4474" max-vertical-offset="6018">
+          <caret line="331" column="42" selection-start-line="331" selection-start-column="42" selection-end-line="331" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#9015#9277#0" expanded="true" />
+            <element signature="e#9254#9255#0" expanded="true" />
+            <element signature="e#9445#10147#0" expanded="true" />
+            <element signature="e#10124#10125#0" expanded="true" />
           </folding>
         </state>
       </provider>

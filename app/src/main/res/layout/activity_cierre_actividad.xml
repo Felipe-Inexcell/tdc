@@ -157,7 +157,8 @@
             android:layout_toEndOf="@+id/imageButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:enabled="true" />
+            android:enabled="true"
+            android:textColor="#FFFFFF" />
     </RelativeLayout>
 
     <ScrollView
@@ -204,6 +205,56 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="8dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AC"
+                android:drawableRight="@drawable/ic_rightarrow"
+                android:id="@+id/AC"
+                android:background="@drawable/custom_button_blue_right"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DC"
+                android:drawableRight="@drawable/ic_rightarrow"
+                android:id="@+id/DC"
+                android:background="@drawable/custom_button_blue_right"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SYSTEM GROUND"
+                android:drawableRight="@drawable/ic_rightarrow"
+                android:id="@+id/SG"
+                android:background="@drawable/custom_button_blue_right"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AIR"
+                android:drawableRight="@drawable/ic_rightarrow"
+                android:id="@+id/AIR"
+                android:background="@drawable/custom_button_blue_right"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp"
+                android:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>
