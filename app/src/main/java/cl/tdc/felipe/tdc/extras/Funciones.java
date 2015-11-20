@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.media.RingtoneManager;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.InputType;
@@ -23,6 +24,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -239,6 +246,39 @@ public class Funciones {
             return cd.getData();
         }
         return "";
+    }
+
+    public static File Update(String apkurl) {
+        try {
+            URL url = new URL(apkurl);
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            c.setRequestMethod("GET");
+            c.setDoOutput(true);
+            c.connect();
+
+            String[] spliit = apkurl.split("/");
+
+            String PATH = Environment.getExternalStorageDirectory() + "/TDC@/update/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, spliit[spliit.length - 1]);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+
+            return outputFile;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 

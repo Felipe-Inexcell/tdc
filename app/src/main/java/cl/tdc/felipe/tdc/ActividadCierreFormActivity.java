@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -88,8 +89,11 @@ public class ActividadCierreFormActivity extends Activity {
     private String imgName;
     PHOTO photoTMP;
     QUESTION questionTMP;
+    ITEM itemTMP;
     Button buttonTMP;
     ArrayList<SYSTEM> SYSTEMS;
+
+    ProgressDialog dialog;
 
     @Override
     protected void onResume() {
@@ -103,6 +107,9 @@ public class ActividadCierreFormActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.d("AVERIA", "onPause");
+        super.onPause();
+        if (dialog != null)
+            dialog.dismiss();
         unbindService(mConnection);
     }
 
@@ -131,9 +138,12 @@ public class ActividadCierreFormActivity extends Activity {
         CONTENIDO = (LinearLayout) this.findViewById(R.id.contenido);
         TITLE = getIntent().getStringExtra("TITULO");
 
+        dialog = null;
+
         if (TITLE.equals("AIR")) {
             NAIR = getIntent().getStringExtra("NAIR");
         }
+
         QUERY = getIntent().getStringExtra("XML");
         IDMAIN = getIntent().getStringExtra("ID");
 
@@ -748,7 +758,7 @@ public class ActividadCierreFormActivity extends Activity {
 
 
                             if (I.getIdType().equals(Constantes.ADD)) {
-                                ((TextView)I.getView()).setText("Aires Acondicionados: "+NAIR);
+                                ((TextView) I.getView()).setText("Aires Acondicionados: " + NAIR);
 
                                 int n = Integer.parseInt(NAIR);
                                 for (int x = 0; x < n; x++) {
@@ -899,13 +909,96 @@ public class ActividadCierreFormActivity extends Activity {
                                     c.setChecked(check);
                                 }
                             }
+                            if (I.getIdType().equals(Constantes.HOUR)) {
+                                String hora = REG.getString("HOUR" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                I.getEditText().setText(hora);
+                            }
+                            if (I.getIdType().equals(Constantes.PHOTO)) {
+                                String name = REG.getString("PHOTONAME" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                File tmp = new File(name);
+                                if (tmp.exists()) {
+                                    PHOTO f = new PHOTO();
+                                    f.setNamePhoto(REG.getString("PHOTONAME" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem()));
+                                    f.setTitlePhoto(REG.getString("PHOTOTITLE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem()));
+                                    f.setDateTime(REG.getString("PHOTODATE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem()));
+                                    f.setCoordX(REG.getString("PHOTOCOORDX" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem()));
+                                    f.setCoordY(REG.getString("PHOTOCOORDY" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem()));
+                                    I.setPhoto(f);
+                                    I.getButtons().get(1).setEnabled(true);
+                                }
+
+                                final ArrayList<Button> buttons = I.getButtons();
+
+                                buttons.get(0).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        itemTMP = I;
+                                        photoTMP = new PHOTO();
+                                        buttonTMP = buttons.get(1);
+                                        tomarFoto();
+                                    }
+                                });
+
+                                buttons.get(1).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if(I.getPhoto()!= null){
+                                            PHOTO p = I.getPhoto();
+
+                                            File file = new File(p.getNamePhoto());
+                                            if(file.exists()){
+                                                ImageView joto = new ImageView(mContext);
+                                                final PHOTO f = I.getPhoto();
+                                                joto.setImageBitmap(BitmapFactory.decodeFile(f.getNamePhoto()));
+                                                AlertDialog.Builder b = new AlertDialog.Builder(actividad);
+                                                b.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                });
+                                                b.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int j) {
+                                                        File delete = new File(f.getNamePhoto());
+                                                        if (delete.exists())
+                                                            if (delete.delete()) {
+                                                                Log.d("FOTO", "Imagen eliminada");
+                                                            }
+                                                        Toast.makeText(mContext, "Imagen eliminada", Toast.LENGTH_SHORT).show();
+                                                        buttons.get(1).setEnabled(false);
+                                                        I.setPhoto(null);
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                });
+
+                                                b.setView(joto);
+                                                b.setTitle(f.getTitlePhoto());
+                                                b.show();
+                                            }
+
+                                        }
+                                    }
+                                });
+
+
+                            }
+                            if (I.getIdType().equals(Constantes.TEXT)) {
+                                String text = REG.getString("TEXT" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                ((EditText) I.getView()).setText(text);
+                            }
+                            if (I.getIdType().equals(Constantes.NUM)) {
+                                String text = REG.getString("NUM" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem());
+                                ((EditText) I.getView()).setText(text);
+                            }
                         }
 
                         CONTENIDO.addView(itemLayout);
                     }
                 }
-            }
 
+
+            }
         } catch (ParserConfigurationException | SAXException | XPathExpressionException |
                 IOException e
                 )
@@ -1021,6 +1114,30 @@ public class ActividadCierreFormActivity extends Activity {
                             CheckBox c = I.getCheckBoxes().get(i);
                             REG.addValue("CHECK-PHOTO" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem() + i, c.isChecked()); //GUARDAMOS LA SELECCION DE SECTORES
                         }
+                    }
+
+                    if (I.getIdType().equals(Constantes.HOUR)) {
+                        REG.addValue("HOUR" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), I.getEditText().getText().toString());
+                    }
+                    if (I.getIdType().equals(Constantes.PHOTO)) {
+                        PHOTO p = I.getPhoto();
+                        if (p != null) {
+                            File tmp = new File(p.getNamePhoto());
+                            if (tmp.exists()) {
+                                REG.addValue("PHOTONAME" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), p.getNamePhoto());
+                                REG.addValue("PHOTOTITLE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), p.getTitlePhoto());
+                                REG.addValue("PHOTODATE" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), p.getDateTime());
+                                REG.addValue("PHOTOCOORDX" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), p.getCoordX());
+                                REG.addValue("PHOTOCOORDY" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), p.getCoordY());
+                            }
+                        }
+
+                    }
+                    if (I.getIdType().equals(Constantes.TEXT)) {
+                        REG.addValue("TEXT" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), ((EditText) I.getView()).getText().toString());
+                    }
+                    if (I.getIdType().equals(Constantes.NUM)) {
+                        REG.addValue("NUM" + S.getIdSystem() + "-" + A.getIdArea() + "-" + I.getIdItem(), ((EditText) I.getView()).getText().toString());
                     }
 
                     if (I.getIdType().equals(Constantes.TABLE)) {
@@ -1366,10 +1483,9 @@ public class ActividadCierreFormActivity extends Activity {
             e.execute();
 
         }
-        if (TITLE.equals("AC")) {
-
-            //EnviarRAN e = new EnviarRAN();
-            //e.execute();
+        if (TITLE.equals("FAENA")) {
+            Enviar e = new Enviar();
+            e.execute();
 
         }
 
@@ -1421,6 +1537,17 @@ public class ActividadCierreFormActivity extends Activity {
 
     }
 
+    private void tomarFoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        int code = TAKE_PICTURE;
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        photoTMP.setDateTime(timeStamp);
+        imgName = name + "item_"+itemTMP.getIdItem() + "_" + timeStamp + ".jpg";
+        Uri output = Uri.fromFile(new File(imgName));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
+        startActivityForResult(intent, code);
+    }
+
     private void tomarFotos() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         int code = TAKE_PICTURES;
@@ -1436,6 +1563,37 @@ public class ActividadCierreFormActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("CODE", "resultcode" + resultCode);
         if (resultCode == -1) {
+            if (requestCode == TAKE_PICTURE) {
+                AlertDialog.Builder b = new AlertDialog.Builder(actividad);
+                final EditText titulo = new EditText(this);
+
+                b.setCancelable(false);
+                titulo.setHint("Título");
+                b.setTitle("Información Fotografía");
+                b.setView(titulo);
+                b.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        photoTMP.setTitlePhoto(titulo.getText().toString());
+                        photoTMP.setCoordX(String.valueOf(trackerTDC.gps.getLatitude()));
+                        photoTMP.setCoordY(String.valueOf(trackerTDC.gps.getLongitude()));
+                        photoTMP.setNamePhoto(imgName);
+                        itemTMP.setPhoto(photoTMP);
+                        buttonTMP.setEnabled(true);
+                        dialogInterface.dismiss();
+                    }
+                });
+                b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        photoTMP = null;
+                        dialogInterface.dismiss();
+                    }
+                });
+                b.show();
+
+            }
             if (requestCode == TAKE_PICTURES) {
                 AlertDialog.Builder b = new AlertDialog.Builder(actividad);
                 final EditText titulo = new EditText(this);
@@ -1472,8 +1630,8 @@ public class ActividadCierreFormActivity extends Activity {
 
     }
 
+
     private class EnviarIden extends AsyncTask<String, String, String> {
-        ProgressDialog dialog;
         boolean ok = false;
 
         private EnviarIden() {
@@ -1504,6 +1662,8 @@ public class ActividadCierreFormActivity extends Activity {
                 return "Se agotó el tiempo de conexión.";
             } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
                 return "Error al leer XML";
+            } catch (Exception e) {
+                return "Error al enviar la respuesta";
             }
         }
 
@@ -1530,11 +1690,11 @@ public class ActividadCierreFormActivity extends Activity {
     }
 
     private class Enviar3G extends AsyncTask<String, String, String> {
-        ProgressDialog dialog;
+
         boolean ok = false;
 
         private Enviar3G() {
-            dialog = new ProgressDialog(mContext);
+            dialog = new ProgressDialog(actividad);
             dialog.setMessage("Enviando formulario...");
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
@@ -1561,7 +1721,77 @@ public class ActividadCierreFormActivity extends Activity {
                 return "Se agotó el tiempo de conexión.";
             } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
                 return "Error al leer XML";
+            } catch (Exception e) {
+                return "Error al enviar la respuesta.";
+
             }
+            //TODO AGREGAR CATCH GENERAL
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (dialog.isShowing()) dialog.dismiss();
+
+            formSended = ok;
+            if (ok) {
+                subir_fotos(s);
+            } else {
+                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                b.setMessage(s);
+                b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                b.show();
+            }
+
+        }
+    }
+
+    private class Enviar extends AsyncTask<String, String, String> {
+
+        boolean ok = false;
+
+        private Enviar() {
+            dialog = new ProgressDialog(actividad);
+            dialog.setMessage("Enviando formulario...");
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.show();
+        }
+
+        private String getAction() {
+            if (TITLE.equals("FAENA")) return SoapRequestTDC.ACTION_SEND_FAENA;
+            else return "";
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String response = SoapRequestTDC.sendAnswer(telephonyManager.getDeviceId(), IDMAIN, SYSTEMS, getAction());
+                ArrayList<String> parse = XMLParser.getReturnCode2(response);
+                if (parse.get(0).equals("0")) {
+                    ok = true;
+                    return parse.get(1);
+                } else {
+                    return "Error Code:" + parse.get(0) + "\n" + parse.get(1);
+                }
+            } catch (IOException e) {
+                return "Se agotó el tiempo de conexión.";
+            } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
+                return "Error al leer XML";
+            } catch (Exception e) {
+                return "Error al enviar la respuesta.";
+
+            }
+            //TODO AGREGAR CATCH GENERAL
         }
 
         @Override
@@ -1588,13 +1818,18 @@ public class ActividadCierreFormActivity extends Activity {
 
 
     public void subir_fotos(String mensaje) {
-        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder b = new AlertDialog.Builder(actividad);
         b.setMessage(mensaje);
         b.setCancelable(false);
         ArrayList<PHOTO> p = new ArrayList<>();
         for (SYSTEM S : SYSTEMS) {
             for (AREA A : S.getAreas()) {
                 for (ITEM I : A.getItems()) {
+                    if(I.getIdType().equals(Constantes.PHOTO)){
+                        if(I.getPhoto() != null){
+                            p.add(I.getPhoto());
+                        }
+                    }
                     if (I.getQuestions() != null) {
                         for (QUESTION Q : I.getQuestions()) {
                             if (Q.getFoto() != null) {
@@ -1679,7 +1914,6 @@ public class ActividadCierreFormActivity extends Activity {
     //TODO UPLOAD PHOTOS
     private class UploadImage extends AsyncTask<String, String, String> {
 
-        ProgressDialog dialog;
         ArrayList<PHOTO> allPhotos;
         String mensaje;
 
@@ -1828,7 +2062,7 @@ public class ActividadCierreFormActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if(!formSended){
+        if (!formSended) {
             saveData();
         }
         super.onDestroy();

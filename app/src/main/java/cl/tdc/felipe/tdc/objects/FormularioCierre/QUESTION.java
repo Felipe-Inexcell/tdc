@@ -65,14 +65,14 @@ public class QUESTION {
                 RadioButton rb = (RadioButton) rg.findViewById(id);
                 Answer = rb.getText().toString();
             }else
-                Answer = "Sin selección";
+                Answer = "";
         }
         if(idType.equals(Constantes.CHECK)){
             for(CheckBox c: checkBoxes){
                 if(c.isChecked())
                     Answer = c.getText().toString();
                 else
-                    Answer = "Sin Selección";
+                    Answer = "";
             }
         }
         if(idType.equals(Constantes.TEXT) || idType.equals(Constantes.NUM)){
@@ -92,7 +92,7 @@ public class QUESTION {
                 RadioButton rb = (RadioButton) rg.findViewById(id);
                 Answer = rb.getText().toString();
             }else
-                Answer = "Sin selección";
+                Answer = "";
         }
         if(idType.equals(Constantes.CHECK)){
             int count= 0;
@@ -107,7 +107,7 @@ public class QUESTION {
                     count++;
                 }
                 if(count==0)
-                    Answer = "Sin Selección";
+                    Answer = "";
             }
         }
         if(idType.equals(Constantes.TEXT) || idType.equals(Constantes.NUM)){

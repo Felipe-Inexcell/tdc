@@ -25,6 +25,26 @@ import cl.tdc.felipe.tdc.objects.FormularioCierre.VALUE;
 
 public class XMLParserTDC {
 
+    public static ArrayList<String> getUpdateInfo(String xmlRecords) throws ParserConfigurationException,
+            SAXException, IOException, XPathExpressionException {
+        ArrayList<String> models = new ArrayList<>();
+
+
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xmlRecords));
+
+        Document doc = db.parse(is);
+        Element response = (Element) doc.getElementsByTagName("ResponseApk").item(0);
+
+        models.add(getNodeValue(response, "Version"));
+        models.add(getNodeValue(response, "Link"));
+        models.add(getNodeValue(response, "Name"));
+
+        return models;
+        //return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector
+    }
+
 
     public static ArrayList<SYSTEM> parseFormulario(String xmlRecords) throws ParserConfigurationException,
             SAXException, IOException, XPathExpressionException {

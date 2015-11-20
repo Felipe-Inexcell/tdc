@@ -433,28 +433,32 @@ public class XMLParser {
             maintenance.setIdMaintenance(getCharacterDataFromElement((Element) element.getElementsByTagName("IdMaintenance").item(0)));
             maintenance.setType(getCharacterDataFromElement((Element) element.getElementsByTagName("Type").item(0)));
 
-            NodeList Systems = element.getElementsByTagName("SystemsPlan").item(0).getChildNodes();
-            ArrayList<MainSystem> mList = new ArrayList<>();
-            for (int k = 0; k < Systems.getLength(); k++) {
-                MainSystem mainSystem = new MainSystem();
-                Element system = (Element) Systems.item(k);
+            NodeList Systems = element.getElementsByTagName("SystemsPlan");
+            if(Systems.getLength() > 0 ) {
+                Systems = Systems.item(0).getChildNodes();
+                ArrayList<MainSystem> mList = new ArrayList<>();
+                for (int k = 0; k < Systems.getLength(); k++) {
+                    MainSystem mainSystem = new MainSystem();
+                    Element system = (Element) Systems.item(k);
 
-                mainSystem.setNameSystem(getCharacterDataFromElement((Element) system.getElementsByTagName("NameSystem").item(0)));
+                    mainSystem.setNameSystem(getCharacterDataFromElement((Element) system.getElementsByTagName("NameSystem").item(0)));
 
-                NodeList Activities = system.getElementsByTagName("Activities").item(0).getChildNodes();
-                ArrayList<Activity> aList = new ArrayList<>();
-                for (int j = 0; j < Activities.getLength(); j++) {
-                    Activity actividad = new Activity();
-                    Element subElement = (Element) Activities.item(j);
-                    actividad.setNameActivity(getCharacterDataFromElement((Element) subElement.getElementsByTagName("NameActivity").item(0)));
-                    actividad.setDescription(getCharacterDataFromElement((Element) subElement.getElementsByTagName("Description").item(0)));
-                    actividad.setIdActivity(getCharacterDataFromElement((Element) subElement.getElementsByTagName("IdActivity").item(0)));
-                    aList.add(actividad);
+                    NodeList Activities = system.getElementsByTagName("Activities").item(0).getChildNodes();
+                    ArrayList<Activity> aList = new ArrayList<>();
+                    for (int j = 0; j < Activities.getLength(); j++) {
+                        Activity actividad = new Activity();
+                        Element subElement = (Element) Activities.item(j);
+                        actividad.setNameActivity(getCharacterDataFromElement((Element) subElement.getElementsByTagName("NameActivity").item(0)));
+                        actividad.setDescription(getCharacterDataFromElement((Element) subElement.getElementsByTagName("Description").item(0)));
+                        actividad.setIdActivity(getCharacterDataFromElement((Element) subElement.getElementsByTagName("IdActivity").item(0)));
+                        aList.add(actividad);
+                    }
+                    mainSystem.setActivitieList(aList);
+                    mList.add(mainSystem);
                 }
-                mainSystem.setActivitieList(aList);
-                mList.add(mainSystem);
+
+                maintenance.setSystemList(mList);
             }
-            maintenance.setSystemList(mList);
             mainList.add(maintenance);
         }
         agenda.setMaintenanceList(mainList);

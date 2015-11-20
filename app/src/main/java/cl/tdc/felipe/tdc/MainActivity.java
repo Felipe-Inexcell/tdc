@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,15 +31,18 @@ import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.daemon.WifiTrackerTDC;
+import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.PreAsBuilt.Informacion;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestCheckLists;
 import cl.tdc.felipe.tdc.webservice.SoapRequestPreAsBuilt;
+import cl.tdc.felipe.tdc.webservice.SoapRequestTDC;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
 import cl.tdc.felipe.tdc.webservice.XMLParserChecklists;
 import cl.tdc.felipe.tdc.webservice.XMLParserPreAsBuilt;
+import cl.tdc.felipe.tdc.webservice.XMLParserTDC;
 import cl.tdc.felipe.tdc.webservice.dummy;
 
 public class MainActivity extends ActionBarActivity {
@@ -102,6 +106,8 @@ public class MainActivity extends ActionBarActivity {
         startService(service_pos);
         settings();
 
+        Actualizar a = new Actualizar();
+        a.execute();
     }
 
     @Override
@@ -273,13 +279,7 @@ public class MainActivity extends ActionBarActivity {
                     return query;
                 else
                     return parse.get(1);
-            } catch (SAXException e) {
-                e.printStackTrace();
-                message = dummy.ERROR_PARSE;
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-                message =dummy.ERROR_PARSE;
-            } catch (XPathExpressionException e) {
+            } catch (SAXException | ParserConfigurationException | XPathExpressionException e) {
                 e.printStackTrace();
                 message = dummy.ERROR_PARSE;
             } catch (IOException e) {
@@ -400,7 +400,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private class AgendaTask extends AsyncTask<String, String, ArrayList<String>> {
-        ProgressDialog progressDialog;
+        ProgressDialog progressDialog = null;
         Context tContext;
         String ATAG = "MAINTASK";
         String mensaje;
@@ -424,7 +424,6 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
-            String result;
             try {
                 publishProgress("Verificando Jornada...");
                 String query = SoapRequest.updateTechnician(IMEI);
@@ -461,6 +460,141 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+    private class Actualizar extends AsyncTask<String, String, ArrayList<String>> {
+        ProgressDialog progressDialog = null;
+        String ATAG = "ACTUALIZACION";
+        String mensaje;
+
+        public Actualizar() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(actividad);
+            progressDialog.setMessage("Buscando Actualizaciones...");
+            progressDialog.show();
+        }
+
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            try {
+                String query = SoapRequestTDC.updateApk(IMEI);
+                return XMLParserTDC.getUpdateInfo(query);
+            } catch (IOException e) {
+                Log.e(ATAG, e.getMessage() + ":\n" + e.getCause());
+                mensaje = dummy.ERROR_CONNECTION;
+            } catch (SAXException | XPathExpressionException | ParserConfigurationException e) {
+                e.printStackTrace();
+                mensaje = dummy.ERROR_PARSE;
+            } catch (Exception e) {
+                e.printStackTrace();
+                mensaje = dummy.ERROR_GENERAL;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<String> s) {
+            progressDialog.dismiss();
+
+            if (s == null) {
+                AlertDialog.Builder error = new AlertDialog.Builder(actividad);
+                error.setMessage(mensaje);
+                error.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                error.show();
+            } else {
+                String version = getResources().getString(R.string.version);
+                if(s.get(0).equals("")){
+                    Toast.makeText(mContext, "No se encontró actualización", Toast.LENGTH_SHORT).show();
+                }else if(version.compareTo(s.get(0)) < 0){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(actividad);
+                    builder.setMessage("Versión Instalada: "
+                            + version
+                            + "\nVersión a Instalar: " + s.get(0)
+                            + "\nDebe actualizar la aplicación para continuar utilizándola.");
+                    builder.setTitle("Hay una nueva versión de la Aplicación");
+                    builder.setCancelable(false);
+
+                    builder.setPositiveButton("Descargar e Instalar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        /*Toast.makeText(mContext, "Descargando... si claro", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/app-debug.apk")), "application/vnd.android.package-archive");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        p.finish();
+                        dialog.dismiss();*/
+                            Update u = new Update(mContext, s.get(1));
+                            u.execute();
+                        }
+                    });
+                    builder.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            actividad.finish();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            actividad.finish();
+                        }
+                    });
+                    builder.show();
+                }
+                }
+
+
+            }
+        }
+
+    private class Update extends AsyncTask<String, String, File> {
+        Context ctx;
+        ProgressDialog d;
+        String url;
+
+        private Update(Context ctx, String URL) {
+            this.ctx = ctx;
+            this.url = URL;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            d = new ProgressDialog(ctx);
+            d.setCancelable(false);
+            d.setCanceledOnTouchOutside(false);
+            d.setMessage("Descargando nueva versión...");
+            d.show();
+        }
+
+        @Override
+        protected File doInBackground(String... params) {
+            return Funciones.Update(url);
+        }
+
+        @Override
+        protected void onPostExecute(File file) {
+            if (d.isShowing()) d.dismiss();
+            if (file != null) {
+                //Toast.makeText(ctx, file, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+            }
+            actividad.finish();
+        }
+    }
+
 
 
 }

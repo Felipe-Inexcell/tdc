@@ -165,7 +165,7 @@ public class SoapRequest {
 
 
     public static String sendPosition(String LONGITUDE, String LATITUDE, String DATE, String IMEI, String ID, String FLAG) throws Exception {
-        final String SOAP_ACTION = "";//"urn:Configurationwsdl#request";
+        final String SOAP_ACTION = "urn:Configurationwsdl#Tracking";
         String response = null;
         String xml = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -175,7 +175,7 @@ public class SoapRequest {
             DATE = formatter.format(fecha);
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(dummy.URL_TRACKING);
+        HttpPost httpPost = new HttpPost(dummy.URL_TDC);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.encodingStyle = SoapSerializationEnvelope.ENC;
@@ -186,10 +186,9 @@ public class SoapRequest {
                 "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
                         "<soapenv:Header/>" +
                         "<soapenv:Body>" +
-                        "<urn:request soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                        "<urn:tracking soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
                         "<Position xsi:type=\"urn:Position\">" +
-                        "<Request xsi:type=\"urn:Request\">" +
-                        "<!--Zero or more repetitions:-->" +
+                        "<RequestPosition xsi:type=\"urn:RequestPosition\">" +
                         "<Parameters xsi:type=\"urn:Parameters\">" +
                         "<Parameter xsi:type=\"urn:Parameter\">" +
                         "<Name xsi:type=\"xsd:string\">LATITUDE</Name>" +
@@ -212,20 +211,20 @@ public class SoapRequest {
                         "<Value xsi:type=\"xsd:string\">" + ID + "</Value>" +
                         "</Parameter>" +
                         "</Parameters>" +
-                        "<Header xsi:type=\"urn:Header\">" +
+                        "<HeaderPlan xsi:type=\"urn:HeaderPlan\">" +
                         "<Date xsi:type=\"xsd:string\">" + DATE + "</Date>" +
                         "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
                         "<User xsi:type=\"xsd:string\">" + IMEI + "</User>" +
-                        "</Header>" +
+                        "</HeaderPlan>" +
                         "<OperationType xsi:type=\"xsd:string\">INSERT</OperationType>" +
                         "<Element xsi:type=\"xsd:string\">TRACKING</Element>" +
-                        "</Request>" +
+                        "</RequestPosition>" +
                         "</Position>" +
-                        "</urn:request>" +
+                        "</urn:tracking>" +
                         "</soapenv:Body>" +
                         "</soapenv:Envelope>";
         xml = bodyOut;
-        Log.w("POSITION", bodyOut);
+        Log.w("POSITIONTRACKER", bodyOut);
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
         httpPost.addHeader(SOAP_ACTION, dummy.URL_TRACKING);
@@ -234,6 +233,7 @@ public class SoapRequest {
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();
         response = EntityUtils.toString(resEntity);
+        Log.w("POSITIONTRACKER", response);
         return response;
     }
 

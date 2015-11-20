@@ -40,7 +40,7 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
 
     FormCierreReg REG;
 
-    Button IDEN, TRESG, AC, DC, SG, AIR;
+    Button IDEN, TRESG, AC, DC, SG, AIR, FAENA;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +65,14 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         DC = (Button) this.findViewById(R.id.DC);
         SG = (Button) this.findViewById(R.id.SG);
         AIR = (Button) this.findViewById(R.id.AIR);
+        FAENA = (Button) this.findViewById(R.id.FAENA);
         IDEN.setOnClickListener(this);
         TRESG.setOnClickListener(this);
         AC.setOnClickListener(this);
         DC.setOnClickListener(this);
         SG.setOnClickListener(this);
         AIR.setOnClickListener(this);
+        FAENA.setOnClickListener(this);
 
         boolean state = REG.getBoolean("IDEN" + idMain);
         if (state)
@@ -97,6 +99,11 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         state = REG.getBoolean("AIR"+idMain);
         if(state){
             SG.setEnabled(false);
+        }
+
+        state = REG.getBoolean("FAENA"+idMain);
+        if(state){
+            FAENA.setEnabled(false);
         }
     }
 
@@ -175,6 +182,10 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
             buscar_form task = new buscar_form("AIR");
             task.execute();
         }
+        if (view.getId() == R.id.FAENA) {
+            buscar_form task = new buscar_form("FAENA");
+            task.execute();
+        }
     }
 
     private String getAction(String type) {
@@ -184,6 +195,7 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         if (type.equals("DC")) return SoapRequestTDC.ACTION_DC;
         if (type.equals("SYSTEM GROUND")) return SoapRequestTDC.ACTION_SG;
         if (type.equals("AIR")) return SoapRequestTDC.ACTION_AIR;
+        if (type.equals("FAENA")) return SoapRequestTDC.ACTION_FAENA;
         else return "";
     }
 
@@ -247,6 +259,8 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
                     code = 4;
                 }else if(type.equals("AIR")) {
                     code = 5;
+                }else if(type.equals("FAENA")) {
+                    code = 6;
                 }else
                     code = -1;
 
@@ -313,6 +327,10 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
                 TRESG.setEnabled(false);
                 REG.addValue("3G" + idMain, true);
             }
+            if (requestCode == 6) {
+                FAENA.setEnabled(false);
+                REG.addValue("FAENA" + idMain, true);
+            }
         }
     }
 
@@ -341,7 +359,7 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         boolean ok = false;
 
         private Cierre() {
-            p = new ProgressDialog(mContext);
+            p = new ProgressDialog(actividad);
             p.setMessage("Cerrando Mantenimiento...");
             p.setCanceledOnTouchOutside(false);
             p.setCancelable(false);

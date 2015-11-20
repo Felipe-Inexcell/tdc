@@ -15,4 +15,5 @@ public class Constantes {
     public static String CHECK_PHOTO = "9";
     public static String DATE = "10";
     public static String ADD = "11";
+    public static String HOUR = "12";
 }

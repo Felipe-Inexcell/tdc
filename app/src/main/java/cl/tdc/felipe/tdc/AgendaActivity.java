@@ -456,83 +456,85 @@ public class AgendaActivity extends Activity {
                             ImageLoader.getInstance().displayImage(url, iMap);
 
 
-                            int max = Funciones.getNumActivities(m.getSystemList());
-                            pProgress.setMax(max);
-                            Log.d("AGENDA", "MAX" + max);
 
 
-                            for (MainSystem system : m.getSystemList()) {
+                            if(m.getSystemList() != null) {
+                                int max = Funciones.getNumActivities(m.getSystemList());
+                                pProgress.setMax(max);
+                                Log.d("AGENDA", "MAX" + max);
+                                for (MainSystem system : m.getSystemList()) {
 
-                                TextView systemName = new TextView(tContext);
-                                systemName.setText(system.getNameSystem());
-                                systemName.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    TextView systemName = new TextView(tContext);
+                                    systemName.setText(system.getNameSystem());
+                                    systemName.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                                systemName.setBackgroundResource(R.drawable.fondo_general_top);
-                                systemName.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    systemName.setBackgroundResource(R.drawable.fondo_general_top);
+                                    systemName.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                                lActivities.addView(systemName);
+                                    lActivities.addView(systemName);
 
-                                LinearLayout sytemLayout = new LinearLayout(tContext);
-                                sytemLayout.setBackgroundResource(R.drawable.fondo_general_bottom);
-                                sytemLayout.setOrientation(LinearLayout.VERTICAL);
-                                sytemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    LinearLayout sytemLayout = new LinearLayout(tContext);
+                                    sytemLayout.setBackgroundResource(R.drawable.fondo_general_bottom);
+                                    sytemLayout.setOrientation(LinearLayout.VERTICAL);
+                                    sytemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                                for (final cl.tdc.felipe.tdc.objects.Maintenance.Activity a : system.getActivitieList()) {
-                                    idsActivities.add(a.getIdActivity());
-                                    View vista = LayoutInflater.from(tContext).inflate(R.layout.activity_view, null, false);
-                                    ((TextView) vista.findViewById(R.id.tName)).setText(a.getNameActivity());
-                                    ((TextView) vista.findViewById(R.id.tDescription)).setText(a.getDescription());
-                                    CheckBox checkBox = (CheckBox) vista.findViewById(R.id.chCompleted);
-                                    if (terminated) {
-                                        checkBox.setEnabled(false);
-                                        checkBox.setChecked(true);
-                                        pProgress.setProgress(pProgress.getMax());
-                                        bComplete.setEnabled(false);
-                                    }
-                                    if (!terminated) {
-                                        checkBox.setEnabled(true);
-                                    }
+                                    for (final cl.tdc.felipe.tdc.objects.Maintenance.Activity a : system.getActivitieList()) {
+                                        idsActivities.add(a.getIdActivity());
+                                        View vista = LayoutInflater.from(tContext).inflate(R.layout.activity_view, null, false);
+                                        ((TextView) vista.findViewById(R.id.tName)).setText(a.getNameActivity());
+                                        ((TextView) vista.findViewById(R.id.tDescription)).setText(a.getDescription());
+                                        CheckBox checkBox = (CheckBox) vista.findViewById(R.id.chCompleted);
+                                        if (terminated) {
+                                            checkBox.setEnabled(false);
+                                            checkBox.setChecked(true);
+                                            pProgress.setProgress(pProgress.getMax());
+                                            bComplete.setEnabled(false);
+                                        }
+                                        if (!terminated) {
+                                            checkBox.setEnabled(true);
+                                        }
 
-                                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                        @Override
-                                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                            int progress = pProgress.getProgress();
-                                            if (b) {
-                                                pProgress.setProgress(progress + 1);
-                                                if (!terminated)
-                                                    pref.stateActivity(a, true);
-                                                Log.d("FRAGMENT", "Actividad: " + a.getNameActivity() + " estado completada");
-                                            } else {
-                                                pProgress.setProgress(progress - 1);
-                                                if (!terminated)
-                                                    pref.stateActivity(a, false);
-                                                Log.d("FRAGMENT", "Actividad: " + a.getNameActivity() + " estado no completada");
-                                            }
+                                        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                            @Override
+                                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                                int progress = pProgress.getProgress();
+                                                if (b) {
+                                                    pProgress.setProgress(progress + 1);
+                                                    if (!terminated)
+                                                        pref.stateActivity(a, true);
+                                                    Log.d("FRAGMENT", "Actividad: " + a.getNameActivity() + " estado completada");
+                                                } else {
+                                                    pProgress.setProgress(progress - 1);
+                                                    if (!terminated)
+                                                        pref.stateActivity(a, false);
+                                                    Log.d("FRAGMENT", "Actividad: " + a.getNameActivity() + " estado no completada");
+                                                }
 
-                                            if (pProgress.getProgress() == pProgress.getMax()) {
+                                                if (pProgress.getProgress() == pProgress.getMax()) {
                                                     bComplete.setEnabled(true);
+                                                } else {
+                                                    bComplete.setEnabled(false);
+                                                }
+
+                                            }
+                                        });
+
+                                        if (!terminated && pref.isCompleteActivity(a)) {
+
+                                            checkBox.setChecked(true);
+                                            if (pProgress.getProgress() == pProgress.getMax()) {
+                                                bComplete.setEnabled(true);
                                             } else {
                                                 bComplete.setEnabled(false);
                                             }
-
                                         }
-                                    });
 
-                                    if (!terminated && pref.isCompleteActivity(a)) {
 
-                                        checkBox.setChecked(true);
-                                        if (pProgress.getProgress() == pProgress.getMax()) {
-                                            bComplete.setEnabled(true);
-                                        } else {
-                                            bComplete.setEnabled(false);
-                                        }
+                                        sytemLayout.addView(vista);
                                     }
+                                    lActivities.addView(sytemLayout);
 
-
-                                    sytemLayout.addView(vista);
                                 }
-                                lActivities.addView(sytemLayout);
-
                             }
 
                             tAddress.setText("Dirección: " + m.getAddress());
