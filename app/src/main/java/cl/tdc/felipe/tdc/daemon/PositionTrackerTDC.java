@@ -85,7 +85,7 @@ public class PositionTrackerTDC extends Service {
                             List<Address> addressList = geocoder.getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
 
                             /*if (addressList != null && addressList.size() > 0 && Funciones.isCorrect(addressList.get(0))) {*/
-                                Log.i("GEOCODER", addressList.get(0).getCountryName());
+                                //Log.i("GEOCODER", addressList.get(0).getCountryName());
                                 if (wifiState == NetworkInfo.State.CONNECTED || ntwrkState == NetworkInfo.State.CONNECTED) {
                                     /** ENVIAMOS LA INFO**/
                                     try {

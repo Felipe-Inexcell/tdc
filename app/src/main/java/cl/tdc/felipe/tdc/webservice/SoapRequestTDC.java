@@ -580,11 +580,11 @@ public class SoapRequestTDC {
         httpPost.addHeader(SOAP_ACTION, dummy.URL_TDC);
 
 
-        /*httpPost.setEntity(se);
+        httpPost.setEntity(se);
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();
         response = EntityUtils.toString(resEntity);
-        Log.d("RESPONSE", response);*/
+        Log.d("RESPONSE", response);
         return response;
     }
 
