@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.objects.Maintenance.Agenda;
 import cl.tdc.felipe.tdc.preferences.FormCierreReg;
+import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
 import cl.tdc.felipe.tdc.webservice.SoapRequestTDC;
 import cl.tdc.felipe.tdc.webservice.XMLParser;
@@ -38,7 +39,8 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
     public static Activity actividad;
     Context mContext;
 
-    FormCierreReg REG;
+    FormCierreReg REG, IDENREG, TRESGREG, FAENAREG;
+    MaintenanceReg MAINREG;
 
     Button IDEN, TRESG, AC, DC, SG, AIR, FAENA;
 
@@ -50,6 +52,10 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
         mContext = this;
 
         REG = new FormCierreReg(this, "LISTADO");
+        IDENREG = new FormCierreReg(this, "IDEN");
+        TRESGREG = new FormCierreReg(this, "3G");
+        FAENAREG = new FormCierreReg(this, "FAENA");
+        MAINREG = new MaintenanceReg(this);
 
         idMain = getIntent().getStringExtra("MAINTENANCE");
 
@@ -403,6 +409,10 @@ public class ActividadCierreActivity extends Activity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         REG.clearPreferences();
+                        MAINREG.clearPreferences();
+                        IDENREG.clearPreferences();
+                        TRESGREG.clearPreferences();
+                        FAENAREG.clearPreferences();
                         if(AgendaActivity.actividad != null)
                             AgendaActivity.actividad.finish();
 

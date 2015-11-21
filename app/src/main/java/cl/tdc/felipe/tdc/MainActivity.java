@@ -33,6 +33,7 @@ import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
 import cl.tdc.felipe.tdc.daemon.WifiTrackerTDC;
 import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.PreAsBuilt.Informacion;
+import cl.tdc.felipe.tdc.preferences.FormCierreReg;
 import cl.tdc.felipe.tdc.preferences.MaintenanceReg;
 import cl.tdc.felipe.tdc.preferences.PreferencesTDC;
 import cl.tdc.felipe.tdc.webservice.SoapRequest;
@@ -56,6 +57,9 @@ public class MainActivity extends ActionBarActivity {
     LocationManager locationManager;
     public ImageButton agendabtn;
 
+    FormCierreReg REGCIERRE, IDENREG, TRESGREG, FAENAREG;
+    MaintenanceReg MAINREG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +69,15 @@ public class MainActivity extends ActionBarActivity {
         preferencesTDC = new PreferencesTDC(this);
         mContext = this;
 
+        REGCIERRE = new FormCierreReg(this, "LISTADO");
+        IDENREG = new FormCierreReg(this, "IDEN");
+        TRESGREG = new FormCierreReg(this, "3G");
+        FAENAREG = new FormCierreReg(this, "FAENA");
+        MAINREG = new MaintenanceReg(this);
+
         File carpetaTDC = new File(Environment.getExternalStorageDirectory() + "/TDC@");
-        if(!carpetaTDC.exists())
-            if(!carpetaTDC.mkdirs()){
+        if (!carpetaTDC.exists())
+            if (!carpetaTDC.mkdirs()) {
                 Log.e("TDC", "fallo en crear carpeta TDC@");
             }
 
@@ -185,7 +195,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-  //TODO: SEGUIMIENTO DE OBRAS
+    //TODO: SEGUIMIENTO DE OBRAS
     public void onClick_btn5(View v) {
         startActivity(new Intent(this, Seguimiento.class));
     }
@@ -199,10 +209,11 @@ public class MainActivity extends ActionBarActivity {
     public void onClick_relevo(View v) {
         startActivity(new Intent(this, RelevarActivity.class));
     }
+
     public void onClick_preasbuilt(View v) {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
 
-        b.setItems(new CharSequence[]{"RF","MW"}, new DialogInterface.OnClickListener() {
+        b.setItems(new CharSequence[]{"RF", "MW"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 PreAsBuilt task = new PreAsBuilt(mContext, i);
@@ -222,10 +233,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
-
-
-
     void settings() {
         TelephonyManager fono = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         PreferencesTDC preferencesTDC = new PreferencesTDC(this);
@@ -238,7 +245,7 @@ public class MainActivity extends ActionBarActivity {
 
 //-----------------TASK ASINCRONICO------------------------------------
 
-    private class PreAsBuilt extends AsyncTask<String, String, String>{
+    private class PreAsBuilt extends AsyncTask<String, String, String> {
         Context context;
         ProgressDialog d;
         boolean ok = false;
@@ -253,9 +260,9 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             d = new ProgressDialog(context);
-            if(type == XMLParserPreAsBuilt.RF)
+            if (type == XMLParserPreAsBuilt.RF)
                 d.setMessage("Buscando informacion sobre RF");
-            if(type == XMLParserPreAsBuilt.MW)
+            if (type == XMLParserPreAsBuilt.MW)
                 d.setMessage("Buscando informacion sobre MW");
             d.setCanceledOnTouchOutside(false);
             d.setCancelable(false);
@@ -264,9 +271,9 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            try{
+            try {
                 String query;
-                if(type == XMLParserPreAsBuilt.RF)
+                if (type == XMLParserPreAsBuilt.RF)
                     query = SoapRequestPreAsBuilt.getNodob(IMEI);
                 else
                     query = SoapRequestPreAsBuilt.getNodoMW(IMEI);
@@ -275,7 +282,7 @@ public class MainActivity extends ActionBarActivity {
 
                 ok = parse.get(0).equals("0");
 
-                if(ok)
+                if (ok)
                     return query;
                 else
                     return parse.get(1);
@@ -284,7 +291,7 @@ public class MainActivity extends ActionBarActivity {
                 message = dummy.ERROR_PARSE;
             } catch (IOException e) {
                 e.printStackTrace();
-                message =dummy.ERROR_CONNECTION;
+                message = dummy.ERROR_CONNECTION;
             } catch (Exception e) {
                 e.printStackTrace();
                 message = dummy.ERROR_GENERAL;
@@ -294,7 +301,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            if(ok){
+            if (ok) {
                 try {
                     Informacion info = XMLParserPreAsBuilt.getInfoPreAsBuilt(s, type);
 
@@ -316,9 +323,9 @@ public class MainActivity extends ActionBarActivity {
                     e.printStackTrace();
                     Toast.makeText(context, dummy.ERROR_PARSE, Toast.LENGTH_LONG).show();
                 }
-            }else{
+            } else {
 
-                if(s == null)
+                if (s == null)
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 else {
                     try {
@@ -330,7 +337,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
             }
-            if(d.isShowing())d.dismiss();
+            if (d.isShowing()) d.dismiss();
         }
     }
 
@@ -460,6 +467,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+
     private class Actualizar extends AsyncTask<String, String, ArrayList<String>> {
         ProgressDialog progressDialog = null;
         String ATAG = "ACTUALIZACION";
@@ -510,9 +518,9 @@ public class MainActivity extends ActionBarActivity {
                 error.show();
             } else {
                 String version = getResources().getString(R.string.version);
-                if(s.get(0).equals("")){
+                if (s.get(0).equals("")) {
                     Toast.makeText(mContext, "No se encontró actualización", Toast.LENGTH_SHORT).show();
-                }else if(version.compareTo(s.get(0)) < 0){
+                } else if (version.compareTo(s.get(0)) < 0) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(actividad);
                     builder.setMessage("Versión Instalada: "
                             + version
@@ -531,7 +539,7 @@ public class MainActivity extends ActionBarActivity {
                         startActivity(intent);
                         p.finish();
                         dialog.dismiss();*/
-                            Update u = new Update(mContext, s.get(1));
+                            Update u = new Update(mContext, s.get(1), s.get(2));
                             u.execute();
                         }
                     });
@@ -550,20 +558,23 @@ public class MainActivity extends ActionBarActivity {
                     });
                     builder.show();
                 }
-                }
-
-
             }
+
+
         }
+    }
 
     private class Update extends AsyncTask<String, String, File> {
         Context ctx;
         ProgressDialog d;
         String url;
+        String name;
 
-        private Update(Context ctx, String URL) {
+        private Update(Context ctx, String URL, String NAME) {
             this.ctx = ctx;
             this.url = URL;
+            this.name = NAME;
+            Log.w("UPDATE", URL);
         }
 
         @Override
@@ -589,12 +600,17 @@ public class MainActivity extends ActionBarActivity {
                 intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                /*REGCIERRE.clearPreferences();
+                MAINREG.clearPreferences();
+                IDENREG.clearPreferences();
+                TRESGREG.clearPreferences();
+                FAENAREG.clearPreferences();*/
+
 
             }
             actividad.finish();
         }
     }
-
 
 
 }

@@ -35,7 +35,7 @@ import cl.tdc.felipe.tdc.webservice.XMLParser;
 public class PositionTrackerTDC extends Service {
     private static final String TAG = "PositionTrackerTDC";
     private static final long MIN_PERIOD = 1000 * 60 * 5;
-    private static final long MIN_DELAY = 1000 * 20;
+    private static final long MIN_DELAY = 1000 * 2;
     private static final String DIRECTORYNAME = "/TDC@";
     private static final String FILENAME = "pos_pendent.txt";
     public String LATITUDE;
@@ -84,7 +84,7 @@ public class PositionTrackerTDC extends Service {
                             Log.i("GEOCODER", latitude+" "+longitude);
                             List<Address> addressList = geocoder.getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
 
-                            if (addressList != null && addressList.size() > 0 && Funciones.isCorrect(addressList.get(0))) {
+                            /*if (addressList != null && addressList.size() > 0 && Funciones.isCorrect(addressList.get(0))) {*/
                                 Log.i("GEOCODER", addressList.get(0).getCountryName());
                                 if (wifiState == NetworkInfo.State.CONNECTED || ntwrkState == NetworkInfo.State.CONNECTED) {
                                     /** ENVIAMOS LA INFO**/
@@ -160,9 +160,9 @@ public class PositionTrackerTDC extends Service {
                                         out.close();
                                     }
                                 }
-                            } else {
+                            /*} else {
                                 Log.d("GEOCODE", "Posicion fuera de los paises registrados");
-                            }
+                            }*/
                         } catch (Exception e) {
                             e.printStackTrace();
                             if (!gps.isGPSEnabled) {

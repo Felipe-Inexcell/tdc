@@ -162,18 +162,20 @@ public class QUESTION {
             final Calendar myCalendar = Calendar.getInstance();
             final EditText fecha = new EditText(ctx);
             fecha.setBackgroundResource(R.drawable.fondo_edittext);
-            fecha.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            fecha.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             fecha.setEnabled(false);
+            fecha.setGravity(Gravity.CENTER_VERTICAL);
+
 
             ImageButton pick = new ImageButton(ctx);
             pick.setBackgroundResource(R.drawable.button_gray);
             pick.setImageResource(R.drawable.ic_calendarwhite);
 
             LinearLayout.LayoutParams pButton = new LinearLayout.LayoutParams(0,(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, ctx.getResources().getDisplayMetrics()));
-            LinearLayout.LayoutParams pText = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams pText = new LinearLayout.LayoutParams(0, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, ctx.getResources().getDisplayMetrics()));
             pButton.weight=1;
             pText.weight=4;
-            pText.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, ctx.getResources().getDisplayMetrics());
+            pText.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, ctx.getResources().getDisplayMetrics());
 
             final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
