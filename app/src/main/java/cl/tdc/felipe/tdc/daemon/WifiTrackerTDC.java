@@ -25,7 +25,7 @@ import cl.tdc.felipe.tdc.webservice.SoapRequest;
 public class WifiTrackerTDC extends Service {
     private static final String TAG = "WifiTrackerTDC";
     private static final long MIN_PERIOD = 1000 * 60 * 20;
-    private static final long MIN_DELAY = 1000 * 10;
+    private static final long MIN_DELAY = 1000 * 2;
     private static final String DIRECTORYNAME = "/TDC@";
     private static final String FILENAME = "wifi_pendent.txt";
     private static final String FILENAME_AUX = "wifi_pendent_tmp.txt";
@@ -63,37 +63,6 @@ public class WifiTrackerTDC extends Service {
                             ConnectivityManager conMan = (ConnectivityManager) getSystemService(MainActivity.CONNECTIVITY_SERVICE);
                             NetworkInfo.State wifiState = conMan.getNetworkInfo(1).getState();
                             NetworkInfo.State ntwrkState = conMan.getNetworkInfo(0).getState();
-                            /** REVISAMOS SI HAY DATOS PENDIENTES
-                             * Y TRATAMOS DE ENVIAR SI HAY CONEXION                             *
-                             **/
-
-                            if (Environment.getExternalStorageState().equals("mounted")) {
-                                File sdCard = Environment.getExternalStorageDirectory();
-                                File directory = new File(sdCard.getAbsolutePath()
-                                        + DIRECTORYNAME);
-                                File file = new File(directory, FILENAME);
-                                //BufferedWriter out = new BufferedWriter(fw);
-                                if (file.exists() && (wifiState == NetworkInfo.State.CONNECTED || ntwrkState == NetworkInfo.State.CONNECTED)) {
-                                    BufferedReader buffer = new BufferedReader(new FileReader(file));
-                                    String line;
-                                    buffer.readLine(); //leemos la linea en blanco
-                                    int count = 0;
-                                    while ((line = buffer.readLine()) != null) {
-                                        try {
-                                            Log.i(TAG, "PENDIENTE: " + line);
-                                            String[] pendents = line.split(";");
-                                            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                                            String query = SoapRequest.sendWifi(pendents[0], pendents[1], pendents[2], pendents[3], pendents[4], pendents[5], telephonyManager.getDeviceId());
-                                            Log.i(TAG, "ENVIADO\n" + query);
-                                        } catch (Exception e) {
-                                            Log.e("POSITION", e.getMessage() + ": " + e.getCause());
-                                        }
-                                    }
-                                    buffer.close();
-                                    if (file.delete())
-                                        Log.i(TAG, FILENAME + " BORRADO");
-                                }
-                            }
 
                             /** PARA CADA RED ENCONTRADA SE INTENTA ENVIAR
                              * SI ENCUENTRA CONEXION ENVIA LOS DATOS A TDC
@@ -145,6 +114,41 @@ public class WifiTrackerTDC extends Service {
                                     }
                                 }
                             }
+
+
+                            /** REVISAMOS SI HAY DATOS PENDIENTES
+                             * Y TRATAMOS DE ENVIAR SI HAY CONEXION                             *
+                             **/
+
+                            if (Environment.getExternalStorageState().equals("mounted")) {
+                                File sdCard = Environment.getExternalStorageDirectory();
+                                File directory = new File(sdCard.getAbsolutePath()
+                                        + DIRECTORYNAME);
+                                File file = new File(directory, FILENAME);
+                                //BufferedWriter out = new BufferedWriter(fw);
+                                if (file.exists() && (wifiState == NetworkInfo.State.CONNECTED || ntwrkState == NetworkInfo.State.CONNECTED)) {
+                                    BufferedReader buffer = new BufferedReader(new FileReader(file));
+                                    String line;
+                                    buffer.readLine(); //leemos la linea en blanco
+                                    int count = 0;
+                                    while ((line = buffer.readLine()) != null) {
+                                        try {
+                                            Log.i(TAG, "PENDIENTE: " + line);
+                                            String[] pendents = line.split(";");
+                                            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                                            String query = SoapRequest.sendWifi(pendents[0], pendents[1], pendents[2], pendents[3], pendents[4], pendents[5], telephonyManager.getDeviceId());
+                                            Log.i(TAG, "ENVIADO\n" + query);
+                                        } catch (Exception e) {
+                                            Log.e("POSITION", e.getMessage() + ": " + e.getCause());
+                                        }
+                                    }
+                                    buffer.close();
+                                    if (file.delete())
+                                        Log.i(TAG, FILENAME + " BORRADO");
+                                }
+                            }
+
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
