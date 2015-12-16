@@ -6,10 +6,11 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "cl.tdc.felipe.tdc"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -32,11 +33,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:cardview-v7:22.0.0'
     compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.journeyapps:zxing-android-embedded:2.3.0@aar'
     compile 'com.journeyapps:zxing-android-integration:2.3.0@aar'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.github.gcacace:signature-pad:1.0.1'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
-    compile 'com.balysv:material-ripple:1.0.2'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }

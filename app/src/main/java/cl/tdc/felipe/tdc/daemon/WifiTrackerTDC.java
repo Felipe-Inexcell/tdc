@@ -24,7 +24,8 @@ import cl.tdc.felipe.tdc.webservice.SoapRequest;
 
 public class WifiTrackerTDC extends Service {
     private static final String TAG = "WifiTrackerTDC";
-    private static final long MIN_PERIOD = 1000 * 60 * 20;
+    private static long MIN_PERIOD;
+    private static long MINUTE = 1000 * 60;
     private static final long MIN_DELAY = 1000 * 2;
     private static final String DIRECTORYNAME = "/TDC@";
     private static final String FILENAME = "wifi_pendent.txt";
@@ -34,23 +35,16 @@ public class WifiTrackerTDC extends Service {
     MyLocationListener gps;
     MyWifiListener wifi;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        gps = new MyLocationListener(this);
-        wifi = new MyWifiListener(this);
 
-        /**
-         * Timer: Cada MIN_PERIOD segundos revisa las redes wifi que capta.
-         * Si el usuario esta conectado a internet wifi, la informacion de cada red identificada
-         *  es enviada a la torre de control.
-         * Si no, la informacion se guardara en /TDC@/wifi_pendent.txt en
-         * la tarjeta SD.
-         * Luego, si el usuario esta conectado a internet wifi, se revisa si el archivo
-         * /TDC@/wifi_pendent.txt existe en la tarjeta SD.
-         * Si existe, se envía la información almacenada a la torre de control.
-         */
-        this.mTimer = new Timer();
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int _time = intent.getIntExtra("TIME", -1);
+
+        if(_time != 0 && _time != -1){
+            MIN_PERIOD = MINUTE * _time;
+        }
+
         this.mTimer.scheduleAtFixedRate(
                 new TimerTask() {
                     @Override
@@ -156,6 +150,28 @@ public class WifiTrackerTDC extends Service {
                     }
                 }
                 , MIN_DELAY, MIN_PERIOD);
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        gps = new MyLocationListener(this);
+        wifi = new MyWifiListener(this);
+
+        /**
+         * Timer: Cada MIN_PERIOD segundos revisa las redes wifi que capta.
+         * Si el usuario esta conectado a internet wifi, la informacion de cada red identificada
+         *  es enviada a la torre de control.
+         * Si no, la informacion se guardara en /TDC@/wifi_pendent.txt en
+         * la tarjeta SD.
+         * Luego, si el usuario esta conectado a internet wifi, se revisa si el archivo
+         * /TDC@/wifi_pendent.txt existe en la tarjeta SD.
+         * Si existe, se envía la información almacenada a la torre de control.
+         */
+        this.mTimer = new Timer();
+
     }
 
     @Override

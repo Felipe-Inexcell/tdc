@@ -144,6 +144,10 @@ public class ActividadCierreFormActivity extends Activity {
             NAIR = getIntent().getStringExtra("NAIR");
         }
 
+        if(TITLE.equals("") || TITLE.equals("") || TITLE.equals("") || TITLE.equals("") || TITLE.equals("") || TITLE.equals("")){
+
+        }
+
         QUERY = getIntent().getStringExtra("XML");
         IDMAIN = getIntent().getStringExtra("ID");
 
@@ -1488,6 +1492,7 @@ public class ActividadCierreFormActivity extends Activity {
             e.execute();
 
         }
+
 
     }
 

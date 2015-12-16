@@ -14,6 +14,7 @@ import android.media.RingtoneManager;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -246,6 +247,28 @@ public class Funciones {
             return cd.getData();
         }
         return "";
+    }
+
+
+    public static String getNetworkType(int netType){
+        String NT = "";
+        if (netType == TelephonyManager.NETWORK_TYPE_1xRTT) NT = "1xRTT";
+        if (netType == TelephonyManager.NETWORK_TYPE_CDMA) NT = "CDMA";
+        if (netType == TelephonyManager.NETWORK_TYPE_EDGE) NT = "EDGE";
+        if (netType == TelephonyManager.NETWORK_TYPE_EHRPD) NT = "eHRPD";
+        if (netType == TelephonyManager.NETWORK_TYPE_EVDO_0) NT = "EVDO revision 0";
+        if (netType == TelephonyManager.NETWORK_TYPE_EVDO_A) NT = "EVDO revision A";
+        if (netType == TelephonyManager.NETWORK_TYPE_EVDO_B) NT = "EVDO revision B";
+        if (netType == TelephonyManager.NETWORK_TYPE_GPRS) NT = "GPRS";
+        if (netType == TelephonyManager.NETWORK_TYPE_HSDPA) NT = "HSDPA";
+        if (netType == TelephonyManager.NETWORK_TYPE_HSPA) NT = "HSPA";
+        if (netType == TelephonyManager.NETWORK_TYPE_HSPAP) NT = "HSPA+";
+        if (netType == TelephonyManager.NETWORK_TYPE_HSUPA) NT = "HSUPA";
+        if (netType == TelephonyManager.NETWORK_TYPE_IDEN) NT = "iDen";
+        if (netType == TelephonyManager.NETWORK_TYPE_LTE) NT = "LTE";
+        if (netType == TelephonyManager.NETWORK_TYPE_UMTS) NT = "UMTS";
+        if (netType == TelephonyManager.NETWORK_TYPE_UNKNOWN) NT = "Desconocido";
+        return NT;
     }
 
     public static File Update(String apkurl) {

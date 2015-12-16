@@ -216,8 +216,7 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="8dp"
-                android:visibility="gone" />
+                android:layout_marginRight="8dp" />
 
             <Button
                 android:layout_width="match_parent"
@@ -229,8 +228,7 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="8dp"
-                android:visibility="gone" />
+                android:layout_marginRight="8dp" />
 
             <Button
                 android:layout_width="match_parent"
@@ -242,8 +240,7 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="8dp"
-                android:visibility="gone" />
+                android:layout_marginRight="8dp" />
 
             <Button
                 android:layout_width="match_parent"
@@ -255,8 +252,7 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="8dp"
-                android:visibility="gone" />
+                android:layout_marginRight="8dp" />
 
             <Button
                 android:layout_width="match_parent"

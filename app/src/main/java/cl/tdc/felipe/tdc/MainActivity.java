@@ -24,12 +24,14 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import cl.tdc.felipe.tdc.daemon.PositionTrackerTDC;
+import cl.tdc.felipe.tdc.daemon.TresgTrackerTDC;
 import cl.tdc.felipe.tdc.daemon.WifiTrackerTDC;
 import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.PreAsBuilt.Informacion;
@@ -50,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
     Context mContext;
     private static final String TAG = "MAINACTIVITY";
     public static Activity actividad;
-    public static Intent service_wifi, service_pos;
+    public static Intent service_wifi, service_pos, service_3g;
     public static String IMEI;
     public static PreferencesTDC preferencesTDC;
     private static int REQUEST_SETTINGS_ACTION = 0;
@@ -111,9 +113,15 @@ public class MainActivity extends ActionBarActivity {
         IMEI = telephonyManager.getDeviceId();
 
         service_wifi = new Intent(this, WifiTrackerTDC.class);
-        //startService(service_wifi);
+        service_wifi.putExtra("TIME", 10);
+        startService(service_wifi);
+
         service_pos = new Intent(this, PositionTrackerTDC.class);
         startService(service_pos);
+
+        service_3g = new Intent(this, TresgTrackerTDC.class);
+        service_3g.putExtra("TIME", 10);
+        startService(service_3g);
         settings();
 
         Actualizar a = new Actualizar();
@@ -235,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
 
     void settings() {
         TelephonyManager fono = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        PreferencesTDC preferencesTDC = new PreferencesTDC(this);
+        preferencesTDC = new PreferencesTDC(this);
         if (!preferencesTDC.sharedPreferences.contains(PreferencesTDC.SETTING_IMEI))
             preferencesTDC.setIMEI(fono.getDeviceId());
         if (!preferencesTDC.sharedPreferences.contains(PreferencesTDC.SETTING_IMSI))
@@ -517,6 +525,7 @@ public class MainActivity extends ActionBarActivity {
                 });
                 error.show();
             } else {
+                timerServices(s.get(3), s.get(4));
                 String version = getResources().getString(R.string.version);
                 if (s.get(0).equals("")) {
                     Toast.makeText(mContext, "No se encontró actualización", Toast.LENGTH_SHORT).show();
@@ -532,13 +541,6 @@ public class MainActivity extends ActionBarActivity {
                     builder.setPositiveButton("Descargar e Instalar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                        /*Toast.makeText(mContext, "Descargando... si claro", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/app-debug.apk")), "application/vnd.android.package-archive");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        p.finish();
-                        dialog.dismiss();*/
                             Update u = new Update(mContext, s.get(1), s.get(2));
                             u.execute();
                         }
@@ -562,6 +564,54 @@ public class MainActivity extends ActionBarActivity {
 
 
         }
+    }
+
+    private void timerServices(String wifi, String signal) {
+        try {
+
+            int tWifi = Integer.parseInt(wifi);
+
+            int sWifi = preferencesTDC.getWIFI();
+
+            if (sWifi == -1) {
+                preferencesTDC.setWIFI(tWifi);
+                stopService(service_wifi);
+                service_wifi.putExtra("TIME", tWifi);
+                startService(service_wifi);
+
+            } else if (tWifi != sWifi) {
+                preferencesTDC.setWIFI(tWifi);
+                stopService(service_wifi);
+                service_wifi.putExtra("TIME", tWifi);
+                startService(service_wifi);
+
+            }
+
+        } catch (Exception p) {
+            p.printStackTrace();
+        }
+
+        try {
+            int tSignal = Integer.parseInt(signal);
+            int sSignal = preferencesTDC.getSIGNAL();
+            if (sSignal == -1) {
+                preferencesTDC.setSIGNAL(tSignal);
+                stopService(service_3g);
+                service_3g.putExtra("TIME", tSignal);
+                startService(service_3g);
+
+            } else if (tSignal != sSignal) {
+                preferencesTDC.setSIGNAL(tSignal);
+                stopService(service_3g);
+                service_3g.putExtra("TIME", tSignal);
+                startService(service_3g);
+
+            }
+        } catch (Exception p) {
+            p.printStackTrace();
+        }
+
+
     }
 
     private class Update extends AsyncTask<String, String, File> {

@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">TDC@</string>
-    <string name="version">0.9.8.15</string>
-    <string name="app_version">Versión 0.9.8.15</string>
+    <string name="version">0.9.8.17</string>
+    <string name="app_version">Versión 0.9.8.17</string>
     <string name="app_title">Gestión Técnica en Terreno</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

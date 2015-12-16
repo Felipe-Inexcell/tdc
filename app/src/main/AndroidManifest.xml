@@ -30,10 +30,11 @@
 
         <service android:name="cl.tdc.felipe.tdc.daemon.WifiTrackerTDC"/>
         <service android:name="cl.tdc.felipe.tdc.daemon.PositionTrackerTDC"/>
+        <service android:name="cl.tdc.felipe.tdc.daemon.TresgTrackerTDC"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBSKewV3SxDRk9QQh06x4R9NLpFFr1SU4w"/>
+            android:value="AIzaSyAxY4NAbfxpltegJQjIl3G89aop2RfQd3M"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

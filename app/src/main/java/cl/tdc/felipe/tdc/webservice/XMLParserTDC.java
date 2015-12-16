@@ -40,6 +40,8 @@ public class XMLParserTDC {
         models.add(getNodeValue(response, "Version"));
         models.add(getNodeValue(response, "Link"));
         models.add(getNodeValue(response, "Name"));
+        models.add(getNodeValue(response, "TimeWifi"));
+        models.add(getNodeValue(response, "TimeSignal"));
 
         return models;
         //return cpe.elementAt(1).toString(); // Mostrar elemento 1 del Vector

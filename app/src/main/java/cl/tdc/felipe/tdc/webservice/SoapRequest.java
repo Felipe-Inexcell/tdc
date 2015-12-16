@@ -1,7 +1,5 @@
 package cl.tdc.felipe.tdc.webservice;
 
-import android.os.Environment;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -25,11 +23,6 @@ import org.apache.http.util.EntityUtils;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.security.KeyStore;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cl.tdc.felipe.tdc.adapters.Actividad;
 import cl.tdc.felipe.tdc.adapters.ComponenteCantidad;
 import cl.tdc.felipe.tdc.extras.Funciones;
 import cl.tdc.felipe.tdc.objects.FormImage;
@@ -227,13 +219,88 @@ public class SoapRequest {
         Log.w("POSITIONTRACKER", bodyOut);
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
-        httpPost.addHeader(SOAP_ACTION, dummy.URL_TRACKING);
+        httpPost.addHeader(SOAP_ACTION, dummy.URL_TDC);
 
         httpPost.setEntity(se);
         HttpResponse httpResponse = httpClient.execute(httpPost);
         HttpEntity resEntity = httpResponse.getEntity();
         response = EntityUtils.toString(resEntity);
         Log.w("POSITIONTRACKER", response);
+        return response;
+    }
+
+    public static String sendTresG(String LONGITUDE, String LATITUDE, String DATE, String IMEI, int cid, int psc, String strength) throws Exception {
+        final String SOAP_ACTION = "urn:Configurationwsdl#qualitySignal";
+        String response = null;
+        String xml = null;
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fecha = new Date();
+
+        if (DATE.compareTo("") == 0)
+            DATE = formatter.format(fecha);
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(dummy.URL_TDC);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.encodingStyle = SoapSerializationEnvelope.ENC;
+        envelope.dotNet = false;
+        envelope.implicitTypes = true;
+
+        String bodyOut =
+                "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Configurationwsdl\">" +
+                        "<soapenv:Header/>" +
+                        "<soapenv:Body>" +
+                        "<urn:qualitySignal soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                        "<Signal xsi:type=\"urn:Signal\">" +
+                        "<RequestSignal xsi:type=\"urn:RequestSignal\">" +
+                        "<Parameters xsi:type=\"urn:Parameters\">" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">CELLID</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + cid + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">PSC</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + psc + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">RXLEV</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + strength + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">LATITUDE</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + LATITUDE + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">LONGITUDE</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + LONGITUDE + "</Value>" +
+                        "</Parameter>" +
+                        "<Parameter xsi:type=\"urn:Parameter\">" +
+                        "<Name xsi:type=\"xsd:string\">TECHNIC</Name>" +
+                        "<Value xsi:type=\"xsd:string\">" + IMEI + "</Value>" +
+                        "</Parameter>" +
+                        "</Parameters>" +
+                        "<HeaderPlan xsi:type=\"urn:HeaderPlan\">" +
+                        "<Date xsi:type=\"xsd:string\">" + DATE + "</Date>" +
+                        "<Platafform xsi:type=\"xsd:string\">MOBILE</Platafform>" +
+                        "<User xsi:type=\"xsd:string\">" + IMEI + "</User>" +
+                        "</HeaderPlan>" +
+                        "</RequestSignal>" +
+                        "</Signal>" +
+                        "</urn:qualitySignal>" +
+                        "</soapenv:Body>" +
+                        "</soapenv:Envelope>";
+        xml = bodyOut;
+        Log.w("3GTRACKER", bodyOut);
+        StringEntity se = new StringEntity(xml, HTTP.UTF_8);
+        se.setContentType("text/xml");
+        httpPost.addHeader(SOAP_ACTION, dummy.URL_TDC);
+
+        httpPost.setEntity(se);
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+        HttpEntity resEntity = httpResponse.getEntity();
+        response = EntityUtils.toString(resEntity);
+        Log.w("3GTRACKER", response);
         return response;
     }
 
@@ -296,6 +363,8 @@ public class SoapRequest {
                         "</soapenv:Body>" +
                         "</soapenv:Envelope>";
         xml = bodyOut;
+
+        Log.d("WIFITRACKER", "request: "+xml);
         StringEntity se = new StringEntity(xml, HTTP.UTF_8);
         se.setContentType("text/xml");
         httpPost.addHeader(SOAP_ACTION, dummy.URL_TDC);
